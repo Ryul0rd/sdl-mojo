@@ -1,0 +1,931 @@
+# pyright: reportMissingTypeStubs=false
+# pyright: reportUnknownVariableType=false
+# pyright: reportUnknownMemberType=false
+# pyright: reportAttributeAccessIssue=false
+from __future__ import annotations
+from typing import Type, List, Any, TypeVar, Optional, Iterable, cast
+from dataclasses import dataclass
+import sys
+import os
+import re
+import shutil
+import requests
+from tqdm import tqdm
+from clang import cindex
+from clang.cindex import Cursor, CursorKind, TypeKind, Token, TokenKind, SourceRange, SourceLocation, TranslationUnit
+
+
+T = TypeVar("T")
+
+
+REF = "release-3.2.x"
+LIST_URL = f"https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref={REF}"
+
+C_ROOT = "c_src"
+C_SDL3_DIR = os.path.join(C_ROOT, "SDL3")
+
+OUT_DIR = "sdl"
+
+REQUIRED_HEADERS = [
+    # "SDL_assert.h",
+    # "SDL_asyncio.h",
+    # "SDL_atomic.h",
+    "SDL_audio.h",
+    # "SDL_begin_code.h",
+    # "SDL_bits.h",
+    "SDL_blendmode.h",
+    "SDL_camera.h",
+    "SDL_clipboard.h",
+    # "SDL_close_code.h",
+    # "SDL_copying.h",
+    # "SDL_cpuinfo.h",
+    # "SDL_dialog.h",
+    # "SDL_egl.h",
+    # "SDL_endian.h",
+    "SDL_error.h",
+    "SDL_events.h",
+    "SDL_filesystem.h",
+    "SDL_gamepad.h",
+    "SDL_gpu.h",
+    "SDL_guid.h",
+    "SDL_haptic.h",
+    # "SDL_hidapi.h",
+    "SDL_hints.h",
+    "SDL_init.h",
+    # "SDL_intrin.h",
+    "SDL_iostream.h",
+    "SDL_joystick.h",
+    "SDL_keyboard.h",
+    "SDL_keycode.h",
+    # "SDL_loadso.h",
+    # "SDL_locale.h",
+    "SDL_log.h",
+    # "SDL_messagebox.h",
+    # "SDL_metal.h",
+    # "SDL_misc.h",
+    "SDL_mouse.h",
+    # "SDL_mutex.h",
+    # "SDL_oldnames.h",
+    # "SDL_opengl_gltext.h",
+    # "SDL_opengl.h",
+    # "SDL_opengles.h",
+    # "SDL_opengles2_gl2.h",
+    # "SDL_opengles2_gl2text.h",
+    # "SDL_opengles2_gl2platform.h",
+    # "SDL_opengles2_gl2khrplatform.h",
+    # "SDL_opengles2.h",
+    "SDL_pen.h",
+    "SDL_pixels.h",
+    # "SDL_platform_defines.h",
+    # "SDL_platform.h",
+    "SDL_power.h",
+    # "SDL_process.h",
+    "SDL_properties.h",
+    "SDL_rect.h",
+    "SDL_render.h",
+    # "SDL_revision.h",
+    "SDL_scancode.h",
+    "SDL_sensor.h",
+    # "SDL_stdinc.h",
+    "SDL_storage.h",
+    "SDL_surface.h",
+    # "SDL_system.h",
+    # "SDL_thread.h",
+    "SDL_time.h",
+    "SDL_timer.h",
+    "SDL_touch.h",
+    # "SDL_tray.h",
+    "SDL_version.h",
+    "SDL_video.h",
+    "SDL_vulkan.h",
+]
+
+
+def main():
+    force_download = "--force-download" in sys.argv
+    download_necessary = (
+        force_download
+        or not os.path.exists(C_SDL3_DIR)
+        or not any(os.scandir(C_SDL3_DIR))
+    )
+    if download_necessary:
+        shutil.rmtree(C_SDL3_DIR, ignore_errors=True)
+        os.makedirs(C_SDL3_DIR, exist_ok=True)
+        request = requests.get(LIST_URL, headers={"Accept": "application/vnd.github+json"})
+        request.raise_for_status()
+        items = [FileInfo(obj["name"], obj["path"], obj["type"], obj["download_url"]) for obj in request.json()]
+        pbar_items = tqdm(items, desc="Downloading Headers")
+        for item in pbar_items:
+            if item.type != "file" or not item.name.endswith(".h"):
+                continue
+            pbar_items.set_description(f"Downloading {item.name.ljust(32)}")
+            url = item.download_url
+            resp = requests.get(url)
+            resp.raise_for_status()
+            dest = os.path.join(C_SDL3_DIR, item.name)
+            with open(dest, "wb") as f:
+                f.write(resp.content)
+    else:
+        print("Skipping download (existing headers found).")
+
+    index = cindex.Index.create()
+    translation_unit = index.parse( # type: ignore
+        os.path.join(C_SDL3_DIR, "SDL.h"),
+        args = [
+            "-std=c99",
+            "-I", C_ROOT,
+            "-D", "bool=_Bool", # stdbool.h isn't being found for some reason so we do this
+        ],
+        options = TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD,
+    )
+
+    functions: List[SdlFunction] = []
+    macro_constants: List[SdlMacroConstant] = []
+    macro_functions: List[SdlMacroFunction] = []
+    typedefs: List[SdlTypedef] = []
+    structs: List[SdlStruct] = []
+    enums: List[SdlEnum] = []
+    pbar = tqdm(REQUIRED_HEADERS)
+    for header_name in pbar:
+        pbar.set_description(f"Parsing {header_name.ljust(32)}")
+        for cursor in assert_type(Cursor, translation_unit.cursor).get_children():
+            cursor = assert_type(Cursor, cursor)
+            location = assert_type(SourceLocation, cursor.location)
+            if location.file is None:
+                continue
+            if os.path.basename(assert_type(str, location.file.name)) != header_name:
+                continue
+            sdl_node = parse_sdl_node(cursor)
+            if isinstance(sdl_node, SdlFunction):
+                functions.append(sdl_node)
+            elif isinstance(sdl_node, SdlTypedef):
+                typedefs.append(sdl_node)
+            elif isinstance(sdl_node, SdlStruct):
+                structs.append(sdl_node)
+            elif isinstance(sdl_node, SdlEnum):
+                enums.append(sdl_node)
+            elif isinstance(sdl_node, SdlMacroConstant):
+                macro_constants.append(sdl_node)
+            elif isinstance(sdl_node, SdlMacroFunction):
+                macro_functions.append(sdl_node)
+
+    functions_table_file_parts: List[str] = [
+        "from sys.ffi import _Global, OwnedDLHandle, c_char\n",
+        "from os import PathLike\n",
+        "from .misc import *\n",
+        "from .typedefs import *\n",
+        "from .structs import *\n",
+        "from .enums import *\n",
+        "\n\n",
+        "comptime Ptr = UnsafePointer\n",
+        "\n\n",
+        'comptime function_table = _Global["function_table", zero_init[FunctionTable]]()\n',
+        "\n\n",
+        "struct FunctionTable(Movable):\n",
+        "    var dlhandle: OwnedDLHandle\n",
+    ]
+    for function in functions:
+        mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+        functions_table_file_parts.append(
+            f'    var {mojo_fn_name}: {emit_mojo_type(function.as_fn_type())}\n'
+        )
+    functions_table_file_parts.append((
+        "\n"
+        "    fn __init__(out self, path: Some[PathLike]) raises:\n"
+        "        self.dlhandle = OwnedDLHandle(path)\n"
+    ))
+    for function in functions:
+        mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+        functions_table_file_parts.append(
+            f'        self.{mojo_fn_name} = self.dlhandle.get_function[{emit_mojo_type(function.as_fn_type())}]("{function.name}")\n'
+        )
+    with open(os.path.join(OUT_DIR, "function_table.mojo"), "w") as f:
+        f.write("".join(functions_table_file_parts))
+
+    functions_file_parts: List[str] = [
+        "from sys.ffi import CStringSlice, c_char\n",
+        "from .misc import get_function_table\n",
+        "\n\n",
+        "comptime Ptr = UnsafePointer\n",
+    ]
+    for function in functions:
+        functions_file_parts.append("\n\n")
+        functions_file_parts.append(emit_sdl_function(function))
+    with open(os.path.join(OUT_DIR, "functions.mojo"), "w") as f:
+        f.write("".join(functions_file_parts))
+
+    macro_constant_file_parts: List[str] = []
+    for constant in macro_constants:
+        macro_constant_file_parts.append("\n\n")
+        macro_constant_file_parts.append(emit_sdl_macro_constant(constant))
+    with open(os.path.join(OUT_DIR, "constants.mojo"), "w") as f:
+        f.write("".join(macro_constant_file_parts))
+
+    typedef_file_parts: List[str] = []
+    for typedef in typedefs:
+        if typedef.name.startswith("SDL_compile_time_assert"):
+            continue
+        typedef_file_parts.append("\n\n")
+        typedef_file_parts.append(emit_sdl_typedef(typedef))
+    with open(os.path.join(OUT_DIR, "typedefs.mojo"), "w") as f:
+        f.write("".join(typedef_file_parts))
+
+    structs_file_parts: List[str] = [
+        "from .misc import *\n",
+    ]
+    for struct in structs:
+        structs_file_parts.append("\n\n")
+        structs_file_parts.append(emit_sdl_struct(struct))
+    with open(os.path.join(OUT_DIR, "structs.mojo"), "w") as f:
+        f.write("".join(structs_file_parts))
+
+    enums_file_parts: List[str] = []
+    for enum in enums:
+        enums_file_parts.append("\n\n")
+        enums_file_parts.append(emit_sdl_enum(enum))
+    with open(os.path.join(OUT_DIR, "enums.mojo"), "w") as f:
+        f.write("".join(enums_file_parts))
+
+    with open(os.path.join(OUT_DIR, "macros.mojo"), "r") as f:
+        macro_file_content = f.read()
+    pattern = re.compile(r"\bfn\s([A-Za-z_][A-Za-z0-9_]*)")
+    implemented_macro_names: List[str] = re.findall(pattern, macro_file_content)
+
+    for macro_function in macro_functions:
+        mojo_name = macro_function.name.removeprefix("SDL_").lower()
+        if mojo_name not in implemented_macro_names:
+            print("-"*40)
+            print(f"WARNING: Still need to implement the macro fn: {mojo_name}")
+            print(emit_original_docstring(macro_function.docstring))
+
+
+# ----------------
+# Data Types
+# ----------------
+
+
+@dataclass
+class SdlFunction:
+    name: str
+    return_type: SdlType
+    args: List[SdlFunctionArg]
+    docstring: str
+    
+    def as_fn_type(self) -> SdlFunctionType:
+        return SdlFunctionType(self.return_type, [arg.type for arg in self.args])
+
+
+@dataclass
+class SdlFunctionArg:
+    name: str
+    type: SdlType
+
+
+@dataclass
+class SdlStruct:
+    name: str
+    fields: List[SdlField]
+    docstring: str
+
+
+@dataclass
+class SdlField:
+    name: str
+    type: SdlType
+
+
+@dataclass
+class SdlEnum:
+    name: str
+    values: List[SdlEnumValue]
+    docstring: str
+
+
+@dataclass
+class SdlEnumValue:
+    name: str
+    value: int
+
+
+@dataclass
+class SdlTypedef:
+    name: str
+    underlying_type: SdlType
+    docstring: str
+
+
+@dataclass
+class SdlMacroConstant:
+    name: str
+    value_tokens: List[str]
+    docstring: str
+
+
+@dataclass
+class SdlMacroFunction:
+    name: str
+    docstring: str
+
+
+SdlNode = SdlFunction | SdlStruct | SdlEnum | SdlTypedef | SdlMacroConstant | SdlMacroFunction
+
+
+@dataclass
+class SdlBaseType:
+    name: str
+    const: bool = False
+
+
+@dataclass
+class SdlFunctionType:
+    return_type: SdlType
+    arg_types: List[SdlType]
+
+
+@dataclass
+class SdlPointer:
+    pointee_type: SdlType
+    const: bool = False
+
+
+@dataclass
+class SdlArray:
+    element_type: SdlType
+    length: Optional[int]
+
+
+SdlType = SdlBaseType | SdlFunctionType | SdlPointer | SdlArray
+
+
+# ----------------
+# Parsing
+# ----------------
+
+
+def parse_sdl_node(node: Cursor) -> Optional[SdlNode]:
+    name = assert_type(str, node.spelling)
+    if not name.startswith("SDL_") and not name.startswith("SDLK_"):
+        return None
+    
+    if node.kind == CursorKind.FUNCTION_DECL:
+        if node.is_definition():
+            return None
+        return_type = parse_sdl_type(assert_type(cindex.Type, node.result_type))
+        docstring = parse_doc_block(node)
+        fn_args: List[SdlFunctionArg] = []
+        for arg in node.get_arguments():
+            arg_name = assert_type(str, arg.spelling)
+            arg_type = parse_sdl_type(assert_type(cindex.Type, arg.type))
+            fn_args.append(SdlFunctionArg(name=arg_name, type=arg_type))
+        return SdlFunction(name, return_type, fn_args, docstring)
+    
+    if node.kind == CursorKind.MACRO_DEFINITION:
+        tokens = [assert_type(Token, t) for t in node.get_tokens()]
+        name_index = None
+        for i, t in enumerate(tokens):
+            if t.spelling == name:
+                name_index = i
+                break
+        if name_index is None:
+            raise ValueError("Expected name in macro definition")
+        is_stub = name_index + 1 >= len(tokens)
+        if is_stub:
+            return None
+        name_token = tokens[name_index]
+        token_after_name = tokens[name_index+1]
+        name_location = assert_type(SourceLocation, name_token.location)
+        token_after_name_location = assert_type(SourceLocation, token_after_name.location)
+        is_function_like = (
+            token_after_name.spelling == "("
+            and name_location.line == token_after_name_location.line
+            and name_location.column + len(assert_type(str, name_token.spelling)) == token_after_name_location.column
+        )
+        if is_function_like:
+            return SdlMacroFunction(name, parse_doc_block(node))
+        value = [assert_type(str, t.spelling) for t in tokens[name_index+1:]]
+        docstring = parse_doc_block(node)
+        return SdlMacroConstant(name, value, docstring)
+    
+    if node.kind == CursorKind.TYPEDEF_DECL:
+        # Event is the only enum we need atm so we implement manually
+        if name == "SDL_Event":
+            return None
+        clang_underlying_type: cindex.Type = assert_type(cindex.Type, node.underlying_typedef_type)
+        decl = cast(Optional[Cursor], clang_underlying_type.get_declaration())
+        if decl is not None and decl.kind in (CursorKind.STRUCT_DECL, CursorKind.ENUM_DECL):
+            definition = cast(Optional[Cursor], decl.get_definition())
+            if definition is not None:
+                return None
+        underlying_type = parse_sdl_type(clang_underlying_type)
+        docstring = parse_doc_block(node)
+        return SdlTypedef(name, underlying_type, docstring)
+    
+    if node.kind == CursorKind.STRUCT_DECL:
+        if not node.is_definition():
+            return None
+        # GamepadBinding is the only struct to use anonymous unions so it's implemented manually.
+        if name == "SDL_GamepadBinding":
+            return None
+        docstring = parse_doc_block(node)
+        fields: List[SdlField] = []
+        for child in node.get_children():
+            if child.kind == CursorKind.FIELD_DECL:
+                field_name = assert_type(str, child.spelling)
+                field_type = parse_sdl_type(assert_type(cindex.Type, child.type))
+                fields.append(SdlField(name=field_name, type=field_type))
+        return SdlStruct(name, fields, docstring)
+    
+    if node.kind == CursorKind.ENUM_DECL:
+        docstring = parse_doc_block(node)
+        values: List[SdlEnumValue] = []
+        for child in node.get_children():
+            if child.kind == CursorKind.ENUM_CONSTANT_DECL:
+                value_name = assert_type(str, child.spelling)
+                value_val = int(assert_type(int, child.enum_value))
+                values.append(SdlEnumValue(name=value_name, value=value_val))
+        return SdlEnum(name, values, docstring)
+
+    return None
+
+
+def parse_sdl_type(type: cindex.Type) -> SdlType:
+    if type.kind == TypeKind.POINTER:
+        pointee = parse_sdl_type(assert_type(cindex.Type, type.get_pointee()))
+        return SdlPointer(
+            pointee_type = pointee,
+            const = assert_type(bool, type.is_const_qualified()),
+        )
+    
+    if type.kind in (TypeKind.CONSTANTARRAY, TypeKind.INCOMPLETEARRAY, TypeKind.VARIABLEARRAY):
+        elem_type = parse_sdl_type(assert_type(cindex.Type, type.get_array_element_type()))
+        if type.kind == TypeKind.CONSTANTARRAY:
+            length = assert_type(int, type.get_array_size())
+        else:
+            length = None
+        return SdlArray(
+            element_type = elem_type,
+            length = length,
+        )
+    
+    if type.kind in (TypeKind.FUNCTIONPROTO, TypeKind.FUNCTIONNOPROTO):
+        return_type = parse_sdl_type(assert_type(cindex.Type, type.get_result()))
+        arg_types: List[SdlType] = []
+        if type.kind == TypeKind.FUNCTIONPROTO:
+            for arg_t in type.argument_types():
+                arg_types.append(parse_sdl_type(assert_type(cindex.Type, arg_t)))
+        return SdlFunctionType(
+            return_type = return_type,
+            arg_types = arg_types,
+        )
+    
+    # SdlBaseType
+    name = assert_type(str, type.spelling).strip()
+    for prefix in ("const", "volatile", "restrict", "struct", "union", "enum"):
+        if name.startswith(prefix):
+            name = name[len(prefix):].lstrip()
+    return SdlBaseType(
+        name = name,
+        const = assert_type(bool, type.is_const_qualified()),
+    )
+
+
+def parse_doc_block(node: Cursor) -> str:
+    def parse_macro_doc_block(node: Cursor) -> str:
+        """Clang doesn't capture doxygen comments on macros so we handle it manually"""
+        macro_extent = assert_type(SourceRange, node.extent)
+        macro_start = assert_type(SourceLocation, macro_extent.start)
+        macro_file = assert_type(cindex.File, macro_start.file)
+        macro_file_name = assert_type(str, macro_file.name)
+        tu = assert_type(TranslationUnit, node.translation_unit)
+        begin_location = assert_type(SourceLocation, tu.get_location(macro_file_name, (1, 1)))
+        end_location = assert_type(SourceLocation, tu.get_location(macro_file_name, (macro_start.line, macro_start.column)))
+        header_extent = assert_type(SourceRange, SourceRange.from_locations(begin_location, end_location))
+
+        tokens = list(tu.get_tokens(extent=header_extent))
+        for token in tokens:
+            token = assert_type(cindex.Token, token)
+            if token.kind != TokenKind.COMMENT:
+                continue
+            comment_extent = assert_type(SourceRange, token.extent)
+            comment_end = assert_type(SourceLocation, comment_extent.end)
+            if comment_end.line != macro_start.line - 1:
+                continue
+            comment = assert_type(str, token.spelling)
+            return comment
+        return ""
+
+    raw = cast(Optional[str], node.raw_comment)
+    if node.kind == CursorKind.MACRO_DEFINITION:
+        raw = parse_macro_doc_block(node)
+    if raw is None:
+        return ""
+    cleaned: List[str] = []
+    for line in raw.splitlines():
+        line = line.strip()
+        line = line.removesuffix("*/")
+        for prefix in ("///", "//!", "/**", "/*", "//", "*"):
+            if line.startswith(prefix):
+                line = line.removeprefix(prefix)
+                break
+        line = line.strip()
+        cleaned.append(line)
+    return "\n".join(cleaned).strip()
+
+
+# ----------------
+# Emission
+# ----------------
+
+
+def emit_sdl_function(function: SdlFunction) -> str:
+    mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+    original_docstring = emit_original_docstring(function.docstring)
+    if is_string(function.return_type):
+        return_type_mojo = "CStringSlice[ImmutOrigin.external]"
+    else:
+        return_type_mojo = emit_mojo_type(function.return_type)
+    returns_bool_error = (
+        return_type_mojo == "Bool"
+        and "Returns: true on success or false on failure" in original_docstring
+    )
+    returns_ptr_error = (
+        isinstance(function.return_type, SdlPointer)
+        and "NULL" in original_docstring
+        and "SDL_GetError()" in original_docstring
+    )
+
+    if returns_bool_error:
+        return_part = ") raises:\n"
+        result_part = "var success = "
+        post_call_part = (
+            "    if not success:\n"
+            "        raise get_error()\n"
+        )
+    elif is_string(function.return_type) and returns_ptr_error:
+        result_part = "var cstring = "
+        return_part = f") raises -> {return_type_mojo}:\n"
+        post_call_part = (
+            "    if not cstring:\n"
+            "        raise get_error()\n"
+            "    return CStringSlice(unsafe_from_ptr=cstring)\n"
+        )
+    elif is_string(function.return_type):
+        result_part = "var cstring = "
+        return_part = f") -> {return_type_mojo}:\n"
+        post_call_part = "    return CStringSlice(unsafe_from_ptr=cstring)\n"
+    elif returns_ptr_error:
+        result_part = "var result = "
+        return_part = f") raises -> {return_type_mojo}:\n"
+        post_call_part = (
+            "    if not result:\n"
+            "        raise get_error()\n"
+            "    return result\n"
+        )
+    elif return_type_mojo == "NoneType":
+        result_part = ""
+        return_part = f"):\n"
+        post_call_part = ""
+    else:
+        result_part = "return "
+        return_part = f") -> {return_type_mojo}:\n"
+        post_call_part = ""
+
+    parts: List[str] = []
+    parts.append(emit_fn_like(
+        f"fn {mojo_fn_name}(",
+        [
+            f"{arg.name}: {'CStringSlice' if is_string(arg.type) else emit_mojo_type(arg.type, use_any_origin=True)}"
+            for arg in function.args
+        ],
+        return_part,
+    ))
+    parts.append(emit_wiki_docstring(function.name))
+    parts.append(emit_fn_like(
+        f"{result_part}get_function_table().{mojo_fn_name}(",
+        [
+            f"{arg.name}.unsafe_ptr()" if is_string(arg.type) else arg.name
+            for arg in function.args
+        ],
+        f")\n",
+        base_indent_level = 1,
+    ))
+    parts.append(post_call_part)
+    return "".join(parts)
+
+
+def emit_sdl_typedef(typedef: SdlTypedef) -> str:
+    mojo_name = typedef.name.removeprefix("SDL_")
+    underlying_mojo_type = emit_mojo_type(typedef.underlying_type)
+
+    is_opaque_type = (
+        isinstance(typedef.underlying_type, SdlBaseType) 
+        and typedef.name == typedef.underlying_type.name
+    )
+    if is_opaque_type:
+        return "".join((
+            f"struct {mojo_name}:\n",
+            emit_wiki_docstring(typedef.name),
+            f"    pass\n",
+        ))
+    
+    is_fn_ptr_type = (
+        isinstance(typedef.underlying_type, SdlPointer) 
+        and isinstance(typedef.underlying_type.pointee_type, SdlFunctionType)
+    )
+    if is_fn_ptr_type:
+        underlying_mojo_type = emit_mojo_type(assert_type(SdlPointer, typedef.underlying_type).pointee_type)
+    elif isinstance(typedef.underlying_type, SdlPointer):
+        underlying_mojo_type = emit_mojo_type(SdlPointer(SdlBaseType("void")))
+    return "".join((
+        f"comptime {mojo_name} = {underlying_mojo_type}\n",
+        emit_wiki_docstring(typedef.name, indent_level=0),
+    ))
+
+
+def emit_sdl_struct(struct: SdlStruct) -> str:
+    mojo_name = struct.name.removeprefix("SDL_")
+    lines: List[str] = []
+    lines.append("@fieldwise_init\n")
+    lines.append(f"struct {mojo_name}(Copyable):\n")
+    lines.append(emit_wiki_docstring(struct.name))
+    if len(struct.fields) == 0: 
+        lines.append("    pass\n")
+    for field in struct.fields:
+        field_name = field.name
+        if field_name == "copy":
+            field_name = "copy_"
+        lines.append(f"    var {field_name}: {emit_mojo_type(field.type)}\n")
+    return "".join(lines)
+
+
+def emit_sdl_enum(enum: SdlEnum) -> str:
+    mojo_name = enum.name.removeprefix("SDL_")
+    longest_common_prefix = enum.values[0].name
+    for value in enum.values[1:]:
+        while not value.name.startswith(longest_common_prefix):
+            longest_common_prefix = longest_common_prefix[:-1]
+    lines: List[str] = []
+    lines.extend((
+        f"struct {mojo_name}(ImplicitlyCopyable, Equatable, Intable, Indexer):\n",
+        emit_wiki_docstring(enum.name),
+        "    var value: Int32\n",
+        "\n",
+        "    fn __init__(out self, *, value: Int32):\n",
+        "        self.value = value\n",
+        "\n",
+        "    fn __eq__(self, rhs: Self) -> Bool:\n",
+        "        return self.value == rhs.value\n",
+        "\n",
+        "    fn __int__(self) -> Int:\n",
+        "        return Int(self.value)\n",
+        "\n",
+        "    fn __mlir_index__(self) -> __mlir_type.index:\n",
+        "        return self.__int__()._mlir_value\n",
+        "\n",
+    ))
+    for value in enum.values:
+        field_name = value.name.removeprefix(longest_common_prefix)
+        if field_name[0].isdigit():
+            field_name = f"N_{field_name}"
+        lines.append(f"    comptime {field_name} = {mojo_name}(value = {value.value})\n")
+    return "".join(lines)
+
+
+def emit_sdl_macro_constant(macro_constant: SdlMacroConstant) -> str:
+    if macro_constant.name.startswith("SDLK_"):
+        name = macro_constant.name.replace("SDLK_", "KEY_")
+    else:
+        name = macro_constant.name.removeprefix("SDL_")
+    tokens = macro_constant.value_tokens
+
+    if tokens[0] == "(":
+        depth = 0
+        has_outer_parens = True
+        for i, t in enumerate(tokens):
+            if t == "(":
+                depth += 1
+            elif t == ")":
+                depth -= 1
+                if depth == 0 and i != len(tokens) - 1:
+                    has_outer_parens = True
+        if has_outer_parens:
+            tokens = tokens[1:-1]
+
+    is_fnlike_macro = len(tokens) >= 2 and tokens[0].startswith("SDL_") and tokens[1] == "("
+    if is_fnlike_macro:
+        new_token = tokens[0].removeprefix("SDL_").lower()
+        if new_token == "uint64_c":
+            new_token = "UInt64"
+        tokens[0] = new_token
+
+    is_cast = len(tokens) >= 3 and tokens[0] == "(" and tokens[1].startswith("SDL_") and tokens[2] == ")"
+    if is_cast:
+        target_type = tokens[1].removeprefix("SDL_")
+        new_tokens = [target_type, "("]
+        new_tokens.extend(tokens[3:])
+        new_tokens.append(")")
+        tokens = new_tokens
+
+    for i in range(len(tokens)):
+        if tokens[i] == ",":
+            tokens[i] = ", "
+        elif tokens[i] == "<<":
+            tokens[i] = " << "
+        elif tokens[i] == "|":
+            tokens[i] = " | "
+        elif tokens[i].startswith("SDL_"):
+            tokens[i] = tokens[i].removeprefix("SDL_")
+        tokens[i] = re.sub(r"(\b0[xX][0-9A-Fa-f]+)([uUlL]+)\b", r"\1", tokens[i])
+        tokens[i] = re.sub(r"(\b\d+)([uUlL]+)\b", r"\1", tokens[i])
+        tokens[i] = re.sub(
+            r"""
+            ((?:\d+\.\d*|\.\d+|\d+)(?:[eE][+-]?\d+)?)
+            ([fFlL])\b
+            """,
+            r"\1", tokens[i], flags=re.VERBOSE,
+        )
+
+    expression = "".join(tokens)
+    return (
+        f"comptime {name} = {expression}\n"
+        f"{emit_wiki_docstring(macro_constant.name, indent_level=0)}"
+    )
+
+
+def emit_mojo_type(sdl_type: SdlType, use_any_origin: bool=False) -> str:
+    MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutOrigin.external"
+    IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutOrigin.external"
+
+    if isinstance(sdl_type, SdlFunctionType):
+        return emit_fn_like(
+            "fn(",
+            [emit_mojo_type(arg_type, use_any_origin=True) for arg_type in sdl_type.arg_types],
+            f") -> {emit_mojo_type(sdl_type.return_type)}",
+            max_line_len = None,
+        )
+    
+    if isinstance(sdl_type, SdlPointer):
+        is_mut = (
+            (isinstance(sdl_type.pointee_type, SdlPointer) or isinstance(sdl_type.pointee_type, SdlBaseType))
+            and not sdl_type.pointee_type.const
+        )
+        origin = MUT_ORIGIN if is_mut else IMMUT_ORIGIN
+        return f"Ptr[{emit_mojo_type(sdl_type.pointee_type)}, {origin}]"
+    
+    if isinstance(sdl_type, SdlArray):
+        if sdl_type.length is not None:
+            return f"InlineArray[{emit_mojo_type(sdl_type.element_type)}, Int({sdl_type.length})]"
+        else:
+            return f"Ptr[{emit_mojo_type(sdl_type.element_type)}, {MUT_ORIGIN}]"
+
+    # SdlBaseType
+    mapping = {
+        "void": "NoneType",
+        "char": "c_char",
+        "float": "Float32",
+        "double": "Float64",
+        "_Bool": "Bool",
+        "Uint8": "UInt8",
+        "Uint16": "UInt16",
+        "Uint32": "UInt32",
+        "Uint64": "UInt64",
+        "Sint8": "Int8",
+        "Sint16": "Int16",
+        "Sint32": "Int32",
+        "Sint64": "Int64",
+        "int": "Int32",
+        "intptr_t": "Int",
+        "unsigned char": "UInt8",
+        "unsigned short": "UInt16",
+        "unsigned int": "UInt32",
+        "long": "c_long",
+        "long long": "c_long_long",
+        "unsigned long": "c_ulong",
+        "unsigned long long": "c_ulong_long",
+        "iconv_data_t": "IConvData",
+    }
+    if sdl_type.name in mapping:
+        return mapping[sdl_type.name]
+    return sdl_type.name.removeprefix("SDL_")
+
+
+def is_string(sdl_type: SdlType) -> bool:
+    return (
+        isinstance(sdl_type, SdlPointer)
+        and isinstance(sdl_type.pointee_type, SdlBaseType)
+        and sdl_type.pointee_type.const
+        and emit_mojo_type(sdl_type.pointee_type) == "c_char"
+    )
+
+
+def emit_original_docstring(text: str, indent_level: int = 1, spaces_per_indent: int = 4) -> str:
+    if not text:
+        return ""
+    REPLACEMENTS = {
+        r"\since": "Since:",
+        r"\sa": "See also:",
+        r"\param": "Argument:",
+        r"\returns": "Returns:",
+        r"\threadsafety": "Thread safety:",
+        "\\": "\\\\",
+    }
+    for old, new in REPLACEMENTS.items():
+        text = text.replace(old, new)
+    indent = " " * (indent_level * spaces_per_indent)
+    lines = [line.removeprefix("< ") for line in text.splitlines()]
+    if len(lines) == 1:
+        return f'{indent}"""{lines[0]}"""\n'
+    out: list[str] = [f'{indent}"""\n']
+    out.extend(f"{indent}{line}\n" for line in lines)
+    out.append(f'{indent}"""\n')
+    return "".join(out)
+
+
+def emit_wiki_docstring(c_name: str, indent_level: int = 1, spaces_per_indent: int = 4) -> str:
+    indent = " " * (indent_level * spaces_per_indent)
+    return (
+        f'{indent}"""See official documentation for details.\n'
+        f'{indent}\n'
+        f'{indent}https://wiki.libsdl.org/SDL3/{c_name}\n'
+        f'{indent}"""\n'
+    )
+
+
+def emit_fn_like(
+    initial_line: str, arg_lines: Iterable[str], final_line: str,
+    spaces_per_indent: int=4, base_indent_level: int=0, max_line_len: Optional[int]=100,
+) -> str:
+    base_indent = " " * spaces_per_indent * base_indent_level
+    inner_indent = " " * spaces_per_indent * (base_indent_level + 1)
+    one_line_args = ", ".join(arg_lines)
+    one_liner = base_indent + initial_line + one_line_args + final_line
+    if max_line_len is None or len(one_liner) <= max_line_len:
+        return one_liner
+    lines: List[str] = [
+        base_indent + initial_line,
+        inner_indent + one_line_args,
+        base_indent + final_line,
+    ]
+    if all(len(line) <= max_line_len for line in lines):
+        return "\n".join(lines)
+    lines = [base_indent, initial_line, "\n"]
+    for arg_line in arg_lines:
+        lines.append(inner_indent + arg_line + ",\n")
+    lines.append(base_indent + final_line)
+    return "".join(lines)
+
+
+def pascal_to_snake_case(name: str) -> str:
+    """
+    Convert PascalCase / CamelCase (optionally with underscores) to snake_case.
+    Examples:
+        PascalCase           -> pascal_case
+        HTTPRequest          -> http_request
+        SDL_AudioStream      -> sdl_audio_stream
+    """
+    parts = name.split("_")
+    snake_parts: List[str] = []
+    for part in parts:
+        if not part:
+            continue
+        s1 = re.sub(r"(.)([A-Z][a-z0-9]+)", r"\1_\2", part)
+        s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+        snake_parts.append(s2.lower())
+    return "_".join(snake_parts)
+
+
+# ----------------
+# Misc
+# ----------------
+
+
+@dataclass
+class FileInfo:
+    name: str
+    path: str
+    type: str
+    download_url: str
+
+
+def assert_type(t: Type[T], value: Any) -> T:
+    """Ensure that a value is of the expected type.
+
+    Raises a TypeError if the value is not an instance of the given type.
+
+    Args:
+        t: The expected Python type.
+        value: The object to validate.
+
+    Returns:
+        The value, typed as T, if validation succeeds.
+
+    Raises:
+        TypeError: If value is not an instance of t.
+    """
+    if not isinstance(value, t):
+        raise TypeError(f"Expected {t.__name__}, got {type(value).__name__}")
+    return value
+
+
+if __name__ == "__main__":
+    main()
