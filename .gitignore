@@ -1,3 +1,4 @@
+*.mojopkg
 test.mojo
 c_src/
 
