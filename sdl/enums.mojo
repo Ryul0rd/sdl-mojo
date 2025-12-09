@@ -1,6 +1,7 @@
 
 
-struct AudioFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct AudioFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AudioFormat
@@ -33,7 +34,8 @@ struct AudioFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime F32 = AudioFormat(value = 33056)
 
 
-struct BlendOperation(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct BlendOperation(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_BlendOperation
@@ -59,7 +61,8 @@ struct BlendOperation(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime MAXIMUM = BlendOperation(value = 5)
 
 
-struct BlendFactor(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct BlendFactor(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_BlendFactor
@@ -90,7 +93,8 @@ struct BlendFactor(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime ONE_MINUS_DST_ALPHA = BlendFactor(value = 10)
 
 
-struct CameraPosition(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct CameraPosition(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CameraPosition
@@ -114,7 +118,8 @@ struct CameraPosition(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime BACK_FACING = CameraPosition(value = 2)
 
 
-struct EventType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct EventType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_EventType
@@ -253,7 +258,8 @@ struct EventType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime ENUM_PADDING = EventType(value = 2147483647)
 
 
-struct EventAction(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct EventAction(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_EventAction
@@ -277,7 +283,8 @@ struct EventAction(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime GETEVENT = EventAction(value = 2)
 
 
-struct Folder(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct Folder(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Folder
@@ -310,7 +317,8 @@ struct Folder(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = Folder(value = 11)
 
 
-struct PathType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PathType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PathType
@@ -335,7 +343,8 @@ struct PathType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime OTHER = PathType(value = 3)
 
 
-struct EnumerationResult(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct EnumerationResult(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_EnumerationResult
@@ -359,7 +368,8 @@ struct EnumerationResult(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime FAILURE = EnumerationResult(value = 2)
 
 
-struct GamepadType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GamepadType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GamepadType
@@ -392,7 +402,8 @@ struct GamepadType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = GamepadType(value = 11)
 
 
-struct GamepadButton(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GamepadButton(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GamepadButton
@@ -441,7 +452,8 @@ struct GamepadButton(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = GamepadButton(value = 26)
 
 
-struct GamepadButtonLabel(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GamepadButtonLabel(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GamepadButtonLabel
@@ -471,7 +483,8 @@ struct GamepadButtonLabel(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime TRIANGLE = GamepadButtonLabel(value = 8)
 
 
-struct GamepadAxis(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GamepadAxis(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GamepadAxis
@@ -500,7 +513,8 @@ struct GamepadAxis(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = GamepadAxis(value = 6)
 
 
-struct GamepadBindingType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GamepadBindingType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GamepadBindingType
@@ -525,7 +539,8 @@ struct GamepadBindingType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime HAT = GamepadBindingType(value = 3)
 
 
-struct GPUPrimitiveType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUPrimitiveType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUPrimitiveType
@@ -551,7 +566,8 @@ struct GPUPrimitiveType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime POINTLIST = GPUPrimitiveType(value = 4)
 
 
-struct GPULoadOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPULoadOp(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPULoadOp
@@ -575,7 +591,8 @@ struct GPULoadOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime DONT_CARE = GPULoadOp(value = 2)
 
 
-struct GPUStoreOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUStoreOp(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUStoreOp
@@ -600,7 +617,8 @@ struct GPUStoreOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime RESOLVE_AND_STORE = GPUStoreOp(value = 3)
 
 
-struct GPUIndexElementSize(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUIndexElementSize(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUIndexElementSize
@@ -623,7 +641,8 @@ struct GPUIndexElementSize(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime N_32BIT = GPUIndexElementSize(value = 1)
 
 
-struct GPUTextureFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUTextureFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureFormat
@@ -749,7 +768,8 @@ struct GPUTextureFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime ASTC_12x12_FLOAT = GPUTextureFormat(value = 104)
 
 
-struct GPUTextureType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUTextureType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureType
@@ -775,7 +795,8 @@ struct GPUTextureType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CUBE_ARRAY = GPUTextureType(value = 4)
 
 
-struct GPUSampleCount(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUSampleCount(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUSampleCount
@@ -800,7 +821,8 @@ struct GPUSampleCount(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime N_8 = GPUSampleCount(value = 3)
 
 
-struct GPUCubeMapFace(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUCubeMapFace(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUCubeMapFace
@@ -827,7 +849,8 @@ struct GPUCubeMapFace(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime NEGATIVEZ = GPUCubeMapFace(value = 5)
 
 
-struct GPUTransferBufferUsage(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUTransferBufferUsage(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTransferBufferUsage
@@ -850,7 +873,8 @@ struct GPUTransferBufferUsage(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime DOWNLOAD = GPUTransferBufferUsage(value = 1)
 
 
-struct GPUShaderStage(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUShaderStage(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUShaderStage
@@ -873,7 +897,8 @@ struct GPUShaderStage(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime FRAGMENT = GPUShaderStage(value = 1)
 
 
-struct GPUVertexElementFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUVertexElementFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUVertexElementFormat
@@ -925,7 +950,8 @@ struct GPUVertexElementFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime HALF4 = GPUVertexElementFormat(value = 30)
 
 
-struct GPUVertexInputRate(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUVertexInputRate(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUVertexInputRate
@@ -948,7 +974,8 @@ struct GPUVertexInputRate(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime INSTANCE = GPUVertexInputRate(value = 1)
 
 
-struct GPUFillMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUFillMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUFillMode
@@ -971,7 +998,8 @@ struct GPUFillMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LINE = GPUFillMode(value = 1)
 
 
-struct GPUCullMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUCullMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUCullMode
@@ -995,7 +1023,8 @@ struct GPUCullMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime BACK = GPUCullMode(value = 2)
 
 
-struct GPUFrontFace(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUFrontFace(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUFrontFace
@@ -1018,7 +1047,8 @@ struct GPUFrontFace(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LOCKWISE = GPUFrontFace(value = 1)
 
 
-struct GPUCompareOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUCompareOp(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUCompareOp
@@ -1048,7 +1078,8 @@ struct GPUCompareOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime ALWAYS = GPUCompareOp(value = 8)
 
 
-struct GPUStencilOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUStencilOp(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUStencilOp
@@ -1078,7 +1109,8 @@ struct GPUStencilOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime DECREMENT_AND_WRAP = GPUStencilOp(value = 8)
 
 
-struct GPUBlendOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUBlendOp(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBlendOp
@@ -1105,7 +1137,8 @@ struct GPUBlendOp(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime MAX = GPUBlendOp(value = 5)
 
 
-struct GPUBlendFactor(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUBlendFactor(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBlendFactor
@@ -1140,7 +1173,8 @@ struct GPUBlendFactor(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime SRC_ALPHA_SATURATE = GPUBlendFactor(value = 13)
 
 
-struct GPUFilter(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUFilter(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUFilter
@@ -1163,7 +1197,8 @@ struct GPUFilter(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LINEAR = GPUFilter(value = 1)
 
 
-struct GPUSamplerMipmapMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUSamplerMipmapMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUSamplerMipmapMode
@@ -1186,7 +1221,8 @@ struct GPUSamplerMipmapMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LINEAR = GPUSamplerMipmapMode(value = 1)
 
 
-struct GPUSamplerAddressMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUSamplerAddressMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUSamplerAddressMode
@@ -1210,7 +1246,8 @@ struct GPUSamplerAddressMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CLAMP_TO_EDGE = GPUSamplerAddressMode(value = 2)
 
 
-struct GPUPresentMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUPresentMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUPresentMode
@@ -1234,7 +1271,8 @@ struct GPUPresentMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime MAILBOX = GPUPresentMode(value = 2)
 
 
-struct GPUSwapchainComposition(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GPUSwapchainComposition(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUSwapchainComposition
@@ -1259,7 +1297,8 @@ struct GPUSwapchainComposition(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime HDR10_ST2084 = GPUSwapchainComposition(value = 3)
 
 
-struct HintPriority(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct HintPriority(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_HintPriority
@@ -1283,7 +1322,8 @@ struct HintPriority(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime OVERRIDE = HintPriority(value = 2)
 
 
-struct AppResult(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct AppResult(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AppResult
@@ -1307,7 +1347,8 @@ struct AppResult(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime FAILURE = AppResult(value = 2)
 
 
-struct IOStatus(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct IOStatus(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_IOStatus
@@ -1334,7 +1375,8 @@ struct IOStatus(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime WRITEONLY = IOStatus(value = 5)
 
 
-struct IOWhence(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct IOWhence(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_IOWhence
@@ -1358,7 +1400,8 @@ struct IOWhence(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime END = IOWhence(value = 2)
 
 
-struct JoystickType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct JoystickType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_JoystickType
@@ -1390,7 +1433,8 @@ struct JoystickType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = JoystickType(value = 10)
 
 
-struct JoystickConnectionState(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct JoystickConnectionState(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_JoystickConnectionState
@@ -1415,7 +1459,8 @@ struct JoystickConnectionState(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime WIRELESS = JoystickConnectionState(value = 2)
 
 
-struct TextInputType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct TextInputType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_TextInputType
@@ -1445,7 +1490,8 @@ struct TextInputType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime NUMBER_PASSWORD_VISIBLE = TextInputType(value = 8)
 
 
-struct Capitalization(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct Capitalization(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Capitalization
@@ -1470,7 +1516,8 @@ struct Capitalization(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LETTERS = Capitalization(value = 3)
 
 
-struct LogCategory(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct LogCategory(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogCategory
@@ -1511,7 +1558,8 @@ struct LogCategory(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CUSTOM = LogCategory(value = 19)
 
 
-struct LogPriority(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct LogPriority(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogPriority
@@ -1541,7 +1589,8 @@ struct LogPriority(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = LogPriority(value = 8)
 
 
-struct SystemCursor(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct SystemCursor(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SystemCursor
@@ -1583,7 +1632,8 @@ struct SystemCursor(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = SystemCursor(value = 20)
 
 
-struct MouseWheelDirection(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct MouseWheelDirection(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_MouseWheelDirection
@@ -1606,7 +1656,8 @@ struct MouseWheelDirection(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime FLIPPED = MouseWheelDirection(value = 1)
 
 
-struct PenAxis(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PenAxis(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PenAxis
@@ -1635,7 +1686,8 @@ struct PenAxis(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = PenAxis(value = 7)
 
 
-struct PixelType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PixelType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PixelType
@@ -1669,7 +1721,8 @@ struct PixelType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime INDEX2 = PixelType(value = 12)
 
 
-struct BitmapOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct BitmapOrder(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_BitmapOrder
@@ -1693,7 +1746,8 @@ struct BitmapOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime N_1234 = BitmapOrder(value = 2)
 
 
-struct PackedOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PackedOrder(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PackedOrder
@@ -1723,7 +1777,8 @@ struct PackedOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime BGRA = PackedOrder(value = 8)
 
 
-struct ArrayOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ArrayOrder(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ArrayOrder
@@ -1751,7 +1806,8 @@ struct ArrayOrder(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime ABGR = ArrayOrder(value = 6)
 
 
-struct PackedLayout(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PackedLayout(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PackedLayout
@@ -1781,7 +1837,8 @@ struct PackedLayout(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime N_1010102 = PackedLayout(value = 8)
 
 
-struct PixelFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PixelFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PixelFormat
@@ -1875,7 +1932,8 @@ struct PixelFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime XBGR32 = PixelFormat(value = 371595268)
 
 
-struct ColorType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ColorType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ColorType
@@ -1899,7 +1957,8 @@ struct ColorType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime YCBCR = ColorType(value = 2)
 
 
-struct ColorRange(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ColorRange(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ColorRange
@@ -1923,7 +1982,8 @@ struct ColorRange(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime FULL = ColorRange(value = 2)
 
 
-struct ColorPrimaries(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ColorPrimaries(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ColorPrimaries
@@ -1958,7 +2018,8 @@ struct ColorPrimaries(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CUSTOM = ColorPrimaries(value = 31)
 
 
-struct TransferCharacteristics(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct TransferCharacteristics(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_TransferCharacteristics
@@ -1998,7 +2059,8 @@ struct TransferCharacteristics(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CUSTOM = TransferCharacteristics(value = 31)
 
 
-struct MatrixCoefficients(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct MatrixCoefficients(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_MatrixCoefficients
@@ -2034,7 +2096,8 @@ struct MatrixCoefficients(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CUSTOM = MatrixCoefficients(value = 31)
 
 
-struct ChromaLocation(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ChromaLocation(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ChromaLocation
@@ -2059,7 +2122,8 @@ struct ChromaLocation(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime TOPLEFT = ChromaLocation(value = 3)
 
 
-struct Colorspace(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct Colorspace(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Colorspace
@@ -2093,7 +2157,8 @@ struct Colorspace(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime YUV_DEFAULT = Colorspace(value = 570426566)
 
 
-struct PowerState(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PowerState(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PowerState
@@ -2120,7 +2185,8 @@ struct PowerState(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime CHARGED = PowerState(value = 4)
 
 
-struct PropertyType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct PropertyType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PropertyType
@@ -2147,7 +2213,8 @@ struct PropertyType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime BOOLEAN = PropertyType(value = 5)
 
 
-struct TextureAccess(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct TextureAccess(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_TextureAccess
@@ -2171,7 +2238,8 @@ struct TextureAccess(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime TARGET = TextureAccess(value = 2)
 
 
-struct RendererLogicalPresentation(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct RendererLogicalPresentation(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RendererLogicalPresentation
@@ -2197,7 +2265,8 @@ struct RendererLogicalPresentation(ImplicitlyCopyable, Equatable, Intable, Index
     comptime INTEGER_SCALE = RendererLogicalPresentation(value = 4)
 
 
-struct Scancode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct Scancode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Scancode
@@ -2467,7 +2536,8 @@ struct Scancode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = Scancode(value = 512)
 
 
-struct SensorType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct SensorType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SensorType
@@ -2497,7 +2567,8 @@ struct SensorType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime COUNT = SensorType(value = 7)
 
 
-struct ScaleMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct ScaleMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ScaleMode
@@ -2521,7 +2592,8 @@ struct ScaleMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime LINEAR = ScaleMode(value = 1)
 
 
-struct FlipMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct FlipMode(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_FlipMode
@@ -2545,7 +2617,8 @@ struct FlipMode(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime VERTICAL = FlipMode(value = 2)
 
 
-struct DateFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct DateFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_DateFormat
@@ -2569,7 +2642,8 @@ struct DateFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime MMDDYYYY = DateFormat(value = 2)
 
 
-struct TimeFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct TimeFormat(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_TimeFormat
@@ -2592,7 +2666,8 @@ struct TimeFormat(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime N_12HR = TimeFormat(value = 1)
 
 
-struct TouchDeviceType(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct TouchDeviceType(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_TouchDeviceType
@@ -2617,7 +2692,8 @@ struct TouchDeviceType(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime INDIRECT_RELATIVE = TouchDeviceType(value = 2)
 
 
-struct SystemTheme(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct SystemTheme(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SystemTheme
@@ -2641,7 +2717,8 @@ struct SystemTheme(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime DARK = SystemTheme(value = 2)
 
 
-struct DisplayOrientation(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct DisplayOrientation(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_DisplayOrientation
@@ -2667,7 +2744,8 @@ struct DisplayOrientation(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime PORTRAIT_FLIPPED = DisplayOrientation(value = 4)
 
 
-struct FlashOperation(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct FlashOperation(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_FlashOperation
@@ -2691,7 +2769,8 @@ struct FlashOperation(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime UNTIL_FOCUSED = FlashOperation(value = 2)
 
 
-struct GLAttr(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct GLAttr(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GLAttr
@@ -2740,7 +2819,8 @@ struct GLAttr(ImplicitlyCopyable, Equatable, Intable, Indexer):
     comptime EGL_PLATFORM = GLAttr(value = 27)
 
 
-struct HitTestResult(ImplicitlyCopyable, Equatable, Intable, Indexer):
+@register_passable("trivial")
+struct HitTestResult(Equatable, Intable, Indexer):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_HitTestResult

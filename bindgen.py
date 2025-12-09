@@ -666,7 +666,8 @@ def emit_sdl_enum(enum: SdlEnum) -> str:
             longest_common_prefix = longest_common_prefix[:-1]
     lines: List[str] = []
     lines.extend((
-        f"struct {mojo_name}(ImplicitlyCopyable, Equatable, Intable, Indexer):\n",
+        '@register_passable("trivial")\n'
+        f"struct {mojo_name}(Equatable, Intable, Indexer):\n",
         emit_wiki_docstring(enum.name),
         "    var value: Int32\n",
         "\n",
