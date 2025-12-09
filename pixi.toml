@@ -1,0 +1,24 @@
+[workspace]
+authors = ["Ryan <18477649+Ryul0rd@users.noreply.github.com>"]
+channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+name = "sdl-mojo"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+bindgen = "python3 bindgen.py"
+package = "mojo package sdl -o sdl.mojopkg"
+build = {depends-on = ["bindgen", "package"]}
+
+[build-dependencies]
+mojo = "==0.26.1.0.dev2025120805"
+python = ">=3.10,<4.0"
+requests = ">=2.32.5,<3"
+tqdm = ">=4.67.1,<5"
+
+[pypi-dependencies]
+libclang = "==18.1.1"
+
+[host-dependencies]
+mojo = ">=0.26.1.0.dev2025120805,<0.27"
+sdl3 = "==3.2.12"
