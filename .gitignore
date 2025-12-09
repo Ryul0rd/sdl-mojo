@@ -1,0 +1,6 @@
+test.mojo
+c_src/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
