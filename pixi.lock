@@ -76,10 +76,10 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libxml2-16-2.15.1-hf2a90c1_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libxml2-2.15.1-h031cc0b_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/libzlib-1.3.1-hb9d3cd8_2.conda
-      - conda: https://conda.modular.com/max-nightly/noarch/mblack-26.1.0.dev2025120805-release.conda
-      - conda: https://conda.modular.com/max-nightly/linux-64/mojo-0.26.1.0.dev2025120805-release.conda
-      - conda: https://conda.modular.com/max-nightly/linux-64/mojo-compiler-0.26.1.0.dev2025120805-release.conda
-      - conda: https://conda.modular.com/max-nightly/noarch/mojo-python-0.26.1.0.dev2025120805-release.conda
+      - conda: https://conda.modular.com/max-nightly/noarch/mblack-26.1.0.dev2025121505-release.conda
+      - conda: https://conda.modular.com/max-nightly/linux-64/mojo-0.26.1.0.dev2025121505-release.conda
+      - conda: https://conda.modular.com/max-nightly/linux-64/mojo-compiler-0.26.1.0.dev2025121505-release.conda
+      - conda: https://conda.modular.com/max-nightly/noarch/mojo-python-0.26.1.0.dev2025121505-release.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/mpg123-1.32.9-hc50e24c_0.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/mypy_extensions-1.1.0-pyha770c72_0.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/ncurses-6.5-h2d0b736_3.conda
@@ -958,9 +958,9 @@ packages:
   purls: []
   size: 60963
   timestamp: 1727963148474
-- conda: https://conda.modular.com/max-nightly/noarch/mblack-26.1.0.dev2025120805-release.conda
+- conda: https://conda.modular.com/max-nightly/noarch/mblack-26.1.0.dev2025121505-release.conda
   noarch: python
-  sha256: 393290d10e7056e5cdf3081ee5c14228be39eb3a799bb5cbcfe0a8e9894d3d61
+  sha256: 1deb29a0b5016ea5438e1aa150d4e78b75314c0609f7a5ad0160daf4afe414e4
   depends:
   - python >=3.10
   - click >=8.0.0
@@ -972,33 +972,33 @@ packages:
   - typing_extensions >=v4.12.2
   - python
   license: MIT
-  size: 138225
-  timestamp: 1765171473918
-- conda: https://conda.modular.com/max-nightly/linux-64/mojo-0.26.1.0.dev2025120805-release.conda
-  sha256: 5953d1061eb178c088f24758c5d7952ec405e029585a62cc735bebd5913feaa1
+  size: 138241
+  timestamp: 1765776272009
+- conda: https://conda.modular.com/max-nightly/linux-64/mojo-0.26.1.0.dev2025121505-release.conda
+  sha256: 9687135f90f0cec0a94f321ed486e3f0364c4e2da41a7dbb8674cd642e0cfbe5
   depends:
   - python >=3.10
-  - mojo-compiler ==0.26.1.0.dev2025120805 release
-  - mblack ==26.1.0.dev2025120805 release
+  - mojo-compiler ==0.26.1.0.dev2025121505 release
+  - mblack ==26.1.0.dev2025121505 release
   - jupyter_client >=8.6.2,<8.7
   license: LicenseRef-Modular-Proprietary
-  size: 87659266
-  timestamp: 1765171473918
-- conda: https://conda.modular.com/max-nightly/linux-64/mojo-compiler-0.26.1.0.dev2025120805-release.conda
-  sha256: dbecf0c058cf813496aeeee297f92cc07e5d543b782340b14aedf239b30581de
+  size: 87668979
+  timestamp: 1765776272009
+- conda: https://conda.modular.com/max-nightly/linux-64/mojo-compiler-0.26.1.0.dev2025121505-release.conda
+  sha256: 1d071054d4bb7ed02886799984301540f1cc2bed92a44e18ff6f92f9a11a1cf8
   depends:
-  - mojo-python ==0.26.1.0.dev2025120805 release
+  - mojo-python ==0.26.1.0.dev2025121505 release
   license: LicenseRef-Modular-Proprietary
-  size: 84231974
-  timestamp: 1765171473918
-- conda: https://conda.modular.com/max-nightly/noarch/mojo-python-0.26.1.0.dev2025120805-release.conda
+  size: 84193363
+  timestamp: 1765776272009
+- conda: https://conda.modular.com/max-nightly/noarch/mojo-python-0.26.1.0.dev2025121505-release.conda
   noarch: python
-  sha256: c0d91ed556d91016065d960ba6c2ed5211d91bd36bd59de309b6f21ef391b7f3
+  sha256: 04e63c1912cad5782f34308a92ed9cfed14ff07a4c06ba37b66cf434350b5fb3
   depends:
   - python
   license: LicenseRef-Modular-Proprietary
-  size: 24251
-  timestamp: 1765171473918
+  size: 24261
+  timestamp: 1765776272009
 - conda: https://conda.anaconda.org/conda-forge/linux-64/mpg123-1.32.9-hc50e24c_0.conda
   sha256: 39c4700fb3fbe403a77d8cc27352fa72ba744db487559d5d44bf8411bb4ea200
   md5: c7f302fd11eeb0987a6a5e1f3aed6a21

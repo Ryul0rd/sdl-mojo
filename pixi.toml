@@ -11,7 +11,7 @@ package = "mojo package sdl -o sdl.mojopkg"
 build = {depends-on = ["bindgen", "package"]}
 
 [build-dependencies]
-mojo = "==0.26.1.0.dev2025120805"
+mojo = "==0.26.1.0.dev2025121505"
 python = ">=3.10,<4.0"
 requests = ">=2.32.5,<3"
 tqdm = ">=4.67.1,<5"
@@ -20,5 +20,5 @@ tqdm = ">=4.67.1,<5"
 libclang = "==18.1.1"
 
 [host-dependencies]
-mojo = ">=0.26.1.0.dev2025120805,<0.27"
+mojo = ">=0.26.1.0.dev2025121505,<0.27"
 sdl3 = "==3.2.12"
