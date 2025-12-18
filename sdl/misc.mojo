@@ -4,8 +4,7 @@ from sys.info import CompilationTarget
 from sys.ffi import  _get_global_or_null, _get_global
 from math import ceildiv
 from os import PathLike
-from .function_table import FunctionTable
-from .enums import EventType
+from .enums import EventType, GamepadBindingType, GamepadButton, GamepadAxis
 
 
 comptime Ptr = UnsafePointer
@@ -18,44 +17,6 @@ fn uninitialized[T: AnyType](out value: T):
 fn zero_init[T: AnyType](out value: T):
     value = uninitialized[T]()
     memset_zero(Ptr(to=value), 1)
-
-
-fn zero_init_function_table() -> OpaquePointer[MutOrigin.external]:
-    var fn_table = alloc[FunctionTable](1)
-    memset_zero(fn_table, 1)
-    return fn_table.bitcast[NoneType]()
-
-
-fn destroy_function_table(fn_table: OpaquePointer[MutOrigin.external]):
-    fn_table.bitcast[FunctionTable]().destroy_pointee()
-
-
-fn get_function_table() -> ref [MutOrigin.external] FunctionTable:
-    return _get_global[
-        "sdl_function_table", zero_init_function_table, destroy_function_table,
-    ]().bitcast[FunctionTable]()[]
-
-
-fn load_dl[PathLike: PathLike](path: PathLike) raises:
-    var fn_table = Ptr(to=get_function_table())
-    try:
-        fn_table.init_pointee_move(FunctionTable(path))
-    except:
-        raise "Couldn't load SDL."
-
-
-fn load_dl() raises:
-    var fn_table = Ptr(to=get_function_table())
-    try:
-        @parameter
-        if CompilationTarget.is_linux():
-            fn_table.init_pointee_move(FunctionTable(".pixi/envs/default/lib/libSDL3.so"))
-        elif CompilationTarget.is_macos():
-            fn_table.init_pointee_move(FunctionTable(".pixi/envs/default/lib/libSDL3.dylib"))
-        else:
-            constrained[False, "Target OS isn't supported."]()
-    except:
-        raise "Couldn't load SDL."
 
 
 # FunctionPointer is one of the only types we need in stdinc.h,

@@ -2849,3 +2849,135 @@ struct HitTestResult(Equatable, Intable, Indexer):
     comptime RESIZE_BOTTOM = HitTestResult(value = 7)
     comptime RESIZE_BOTTOMLEFT = HitTestResult(value = 8)
     comptime RESIZE_LEFT = HitTestResult(value = 9)
+
+
+@register_passable("trivial")
+struct TTF_HintingFlags(Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_HintingFlags
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TTF_HintingFlags(value = -1)
+    comptime NORMAL = TTF_HintingFlags(value = 0)
+    comptime LIGHT = TTF_HintingFlags(value = 1)
+    comptime MONO = TTF_HintingFlags(value = 2)
+    comptime NONE = TTF_HintingFlags(value = 3)
+    comptime LIGHT_SUBPIXEL = TTF_HintingFlags(value = 4)
+
+
+@register_passable("trivial")
+struct TTF_HorizontalAlignment(Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_HorizontalAlignment
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TTF_HorizontalAlignment(value = -1)
+    comptime LEFT = TTF_HorizontalAlignment(value = 0)
+    comptime CENTER = TTF_HorizontalAlignment(value = 1)
+    comptime RIGHT = TTF_HorizontalAlignment(value = 2)
+
+
+@register_passable("trivial")
+struct TTF_Direction(Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_Direction
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TTF_Direction(value = 0)
+    comptime LTR = TTF_Direction(value = 4)
+    comptime RTL = TTF_Direction(value = 5)
+    comptime TTB = TTF_Direction(value = 6)
+    comptime BTT = TTF_Direction(value = 7)
+
+
+@register_passable("trivial")
+struct TTF_ImageType(Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_ImageType
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TTF_ImageType(value = 0)
+    comptime ALPHA = TTF_ImageType(value = 1)
+    comptime COLOR = TTF_ImageType(value = 2)
+    comptime SDF = TTF_ImageType(value = 3)
+
+
+@register_passable("trivial")
+struct TTF_GPUTextEngineWinding(Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_GPUTextEngineWinding
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TTF_GPUTextEngineWinding(value = -1)
+    comptime CLOCKWISE = TTF_GPUTextEngineWinding(value = 0)
+    comptime COUNTER_CLOCKWISE = TTF_GPUTextEngineWinding(value = 1)

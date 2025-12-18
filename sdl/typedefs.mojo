@@ -1,3 +1,9 @@
+from .structs import *
+from .misc import *
+from sys.ffi import c_char
+
+
+comptime Ptr = UnsafePointer
 
 
 comptime AudioDeviceID = UInt32
@@ -604,4 +610,42 @@ comptime HitTest = fn(Ptr[Window, MutAnyOrigin], Ptr[Point, ImmutAnyOrigin], Ptr
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HitTest
+"""
+
+
+struct TTF_Font:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_Font
+    """
+    pass
+
+
+comptime TTF_FontStyleFlags = UInt32
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FontStyleFlags
+"""
+
+
+struct TTF_TextEngine:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_TextEngine
+    """
+    pass
+
+
+struct TTF_TextData:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_TextData
+    """
+    pass
+
+
+comptime TTF_SubStringFlags = UInt32
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SubStringFlags
 """

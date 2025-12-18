@@ -22,3 +22,4 @@ libclang = "==18.1.1"
 [host-dependencies]
 mojo = ">=0.26.1.0.dev2025121505,<0.27"
 sdl3 = "==3.2.12"
+sdl_image = "==1.2.12"

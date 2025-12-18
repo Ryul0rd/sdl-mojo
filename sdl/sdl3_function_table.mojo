@@ -1,4 +1,4 @@
-from sys.ffi import _Global, OwnedDLHandle, c_char
+from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
 from os import PathLike
 from .misc import *
 from .typedefs import *
@@ -9,10 +9,48 @@ from .enums import *
 comptime Ptr = UnsafePointer
 
 
-comptime function_table = _Global["function_table", zero_init[FunctionTable]]()
+comptime sdl3_function_table = _Global["sdl3_function_table", zero_init[Sdl3FunctionTable]]()
 
 
-struct FunctionTable(Movable):
+fn zero_init_sdl3_function_table() -> OpaquePointer[MutOrigin.external]:
+    var fn_table = alloc[Sdl3FunctionTable](1)
+    memset_zero(fn_table, 1)
+    return fn_table.bitcast[NoneType]()
+
+
+fn destroy_sdl3_function_table(fn_table: OpaquePointer[MutOrigin.external]):
+    fn_table.bitcast[Sdl3FunctionTable]().destroy_pointee()
+
+
+fn get_sdl3_function_table() -> ref [MutOrigin.external] Sdl3FunctionTable:
+    return _get_global[
+        "sdl3_function_table", zero_init_sdl3_function_table, destroy_sdl3_function_table,
+    ]().bitcast[Sdl3FunctionTable]()[]
+
+
+fn load_dl[PathLike: PathLike](path: PathLike) raises:
+    var fn_table = Ptr(to=get_sdl3_function_table())
+    try:
+        fn_table.init_pointee_move(Sdl3FunctionTable(path))
+    except:
+        raise "Couldn't load SDL."
+
+
+fn load_dl() raises:
+    var fn_table = Ptr(to=get_sdl3_function_table())
+    try:
+        @parameter
+        if CompilationTarget.is_linux():
+            fn_table.init_pointee_move(Sdl3FunctionTable(".pixi/envs/default/lib/libSDL3.so"))
+        elif CompilationTarget.is_macos():
+            fn_table.init_pointee_move(Sdl3FunctionTable(".pixi/envs/default/lib/libSDL3.dylib"))
+        else:
+            constrained[False, "Target OS isn't supported."]()
+    except:
+       raise "Couldn't load SDL."
+
+
+struct Sdl3FunctionTable(Movable):
     var dlhandle: OwnedDLHandle
     var get_num_audio_drivers: fn() -> Int32
     var get_audio_driver: fn(Int32) -> Ptr[c_char, ImmutOrigin.external]

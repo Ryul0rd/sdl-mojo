@@ -1,3 +1,5 @@
+from .typedefs import *
+from .macros import *
 
 
 comptime AUDIO_MASK_BITSIZE = 0xFF
@@ -6276,4 +6278,312 @@ comptime WINDOW_SURFACE_VSYNC_ADAPTIVE = -1
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_WINDOW_SURFACE_VSYNC_ADAPTIVE
+"""
+
+
+comptime IMAGE_MAJOR_VERSION = 3
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MAJOR_VERSION
+"""
+
+
+comptime IMAGE_MINOR_VERSION = 2
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MINOR_VERSION
+"""
+
+
+comptime IMAGE_MICRO_VERSION = 5
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MICRO_VERSION
+"""
+
+
+comptime IMAGE_VERSION = versionnum(IMAGE_MAJOR_VERSION, IMAGE_MINOR_VERSION, IMAGE_MICRO_VERSION)
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/SDL_IMAGE_VERSION
+"""
+
+
+comptime TTF_MAJOR_VERSION = 3
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/SDL_TTF_MAJOR_VERSION
+"""
+
+
+comptime TTF_MINOR_VERSION = 2
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/SDL_TTF_MINOR_VERSION
+"""
+
+
+comptime TTF_MICRO_VERSION = 3
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/SDL_TTF_MICRO_VERSION
+"""
+
+
+comptime TTF_VERSION = versionnum(TTF_MAJOR_VERSION, TTF_MINOR_VERSION, TTF_MICRO_VERSION)
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/SDL_TTF_VERSION
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_FILENAME_STRING = "SDL_ttf.font.create.filename"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_FILENAME_STRING
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_IOSTREAM_POINTER = "SDL_ttf.font.create.iostream"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_IOSTREAM_POINTER
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER = "SDL_ttf.font.create.iostream.offset"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_IOSTREAM_OFFSET_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_ttf.font.create.iostream.autoclose"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_SIZE_FLOAT = "SDL_ttf.font.create.size"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_SIZE_FLOAT
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_FACE_NUMBER = "SDL_ttf.font.create.face"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_FACE_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER = "SDL_ttf.font.create.hdpi"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_HORIZONTAL_DPI_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER = "SDL_ttf.font.create.vdpi"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_VERTICAL_DPI_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_CREATE_EXISTING_FONT_POINTER = "SDL_ttf.font.create.existing_font"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_CREATE_EXISTING_FONT_POINTER
+"""
+
+
+comptime TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER = "SDL_ttf.font.outline.line_cap"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_OUTLINE_LINE_CAP_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER = "SDL_ttf.font.outline.line_join"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_OUTLINE_LINE_JOIN_NUMBER
+"""
+
+
+comptime TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER = "SDL_ttf.font.outline.miter_limit"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_FONT_OUTLINE_MITER_LIMIT_NUMBER
+"""
+
+
+comptime TTF_STYLE_NORMAL = 0x00
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_STYLE_NORMAL
+"""
+
+
+comptime TTF_STYLE_BOLD = 0x01
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_STYLE_BOLD
+"""
+
+
+comptime TTF_STYLE_ITALIC = 0x02
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_STYLE_ITALIC
+"""
+
+
+comptime TTF_STYLE_UNDERLINE = 0x04
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_STYLE_UNDERLINE
+"""
+
+
+comptime TTF_STYLE_STRIKETHROUGH = 0x08
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_STYLE_STRIKETHROUGH
+"""
+
+
+comptime TTF_FONT_WEIGHT_THIN = 100
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_THIN
+"""
+
+
+comptime TTF_FONT_WEIGHT_EXTRA_LIGHT = 200
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_EXTRA_LIGHT
+"""
+
+
+comptime TTF_FONT_WEIGHT_LIGHT = 300
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_LIGHT
+"""
+
+
+comptime TTF_FONT_WEIGHT_NORMAL = 400
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_NORMAL
+"""
+
+
+comptime TTF_FONT_WEIGHT_MEDIUM = 500
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_MEDIUM
+"""
+
+
+comptime TTF_FONT_WEIGHT_SEMI_BOLD = 600
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_SEMI_BOLD
+"""
+
+
+comptime TTF_FONT_WEIGHT_BOLD = 700
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_BOLD
+"""
+
+
+comptime TTF_FONT_WEIGHT_EXTRA_BOLD = 800
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_EXTRA_BOLD
+"""
+
+
+comptime TTF_FONT_WEIGHT_BLACK = 900
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_BLACK
+"""
+
+
+comptime TTF_FONT_WEIGHT_EXTRA_BLACK = 950
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_FONT_WEIGHT_EXTRA_BLACK
+"""
+
+
+comptime TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER_POINTER = "SDL_ttf.renderer_text_engine.create.renderer"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_RENDERER_TEXT_ENGINE_RENDERER_POINTER
+"""
+
+
+comptime TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE_NUMBER = "SDL_ttf.renderer_text_engine.create.atlas_texture_size"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_RENDERER_TEXT_ENGINE_ATLAS_TEXTURE_SIZE_NUMBER
+"""
+
+
+comptime TTF_PROP_GPU_TEXT_ENGINE_DEVICE_POINTER = "SDL_ttf.gpu_text_engine.create.device"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_GPU_TEXT_ENGINE_DEVICE_POINTER
+"""
+
+
+comptime TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE_NUMBER = "SDL_ttf.gpu_text_engine.create.atlas_texture_size"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_PROP_GPU_TEXT_ENGINE_ATLAS_TEXTURE_SIZE_NUMBER
+"""
+
+
+comptime TTF_SUBSTRING_DIRECTION_MASK = 0x000000FF
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_DIRECTION_MASK
+"""
+
+
+comptime TTF_SUBSTRING_TEXT_START = 0x00000100
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_TEXT_START
+"""
+
+
+comptime TTF_SUBSTRING_LINE_START = 0x00000200
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_LINE_START
+"""
+
+
+comptime TTF_SUBSTRING_LINE_END = 0x00000400
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_LINE_END
+"""
+
+
+comptime TTF_SUBSTRING_TEXT_END = 0x00000800
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_TEXT_END
 """

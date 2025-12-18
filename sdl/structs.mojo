@@ -1,4 +1,9 @@
+from .typedefs import *
+from .enums import *
 from .misc import *
+
+
+comptime Ptr = UnsafePointer
 
 
 @fieldwise_init
@@ -1525,3 +1530,58 @@ struct DisplayMode(Copyable):
     var refresh_rate_numerator: Int32
     var refresh_rate_denominator: Int32
     var internal: Ptr[DisplayModeData, MutOrigin.external]
+
+
+@fieldwise_init
+struct IMG_Animation(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_image/IMG_Animation
+    """
+    var w: Int32
+    var h: Int32
+    var count: Int32
+    var frames: Ptr[Ptr[Surface, MutOrigin.external], MutOrigin.external]
+    var delays: Ptr[Int32, MutOrigin.external]
+
+
+@fieldwise_init
+struct TTF_Text(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_Text
+    """
+    var text: Ptr[c_char, MutOrigin.external]
+    var num_lines: Int32
+    var refcount: Int32
+    var internal: Ptr[TTF_TextData, MutOrigin.external]
+
+
+@fieldwise_init
+struct TTF_GPUAtlasDrawSequence(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_GPUAtlasDrawSequence
+    """
+    var atlas_texture: Ptr[GPUTexture, MutOrigin.external]
+    var xy: Ptr[FPoint, MutOrigin.external]
+    var uv: Ptr[FPoint, MutOrigin.external]
+    var num_vertices: Int32
+    var indices: Ptr[Int32, MutOrigin.external]
+    var num_indices: Int32
+    var image_type: TTF_ImageType
+    var next: Ptr[TTF_GPUAtlasDrawSequence, MutOrigin.external]
+
+
+@fieldwise_init
+struct TTF_SubString(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_ttf/TTF_SubString
+    """
+    var flags: TTF_SubStringFlags
+    var offset: Int32
+    var length: Int32
+    var line_index: Int32
+    var cluster_index: Int32
+    var rect: Rect
