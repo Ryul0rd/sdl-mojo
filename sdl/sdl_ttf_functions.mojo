@@ -588,12 +588,17 @@ fn ttf_measure_string(
 
 fn ttf_render_text_solid(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid
     """
-    return get_sdl_ttf_function_table().ttf_render_text_solid(font, text.unsafe_ptr(), length, fg)
+    var result = get_sdl_ttf_function_table().ttf_render_text_solid(
+        font, text.unsafe_ptr(), length, fg
+    )
+    if not result:
+        raise "Error in ttf_render_text_solid call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_solid_wrapped(
@@ -602,36 +607,45 @@ fn ttf_render_text_solid_wrapped(
     length: Int32,
     fg: Color,
     wrapLength: Int32,
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid_Wrapped
     """
-    return get_sdl_ttf_function_table().ttf_render_text_solid_wrapped(
+    var result = get_sdl_ttf_function_table().ttf_render_text_solid_wrapped(
         font, text.unsafe_ptr(), length, fg, wrapLength
     )
+    if not result:
+        raise "Error in ttf_render_text_solid_wrapped call. See official documentation for details."
+    return result
 
 
 fn ttf_render_glyph_solid(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Solid
     """
-    return get_sdl_ttf_function_table().ttf_render_glyph_solid(font, ch, fg)
+    var result = get_sdl_ttf_function_table().ttf_render_glyph_solid(font, ch, fg)
+    if not result:
+        raise "Error in ttf_render_glyph_solid call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_shaded(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded
     """
-    return get_sdl_ttf_function_table().ttf_render_text_shaded(
+    var result = get_sdl_ttf_function_table().ttf_render_text_shaded(
         font, text.unsafe_ptr(), length, fg, bg
     )
+    if not result:
+        raise "Error in ttf_render_text_shaded call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_shaded_wrapped(
@@ -641,36 +655,45 @@ fn ttf_render_text_shaded_wrapped(
     fg: Color,
     bg: Color,
     wrap_width: Int32,
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded_Wrapped
     """
-    return get_sdl_ttf_function_table().ttf_render_text_shaded_wrapped(
+    var result = get_sdl_ttf_function_table().ttf_render_text_shaded_wrapped(
         font, text.unsafe_ptr(), length, fg, bg, wrap_width
     )
+    if not result:
+        raise "Error in ttf_render_text_shaded_wrapped call. See official documentation for details."
+    return result
 
 
 fn ttf_render_glyph_shaded(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color, bg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Shaded
     """
-    return get_sdl_ttf_function_table().ttf_render_glyph_shaded(font, ch, fg, bg)
+    var result = get_sdl_ttf_function_table().ttf_render_glyph_shaded(font, ch, fg, bg)
+    if not result:
+        raise "Error in ttf_render_glyph_shaded call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_blended(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended
     """
-    return get_sdl_ttf_function_table().ttf_render_text_blended(
+    var result = get_sdl_ttf_function_table().ttf_render_text_blended(
         font, text.unsafe_ptr(), length, fg
     )
+    if not result:
+        raise "Error in ttf_render_text_blended call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_blended_wrapped(
@@ -679,36 +702,45 @@ fn ttf_render_text_blended_wrapped(
     length: Int32,
     fg: Color,
     wrap_width: Int32,
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended_Wrapped
     """
-    return get_sdl_ttf_function_table().ttf_render_text_blended_wrapped(
+    var result = get_sdl_ttf_function_table().ttf_render_text_blended_wrapped(
         font, text.unsafe_ptr(), length, fg, wrap_width
     )
+    if not result:
+        raise "Error in ttf_render_text_blended_wrapped call. See official documentation for details."
+    return result
 
 
 fn ttf_render_glyph_blended(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Blended
     """
-    return get_sdl_ttf_function_table().ttf_render_glyph_blended(font, ch, fg)
+    var result = get_sdl_ttf_function_table().ttf_render_glyph_blended(font, ch, fg)
+    if not result:
+        raise "Error in ttf_render_glyph_blended call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_lcd(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD
     """
-    return get_sdl_ttf_function_table().ttf_render_text_lcd(
+    var result = get_sdl_ttf_function_table().ttf_render_text_lcd(
         font, text.unsafe_ptr(), length, fg, bg
     )
+    if not result:
+        raise "Error in ttf_render_text_lcd call. See official documentation for details."
+    return result
 
 
 fn ttf_render_text_lcd_wrapped(
@@ -718,24 +750,30 @@ fn ttf_render_text_lcd_wrapped(
     fg: Color,
     bg: Color,
     wrap_width: Int32,
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD_Wrapped
     """
-    return get_sdl_ttf_function_table().ttf_render_text_lcd_wrapped(
+    var result = get_sdl_ttf_function_table().ttf_render_text_lcd_wrapped(
         font, text.unsafe_ptr(), length, fg, bg, wrap_width
     )
+    if not result:
+        raise "Error in ttf_render_text_lcd_wrapped call. See official documentation for details."
+    return result
 
 
 fn ttf_render_glyph_lcd(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color, bg: Color
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_LCD
     """
-    return get_sdl_ttf_function_table().ttf_render_glyph_lcd(font, ch, fg, bg)
+    var result = get_sdl_ttf_function_table().ttf_render_glyph_lcd(font, ch, fg, bg)
+    if not result:
+        raise "Error in ttf_render_glyph_lcd call. See official documentation for details."
+    return result
 
 
 fn ttf_create_surface_text_engine() raises -> Ptr[TTF_TextEngine, MutOrigin.external]:

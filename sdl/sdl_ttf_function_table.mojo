@@ -36,20 +36,6 @@ fn load_ttf_dl[PathLike: PathLike](path: PathLike) raises:
         raise "Couldn't load SDL."
 
 
-fn load_ttf_dl() raises:
-    var fn_table = Ptr(to=get_sdl_ttf_function_table())
-    try:
-        @parameter
-        if CompilationTarget.is_linux():
-            fn_table.init_pointee_move(SdlTtfFunctionTable(".pixi/envs/default/lib/libSDL3.so"))
-        elif CompilationTarget.is_macos():
-            fn_table.init_pointee_move(SdlTtfFunctionTable(".pixi/envs/default/lib/libSDL3.dylib"))
-        else:
-            constrained[False, "Target OS isn't supported."]()
-    except:
-       raise "Couldn't load SDL."
-
-
 struct SdlTtfFunctionTable(Movable):
     var dlhandle: OwnedDLHandle
     var ttf_version: fn() -> Int32

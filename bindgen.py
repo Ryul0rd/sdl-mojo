@@ -797,23 +797,26 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     returns_ptr_error = (
         isinstance(function.return_type, SdlPointer)
         and "NULL" in original_docstring
-        and "SDL_GetError()" in original_docstring
     )
+    if "GetError" in original_docstring:
+        error = "get_error()"
+    else:
+        error = f'"Error in {mojo_fn_name} call. See official documentation for details."'
 
     if returns_bool_error:
         return_part = ") raises:\n"
         result_part = "var success = "
         post_call_part = (
-            "    if not success:\n"
-            "        raise get_error()\n"
+            f"    if not success:\n"
+            f"        raise {error}\n"
         )
     elif is_string(function.return_type) and returns_ptr_error:
         result_part = "var cstring = "
         return_part = f") raises -> {return_type_mojo}:\n"
         post_call_part = (
-            "    if not cstring:\n"
-            "        raise get_error()\n"
-            "    return CStringSlice(unsafe_from_ptr=cstring)\n"
+            f"    if not cstring:\n"
+            f"        raise {error}\n"
+            f"    return CStringSlice(unsafe_from_ptr=cstring)\n"
         )
     elif is_string(function.return_type):
         result_part = "var cstring = "
@@ -823,9 +826,9 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
         result_part = "var result = "
         return_part = f") raises -> {return_type_mojo}:\n"
         post_call_part = (
-            "    if not result:\n"
-            "        raise get_error()\n"
-            "    return result\n"
+            f"    if not result:\n"
+            f"        raise {error}\n"
+            f"    return result\n"
         )
     elif return_type_mojo == "NoneType":
         result_part = ""
@@ -835,8 +838,6 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
         result_part = "return "
         return_part = f") -> {return_type_mojo}:\n"
         post_call_part = ""
-
-    if mojo_fn_name == "img_load":
 
     parts: List[str] = []
     parts.append(emit_fn_like(

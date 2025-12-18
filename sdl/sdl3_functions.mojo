@@ -16,21 +16,25 @@ fn get_num_audio_drivers() -> Int32:
     return get_sdl3_function_table().get_num_audio_drivers()
 
 
-fn get_audio_driver(index: Int32) -> CStringSlice[ImmutOrigin.external]:
+fn get_audio_driver(index: Int32) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAudioDriver
     """
     var cstring = get_sdl3_function_table().get_audio_driver(index)
+    if not cstring:
+        raise "Error in get_audio_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
-fn get_current_audio_driver() -> CStringSlice[ImmutOrigin.external]:
+fn get_current_audio_driver() raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCurrentAudioDriver
     """
     var cstring = get_sdl3_function_table().get_current_audio_driver()
+    if not cstring:
+        raise "Error in get_current_audio_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -87,12 +91,15 @@ fn get_audio_device_format(
 
 fn get_audio_device_channel_map(
     devid: AudioDeviceID, count: Ptr[Int32, MutAnyOrigin]
-) -> Ptr[Int32, MutOrigin.external]:
+) raises -> Ptr[Int32, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAudioDeviceChannelMap
     """
-    return get_sdl3_function_table().get_audio_device_channel_map(devid, count)
+    var result = get_sdl3_function_table().get_audio_device_channel_map(devid, count)
+    if not result:
+        raise "Error in get_audio_device_channel_map call. See official documentation for details."
+    return result
 
 
 fn open_audio_device(devid: AudioDeviceID, spec: Ptr[AudioSpec, ImmutAnyOrigin]) -> AudioDeviceID:
@@ -310,22 +317,28 @@ fn set_audio_stream_gain(stream: Ptr[AudioStream, MutAnyOrigin], gain: Float32) 
 
 fn get_audio_stream_input_channel_map(
     stream: Ptr[AudioStream, MutAnyOrigin], count: Ptr[Int32, MutAnyOrigin]
-) -> Ptr[Int32, MutOrigin.external]:
+) raises -> Ptr[Int32, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAudioStreamInputChannelMap
     """
-    return get_sdl3_function_table().get_audio_stream_input_channel_map(stream, count)
+    var result = get_sdl3_function_table().get_audio_stream_input_channel_map(stream, count)
+    if not result:
+        raise "Error in get_audio_stream_input_channel_map call. See official documentation for details."
+    return result
 
 
 fn get_audio_stream_output_channel_map(
     stream: Ptr[AudioStream, MutAnyOrigin], count: Ptr[Int32, MutAnyOrigin]
-) -> Ptr[Int32, MutOrigin.external]:
+) raises -> Ptr[Int32, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAudioStreamOutputChannelMap
     """
-    return get_sdl3_function_table().get_audio_stream_output_channel_map(stream, count)
+    var result = get_sdl3_function_table().get_audio_stream_output_channel_map(stream, count)
+    if not result:
+        raise "Error in get_audio_stream_output_channel_map call. See official documentation for details."
+    return result
 
 
 fn set_audio_stream_input_channel_map(
@@ -641,21 +654,25 @@ fn get_num_camera_drivers() -> Int32:
     return get_sdl3_function_table().get_num_camera_drivers()
 
 
-fn get_camera_driver(index: Int32) -> CStringSlice[ImmutOrigin.external]:
+fn get_camera_driver(index: Int32) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCameraDriver
     """
     var cstring = get_sdl3_function_table().get_camera_driver(index)
+    if not cstring:
+        raise "Error in get_camera_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
-fn get_current_camera_driver() -> CStringSlice[ImmutOrigin.external]:
+fn get_current_camera_driver() raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCurrentCameraDriver
     """
     var cstring = get_sdl3_function_table().get_current_camera_driver()
+    if not cstring:
+        raise "Error in get_current_camera_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -753,12 +770,15 @@ fn get_camera_format(
 
 fn acquire_camera_frame(
     camera: Ptr[Camera, MutAnyOrigin], timestampNS: Ptr[UInt64, MutAnyOrigin]
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AcquireCameraFrame
     """
-    return get_sdl3_function_table().acquire_camera_frame(camera, timestampNS)
+    var result = get_sdl3_function_table().acquire_camera_frame(camera, timestampNS)
+    if not result:
+        raise "Error in acquire_camera_frame call. See official documentation for details."
+    return result
 
 
 fn release_camera_frame(camera: Ptr[Camera, MutAnyOrigin], frame: Ptr[Surface, MutAnyOrigin]):
@@ -1087,12 +1107,17 @@ fn register_events(numevents: Int32) -> UInt32:
     return get_sdl3_function_table().register_events(numevents)
 
 
-fn get_window_from_event(event: Ptr[Event, ImmutAnyOrigin]) -> Ptr[Window, MutOrigin.external]:
+fn get_window_from_event(
+    event: Ptr[Event, ImmutAnyOrigin]
+) raises -> Ptr[Window, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetWindowFromEvent
     """
-    return get_sdl3_function_table().get_window_from_event(event)
+    var result = get_sdl3_function_table().get_window_from_event(event)
+    if not result:
+        raise "Error in get_window_from_event call. See official documentation for details."
+    return result
 
 
 fn get_base_path() raises -> CStringSlice[ImmutOrigin.external]:
@@ -1106,12 +1131,15 @@ fn get_base_path() raises -> CStringSlice[ImmutOrigin.external]:
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
-fn get_pref_path(org: CStringSlice, app: CStringSlice) -> Ptr[c_char, MutOrigin.external]:
+fn get_pref_path(org: CStringSlice, app: CStringSlice) raises -> Ptr[c_char, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetPrefPath
     """
-    return get_sdl3_function_table().get_pref_path(org.unsafe_ptr(), app.unsafe_ptr())
+    var result = get_sdl3_function_table().get_pref_path(org.unsafe_ptr(), app.unsafe_ptr())
+    if not result:
+        raise "Error in get_pref_path call. See official documentation for details."
+    return result
 
 
 fn get_user_folder(folder: Folder) raises -> CStringSlice[ImmutOrigin.external]:
@@ -1202,12 +1230,15 @@ fn glob_directory(
     return result
 
 
-fn get_current_directory() -> Ptr[c_char, MutOrigin.external]:
+fn get_current_directory() raises -> Ptr[c_char, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCurrentDirectory
     """
-    return get_sdl3_function_table().get_current_directory()
+    var result = get_sdl3_function_table().get_current_directory()
+    if not result:
+        raise "Error in get_current_directory call. See official documentation for details."
+    return result
 
 
 fn add_gamepad_mapping(mapping: CStringSlice) -> Int32:
@@ -1396,12 +1427,15 @@ fn get_real_gamepad_type_for_id(instance_id: JoystickID) -> GamepadType:
     return get_sdl3_function_table().get_real_gamepad_type_for_id(instance_id)
 
 
-fn get_gamepad_mapping_for_id(instance_id: JoystickID) -> Ptr[c_char, MutOrigin.external]:
+fn get_gamepad_mapping_for_id(instance_id: JoystickID) raises -> Ptr[c_char, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadMappingForID
     """
-    return get_sdl3_function_table().get_gamepad_mapping_for_id(instance_id)
+    var result = get_sdl3_function_table().get_gamepad_mapping_for_id(instance_id)
+    if not result:
+        raise "Error in get_gamepad_mapping_for_id call. See official documentation for details."
+    return result
 
 
 fn open_gamepad(instance_id: JoystickID) raises -> Ptr[Gamepad, MutOrigin.external]:
@@ -1450,21 +1484,29 @@ fn get_gamepad_id(gamepad: Ptr[Gamepad, MutAnyOrigin]) -> JoystickID:
     return get_sdl3_function_table().get_gamepad_id(gamepad)
 
 
-fn get_gamepad_name(gamepad: Ptr[Gamepad, MutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_name(
+    gamepad: Ptr[Gamepad, MutAnyOrigin]
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadName
     """
     var cstring = get_sdl3_function_table().get_gamepad_name(gamepad)
+    if not cstring:
+        raise "Error in get_gamepad_name call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
-fn get_gamepad_path(gamepad: Ptr[Gamepad, MutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_path(
+    gamepad: Ptr[Gamepad, MutAnyOrigin]
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadPath
     """
     var cstring = get_sdl3_function_table().get_gamepad_path(gamepad)
+    if not cstring:
+        raise "Error in get_gamepad_path call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1534,12 +1576,16 @@ fn get_gamepad_firmware_version(gamepad: Ptr[Gamepad, MutAnyOrigin]) -> UInt16:
     return get_sdl3_function_table().get_gamepad_firmware_version(gamepad)
 
 
-fn get_gamepad_serial(gamepad: Ptr[Gamepad, MutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_serial(
+    gamepad: Ptr[Gamepad, MutAnyOrigin]
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadSerial
     """
     var cstring = get_sdl3_function_table().get_gamepad_serial(gamepad)
+    if not cstring:
+        raise "Error in get_gamepad_serial call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1635,12 +1681,14 @@ fn get_gamepad_type_from_string(str: CStringSlice) -> GamepadType:
     return get_sdl3_function_table().get_gamepad_type_from_string(str.unsafe_ptr())
 
 
-fn get_gamepad_string_for_type(type: GamepadType) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_string_for_type(type: GamepadType) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadStringForType
     """
     var cstring = get_sdl3_function_table().get_gamepad_string_for_type(type)
+    if not cstring:
+        raise "Error in get_gamepad_string_for_type call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1652,12 +1700,14 @@ fn get_gamepad_axis_from_string(str: CStringSlice) -> GamepadAxis:
     return get_sdl3_function_table().get_gamepad_axis_from_string(str.unsafe_ptr())
 
 
-fn get_gamepad_string_for_axis(axis: GamepadAxis) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_string_for_axis(axis: GamepadAxis) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadStringForAxis
     """
     var cstring = get_sdl3_function_table().get_gamepad_string_for_axis(axis)
+    if not cstring:
+        raise "Error in get_gamepad_string_for_axis call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1685,12 +1735,16 @@ fn get_gamepad_button_from_string(str: CStringSlice) -> GamepadButton:
     return get_sdl3_function_table().get_gamepad_button_from_string(str.unsafe_ptr())
 
 
-fn get_gamepad_string_for_button(button: GamepadButton) -> CStringSlice[ImmutOrigin.external]:
+fn get_gamepad_string_for_button(
+    button: GamepadButton
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadStringForButton
     """
     var cstring = get_sdl3_function_table().get_gamepad_string_for_button(button)
+    if not cstring:
+        raise "Error in get_gamepad_string_for_button call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1887,7 +1941,7 @@ fn close_gamepad(gamepad: Ptr[Gamepad, MutAnyOrigin]):
 
 fn get_gamepad_apple_sf_symbols_name_for_button(
     gamepad: Ptr[Gamepad, MutAnyOrigin], button: GamepadButton
-) -> CStringSlice[ImmutOrigin.external]:
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadAppleSFSymbolsNameForButton
@@ -1895,12 +1949,14 @@ fn get_gamepad_apple_sf_symbols_name_for_button(
     var cstring = get_sdl3_function_table().get_gamepad_apple_sf_symbols_name_for_button(
         gamepad, button
     )
+    if not cstring:
+        raise "Error in get_gamepad_apple_sf_symbols_name_for_button call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
 fn get_gamepad_apple_sf_symbols_name_for_axis(
     gamepad: Ptr[Gamepad, MutAnyOrigin], axis: GamepadAxis
-) -> CStringSlice[ImmutOrigin.external]:
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadAppleSFSymbolsNameForAxis
@@ -1908,6 +1964,8 @@ fn get_gamepad_apple_sf_symbols_name_for_axis(
     var cstring = get_sdl3_function_table().get_gamepad_apple_sf_symbols_name_for_axis(
         gamepad, axis
     )
+    if not cstring:
+        raise "Error in get_gamepad_apple_sf_symbols_name_for_axis call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -1982,12 +2040,14 @@ fn get_gpu_driver(index: Int32) -> CStringSlice[ImmutOrigin.external]:
 
 fn get_gpu_device_driver(
     device: Ptr[GPUDevice, MutAnyOrigin]
-) -> CStringSlice[ImmutOrigin.external]:
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGPUDeviceDriver
     """
     var cstring = get_sdl3_function_table().get_gpu_device_driver(device)
+    if not cstring:
+        raise "Error in get_gpu_device_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -2266,14 +2326,17 @@ fn begin_gpu_render_pass(
     color_target_infos: Ptr[GPUColorTargetInfo, ImmutAnyOrigin],
     num_color_targets: UInt32,
     depth_stencil_target_info: Ptr[GPUDepthStencilTargetInfo, ImmutAnyOrigin],
-) -> Ptr[GPURenderPass, MutOrigin.external]:
+) raises -> Ptr[GPURenderPass, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_BeginGPURenderPass
     """
-    return get_sdl3_function_table().begin_gpu_render_pass(
+    var result = get_sdl3_function_table().begin_gpu_render_pass(
         command_buffer, color_target_infos, num_color_targets, depth_stencil_target_info
     )
+    if not result:
+        raise "Error in begin_gpu_render_pass call. See official documentation for details."
+    return result
 
 
 fn bind_gpu_graphics_pipeline(
@@ -3362,12 +3425,14 @@ fn reset_hints():
     get_sdl3_function_table().reset_hints()
 
 
-fn get_hint(name: CStringSlice) -> CStringSlice[ImmutOrigin.external]:
+fn get_hint(name: CStringSlice) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetHint
     """
     var cstring = get_sdl3_function_table().get_hint(name.unsafe_ptr())
+    if not cstring:
+        raise "Error in get_hint call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -3493,12 +3558,14 @@ fn set_app_metadata_property(name: CStringSlice, value: CStringSlice) raises:
         raise get_error()
 
 
-fn get_app_metadata_property(name: CStringSlice) -> CStringSlice[ImmutOrigin.external]:
+fn get_app_metadata_property(name: CStringSlice) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAppMetadataProperty
     """
     var cstring = get_sdl3_function_table().get_app_metadata_property(name.unsafe_ptr())
+    if not cstring:
+        raise "Error in get_app_metadata_property call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -4284,12 +4351,14 @@ fn get_joystick_firmware_version(joystick: Ptr[Joystick, MutAnyOrigin]) -> UInt1
 
 fn get_joystick_serial(
     joystick: Ptr[Joystick, MutAnyOrigin]
-) -> CStringSlice[ImmutOrigin.external]:
+) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetJoystickSerial
     """
     var cstring = get_sdl3_function_table().get_joystick_serial(joystick)
+    if not cstring:
+        raise "Error in get_joystick_serial call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -4556,12 +4625,15 @@ fn get_keyboard_focus() -> Ptr[Window, MutOrigin.external]:
     return get_sdl3_function_table().get_keyboard_focus()
 
 
-fn get_keyboard_state(numkeys: Ptr[Int32, MutAnyOrigin]) -> Ptr[Bool, ImmutOrigin.external]:
+fn get_keyboard_state(numkeys: Ptr[Int32, MutAnyOrigin]) raises -> Ptr[Bool, ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetKeyboardState
     """
-    return get_sdl3_function_table().get_keyboard_state(numkeys)
+    var result = get_sdl3_function_table().get_keyboard_state(numkeys)
+    if not result:
+        raise "Error in get_keyboard_state call. See official documentation for details."
+    return result
 
 
 fn reset_keyboard():
@@ -5053,12 +5125,15 @@ fn set_cursor(cursor: Ptr[Cursor, MutAnyOrigin]) raises:
         raise get_error()
 
 
-fn get_cursor() -> Ptr[Cursor, MutOrigin.external]:
+fn get_cursor() raises -> Ptr[Cursor, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCursor
     """
-    return get_sdl3_function_table().get_cursor()
+    var result = get_sdl3_function_table().get_cursor()
+    if not result:
+        raise "Error in get_cursor call. See official documentation for details."
+    return result
 
 
 fn get_default_cursor() raises -> Ptr[Cursor, MutOrigin.external]:
@@ -5600,12 +5675,14 @@ fn get_num_render_drivers() -> Int32:
     return get_sdl3_function_table().get_num_render_drivers()
 
 
-fn get_render_driver(index: Int32) -> CStringSlice[ImmutOrigin.external]:
+fn get_render_driver(index: Int32) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetRenderDriver
     """
     var cstring = get_sdl3_function_table().get_render_driver(index)
+    if not cstring:
+        raise "Error in get_render_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -6056,12 +6133,17 @@ fn set_render_target(
         raise get_error()
 
 
-fn get_render_target(renderer: Ptr[Renderer, MutAnyOrigin]) -> Ptr[Texture, MutOrigin.external]:
+fn get_render_target(
+    renderer: Ptr[Renderer, MutAnyOrigin]
+) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetRenderTarget
     """
-    return get_sdl3_function_table().get_render_target(renderer)
+    var result = get_sdl3_function_table().get_render_target(renderer)
+    if not result:
+        raise "Error in get_render_target call. See official documentation for details."
+    return result
 
 
 fn set_render_logical_presentation(
@@ -6663,22 +6745,28 @@ fn flush_renderer(renderer: Ptr[Renderer, MutAnyOrigin]) raises:
 
 fn get_render_metal_layer(
     renderer: Ptr[Renderer, MutAnyOrigin]
-) -> Ptr[NoneType, MutOrigin.external]:
+) raises -> Ptr[NoneType, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetRenderMetalLayer
     """
-    return get_sdl3_function_table().get_render_metal_layer(renderer)
+    var result = get_sdl3_function_table().get_render_metal_layer(renderer)
+    if not result:
+        raise "Error in get_render_metal_layer call. See official documentation for details."
+    return result
 
 
 fn get_render_metal_command_encoder(
     renderer: Ptr[Renderer, MutAnyOrigin]
-) -> Ptr[NoneType, MutOrigin.external]:
+) raises -> Ptr[NoneType, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetRenderMetalCommandEncoder
     """
-    return get_sdl3_function_table().get_render_metal_command_encoder(renderer)
+    var result = get_sdl3_function_table().get_render_metal_command_encoder(renderer)
+    if not result:
+        raise "Error in get_render_metal_command_encoder call. See official documentation for details."
+    return result
 
 
 fn add_vulkan_render_semaphores(
@@ -6757,12 +6845,14 @@ fn get_sensors(count: Ptr[Int32, MutAnyOrigin]) raises -> Ptr[SensorID, MutOrigi
     return result
 
 
-fn get_sensor_name_for_id(instance_id: SensorID) -> CStringSlice[ImmutOrigin.external]:
+fn get_sensor_name_for_id(instance_id: SensorID) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetSensorNameForID
     """
     var cstring = get_sdl3_function_table().get_sensor_name_for_id(instance_id)
+    if not cstring:
+        raise "Error in get_sensor_name_for_id call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -7174,12 +7264,17 @@ fn set_surface_palette(
         raise get_error()
 
 
-fn get_surface_palette(surface: Ptr[Surface, MutAnyOrigin]) -> Ptr[Palette, MutOrigin.external]:
+fn get_surface_palette(
+    surface: Ptr[Surface, MutAnyOrigin]
+) raises -> Ptr[Palette, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetSurfacePalette
     """
-    return get_sdl3_function_table().get_surface_palette(surface)
+    var result = get_sdl3_function_table().get_surface_palette(surface)
+    if not result:
+        raise "Error in get_surface_palette call. See official documentation for details."
+    return result
 
 
 fn add_surface_alternate_image(
@@ -8100,12 +8195,14 @@ fn get_video_driver(index: Int32) -> CStringSlice[ImmutOrigin.external]:
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
-fn get_current_video_driver() -> CStringSlice[ImmutOrigin.external]:
+fn get_current_video_driver() raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCurrentVideoDriver
     """
     var cstring = get_sdl3_function_table().get_current_video_driver()
+    if not cstring:
+        raise "Error in get_current_video_driver call. See official documentation for details."
     return CStringSlice(unsafe_from_ptr=cstring)
 
 
@@ -8307,12 +8404,15 @@ fn set_window_fullscreen_mode(
 
 fn get_window_fullscreen_mode(
     window: Ptr[Window, MutAnyOrigin]
-) -> Ptr[DisplayMode, ImmutOrigin.external]:
+) raises -> Ptr[DisplayMode, ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetWindowFullscreenMode
     """
-    return get_sdl3_function_table().get_window_fullscreen_mode(window)
+    var result = get_sdl3_function_table().get_window_fullscreen_mode(window)
+    if not result:
+        raise "Error in get_window_fullscreen_mode call. See official documentation for details."
+    return result
 
 
 fn get_window_icc_profile(
@@ -8412,12 +8512,15 @@ fn get_window_from_id(id: WindowID) raises -> Ptr[Window, MutOrigin.external]:
     return result
 
 
-fn get_window_parent(window: Ptr[Window, MutAnyOrigin]) -> Ptr[Window, MutOrigin.external]:
+fn get_window_parent(window: Ptr[Window, MutAnyOrigin]) raises -> Ptr[Window, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetWindowParent
     """
-    return get_sdl3_function_table().get_window_parent(window)
+    var result = get_sdl3_function_table().get_window_parent(window)
+    if not result:
+        raise "Error in get_window_parent call. See official documentation for details."
+    return result
 
 
 fn get_window_properties(window: Ptr[Window, MutAnyOrigin]) -> PropertiesID:
@@ -8838,12 +8941,15 @@ fn get_window_mouse_grab(window: Ptr[Window, MutAnyOrigin]) -> Bool:
     return get_sdl3_function_table().get_window_mouse_grab(window)
 
 
-fn get_grabbed_window() -> Ptr[Window, MutOrigin.external]:
+fn get_grabbed_window() raises -> Ptr[Window, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGrabbedWindow
     """
-    return get_sdl3_function_table().get_grabbed_window()
+    var result = get_sdl3_function_table().get_grabbed_window()
+    if not result:
+        raise "Error in get_grabbed_window call. See official documentation for details."
+    return result
 
 
 fn set_window_mouse_rect(
@@ -8858,12 +8964,17 @@ fn set_window_mouse_rect(
         raise get_error()
 
 
-fn get_window_mouse_rect(window: Ptr[Window, MutAnyOrigin]) -> Ptr[Rect, ImmutOrigin.external]:
+fn get_window_mouse_rect(
+    window: Ptr[Window, MutAnyOrigin]
+) raises -> Ptr[Rect, ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetWindowMouseRect
     """
-    return get_sdl3_function_table().get_window_mouse_rect(window)
+    var result = get_sdl3_function_table().get_window_mouse_rect(window)
+    if not result:
+        raise "Error in get_window_mouse_rect call. See official documentation for details."
+    return result
 
 
 fn set_window_opacity(window: Ptr[Window, MutAnyOrigin], opacity: Float32) raises:

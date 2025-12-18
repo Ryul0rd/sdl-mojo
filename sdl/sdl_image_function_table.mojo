@@ -41,9 +41,9 @@ fn load_image_dl() raises:
     try:
         @parameter
         if CompilationTarget.is_linux():
-            fn_table.init_pointee_move(SdlImageFunctionTable(".pixi/envs/default/lib/libSDL3.so"))
+            fn_table.init_pointee_move(SdlImageFunctionTable(".pixi/envs/default/lib/libSDL_image.so"))
         elif CompilationTarget.is_macos():
-            fn_table.init_pointee_move(SdlImageFunctionTable(".pixi/envs/default/lib/libSDL3.dylib"))
+            fn_table.init_pointee_move(SdlImageFunctionTable(".pixi/envs/default/lib/libSDL_image.dylib"))
         else:
             constrained[False, "Target OS isn't supported."]()
     except:

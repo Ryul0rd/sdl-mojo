@@ -19,50 +19,65 @@ fn img_version() -> Int32:
 
 fn img_load_typed_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTyped_IO
     """
-    return get_sdl_image_function_table().img_load_typed_io(src, closeio, type.unsafe_ptr())
+    var result = get_sdl_image_function_table().img_load_typed_io(src, closeio, type.unsafe_ptr())
+    if not result:
+        raise "Error in img_load_typed_io call. See official documentation for details."
+    return result
 
 
-fn img_load(file: CStringSlice) -> Ptr[Surface, MutOrigin.external]:
+fn img_load(file: CStringSlice) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_Load
     """
-    return get_sdl_image_function_table().img_load(file.unsafe_ptr())
+    var result = get_sdl_image_function_table().img_load(file.unsafe_ptr())
+    if not result:
+        raise "Error in img_load call. See official documentation for details."
+    return result
 
 
 fn img_load_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_Load_IO
     """
-    return get_sdl_image_function_table().img_load_io(src, closeio)
+    var result = get_sdl_image_function_table().img_load_io(src, closeio)
+    if not result:
+        raise "Error in img_load_io call. See official documentation for details."
+    return result
 
 
 fn img_load_texture(
     renderer: Ptr[Renderer, MutAnyOrigin], file: CStringSlice
-) -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTexture
     """
-    return get_sdl_image_function_table().img_load_texture(renderer, file.unsafe_ptr())
+    var result = get_sdl_image_function_table().img_load_texture(renderer, file.unsafe_ptr())
+    if not result:
+        raise "Error in img_load_texture call. See official documentation for details."
+    return result
 
 
 fn img_load_texture_io(
     renderer: Ptr[Renderer, MutAnyOrigin], src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTexture_IO
     """
-    return get_sdl_image_function_table().img_load_texture_io(renderer, src, closeio)
+    var result = get_sdl_image_function_table().img_load_texture_io(renderer, src, closeio)
+    if not result:
+        raise "Error in img_load_texture_io call. See official documentation for details."
+    return result
 
 
 fn img_load_texture_typed_io(
@@ -70,14 +85,17 @@ fn img_load_texture_typed_io(
     src: Ptr[IOStream, MutAnyOrigin],
     closeio: Bool,
     type: CStringSlice,
-) -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTextureTyped_IO
     """
-    return get_sdl_image_function_table().img_load_texture_typed_io(
+    var result = get_sdl_image_function_table().img_load_texture_typed_io(
         renderer, src, closeio, type.unsafe_ptr()
     )
+    if not result:
+        raise "Error in img_load_texture_typed_io call. See official documentation for details."
+    return result
 
 
 fn img_is_avif(src: Ptr[IOStream, MutAnyOrigin]) -> Bool:
@@ -224,186 +242,252 @@ fn img_is_webp(src: Ptr[IOStream, MutAnyOrigin]) -> Bool:
     return get_sdl_image_function_table().img_is_webp(src)
 
 
-fn img_load_avif_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_avif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAVIF_IO
     """
-    return get_sdl_image_function_table().img_load_avif_io(src)
+    var result = get_sdl_image_function_table().img_load_avif_io(src)
+    if not result:
+        raise "Error in img_load_avif_io call. See official documentation for details."
+    return result
 
 
-fn img_load_ico_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_ico_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadICO_IO
     """
-    return get_sdl_image_function_table().img_load_ico_io(src)
+    var result = get_sdl_image_function_table().img_load_ico_io(src)
+    if not result:
+        raise "Error in img_load_ico_io call. See official documentation for details."
+    return result
 
 
-fn img_load_cur_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_cur_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadCUR_IO
     """
-    return get_sdl_image_function_table().img_load_cur_io(src)
+    var result = get_sdl_image_function_table().img_load_cur_io(src)
+    if not result:
+        raise "Error in img_load_cur_io call. See official documentation for details."
+    return result
 
 
-fn img_load_bmp_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_bmp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadBMP_IO
     """
-    return get_sdl_image_function_table().img_load_bmp_io(src)
+    var result = get_sdl_image_function_table().img_load_bmp_io(src)
+    if not result:
+        raise "Error in img_load_bmp_io call. See official documentation for details."
+    return result
 
 
-fn img_load_gif_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_gif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadGIF_IO
     """
-    return get_sdl_image_function_table().img_load_gif_io(src)
+    var result = get_sdl_image_function_table().img_load_gif_io(src)
+    if not result:
+        raise "Error in img_load_gif_io call. See official documentation for details."
+    return result
 
 
-fn img_load_jpg_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_jpg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadJPG_IO
     """
-    return get_sdl_image_function_table().img_load_jpg_io(src)
+    var result = get_sdl_image_function_table().img_load_jpg_io(src)
+    if not result:
+        raise "Error in img_load_jpg_io call. See official documentation for details."
+    return result
 
 
-fn img_load_jxl_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_jxl_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadJXL_IO
     """
-    return get_sdl_image_function_table().img_load_jxl_io(src)
+    var result = get_sdl_image_function_table().img_load_jxl_io(src)
+    if not result:
+        raise "Error in img_load_jxl_io call. See official documentation for details."
+    return result
 
 
-fn img_load_lbm_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_lbm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadLBM_IO
     """
-    return get_sdl_image_function_table().img_load_lbm_io(src)
+    var result = get_sdl_image_function_table().img_load_lbm_io(src)
+    if not result:
+        raise "Error in img_load_lbm_io call. See official documentation for details."
+    return result
 
 
-fn img_load_pcx_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_pcx_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPCX_IO
     """
-    return get_sdl_image_function_table().img_load_pcx_io(src)
+    var result = get_sdl_image_function_table().img_load_pcx_io(src)
+    if not result:
+        raise "Error in img_load_pcx_io call. See official documentation for details."
+    return result
 
 
-fn img_load_png_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_png_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPNG_IO
     """
-    return get_sdl_image_function_table().img_load_png_io(src)
+    var result = get_sdl_image_function_table().img_load_png_io(src)
+    if not result:
+        raise "Error in img_load_png_io call. See official documentation for details."
+    return result
 
 
-fn img_load_pnm_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_pnm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPNM_IO
     """
-    return get_sdl_image_function_table().img_load_pnm_io(src)
+    var result = get_sdl_image_function_table().img_load_pnm_io(src)
+    if not result:
+        raise "Error in img_load_pnm_io call. See official documentation for details."
+    return result
 
 
-fn img_load_svg_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_svg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadSVG_IO
     """
-    return get_sdl_image_function_table().img_load_svg_io(src)
+    var result = get_sdl_image_function_table().img_load_svg_io(src)
+    if not result:
+        raise "Error in img_load_svg_io call. See official documentation for details."
+    return result
 
 
-fn img_load_qoi_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_qoi_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadQOI_IO
     """
-    return get_sdl_image_function_table().img_load_qoi_io(src)
+    var result = get_sdl_image_function_table().img_load_qoi_io(src)
+    if not result:
+        raise "Error in img_load_qoi_io call. See official documentation for details."
+    return result
 
 
-fn img_load_tga_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_tga_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTGA_IO
     """
-    return get_sdl_image_function_table().img_load_tga_io(src)
+    var result = get_sdl_image_function_table().img_load_tga_io(src)
+    if not result:
+        raise "Error in img_load_tga_io call. See official documentation for details."
+    return result
 
 
-fn img_load_tif_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_tif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTIF_IO
     """
-    return get_sdl_image_function_table().img_load_tif_io(src)
+    var result = get_sdl_image_function_table().img_load_tif_io(src)
+    if not result:
+        raise "Error in img_load_tif_io call. See official documentation for details."
+    return result
 
 
-fn img_load_xcf_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xcf_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXCF_IO
     """
-    return get_sdl_image_function_table().img_load_xcf_io(src)
+    var result = get_sdl_image_function_table().img_load_xcf_io(src)
+    if not result:
+        raise "Error in img_load_xcf_io call. See official documentation for details."
+    return result
 
 
-fn img_load_xpm_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xpm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXPM_IO
     """
-    return get_sdl_image_function_table().img_load_xpm_io(src)
+    var result = get_sdl_image_function_table().img_load_xpm_io(src)
+    if not result:
+        raise "Error in img_load_xpm_io call. See official documentation for details."
+    return result
 
 
-fn img_load_xv_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xv_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXV_IO
     """
-    return get_sdl_image_function_table().img_load_xv_io(src)
+    var result = get_sdl_image_function_table().img_load_xv_io(src)
+    if not result:
+        raise "Error in img_load_xv_io call. See official documentation for details."
+    return result
 
 
-fn img_load_webp_io(src: Ptr[IOStream, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]:
+fn img_load_webp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadWEBP_IO
     """
-    return get_sdl_image_function_table().img_load_webp_io(src)
+    var result = get_sdl_image_function_table().img_load_webp_io(src)
+    if not result:
+        raise "Error in img_load_webp_io call. See official documentation for details."
+    return result
 
 
 fn img_load_sized_svg_io(
     src: Ptr[IOStream, MutAnyOrigin], width: Int32, height: Int32
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadSizedSVG_IO
     """
-    return get_sdl_image_function_table().img_load_sized_svg_io(src, width, height)
+    var result = get_sdl_image_function_table().img_load_sized_svg_io(src, width, height)
+    if not result:
+        raise "Error in img_load_sized_svg_io call. See official documentation for details."
+    return result
 
 
 fn img_read_xpm_from_array(
     xpm: Ptr[Ptr[c_char, MutOrigin.external], MutAnyOrigin]
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_ReadXPMFromArray
     """
-    return get_sdl_image_function_table().img_read_xpm_from_array(xpm)
+    var result = get_sdl_image_function_table().img_read_xpm_from_array(xpm)
+    if not result:
+        raise "Error in img_read_xpm_from_array call. See official documentation for details."
+    return result
 
 
 fn img_read_xpm_from_array_to_rg_b888(
     xpm: Ptr[Ptr[c_char, MutOrigin.external], MutAnyOrigin]
-) -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_ReadXPMFromArrayToRGB888
     """
-    return get_sdl_image_function_table().img_read_xpm_from_array_to_rg_b888(xpm)
+    var result = get_sdl_image_function_table().img_read_xpm_from_array_to_rg_b888(xpm)
+    if not result:
+        raise "Error in img_read_xpm_from_array_to_rg_b888 call. See official documentation for details."
+    return result
 
 
 fn img_save_avif(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice, quality: Int32) raises:
@@ -478,34 +562,43 @@ fn img_save_jpg_io(
         raise get_error()
 
 
-fn img_load_animation(file: CStringSlice) -> Ptr[IMG_Animation, MutOrigin.external]:
+fn img_load_animation(file: CStringSlice) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimation
     """
-    return get_sdl_image_function_table().img_load_animation(file.unsafe_ptr())
+    var result = get_sdl_image_function_table().img_load_animation(file.unsafe_ptr())
+    if not result:
+        raise "Error in img_load_animation call. See official documentation for details."
+    return result
 
 
 fn img_load_animation_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimation_IO
     """
-    return get_sdl_image_function_table().img_load_animation_io(src, closeio)
+    var result = get_sdl_image_function_table().img_load_animation_io(src, closeio)
+    if not result:
+        raise "Error in img_load_animation_io call. See official documentation for details."
+    return result
 
 
 fn img_load_animation_typed_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
-) -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimationTyped_IO
     """
-    return get_sdl_image_function_table().img_load_animation_typed_io(
+    var result = get_sdl_image_function_table().img_load_animation_typed_io(
         src, closeio, type.unsafe_ptr()
     )
+    if not result:
+        raise "Error in img_load_animation_typed_io call. See official documentation for details."
+    return result
 
 
 fn img_free_animation(anim: Ptr[IMG_Animation, MutAnyOrigin]):
@@ -518,19 +611,25 @@ fn img_free_animation(anim: Ptr[IMG_Animation, MutAnyOrigin]):
 
 fn img_load_gif_animation_io(
     src: Ptr[IOStream, MutAnyOrigin]
-) -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadGIFAnimation_IO
     """
-    return get_sdl_image_function_table().img_load_gif_animation_io(src)
+    var result = get_sdl_image_function_table().img_load_gif_animation_io(src)
+    if not result:
+        raise "Error in img_load_gif_animation_io call. See official documentation for details."
+    return result
 
 
 fn img_load_webp_animation_io(
     src: Ptr[IOStream, MutAnyOrigin]
-) -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadWEBPAnimation_IO
     """
-    return get_sdl_image_function_table().img_load_webp_animation_io(src)
+    var result = get_sdl_image_function_table().img_load_webp_animation_io(src)
+    if not result:
+        raise "Error in img_load_webp_animation_io call. See official documentation for details."
+    return result
