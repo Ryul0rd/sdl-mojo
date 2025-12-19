@@ -100,21 +100,18 @@ def main():
                     "SDL_vulkan.h",
             ],
             repo_url = "https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref=release-3.2.x",
-            pixi_dl_name = "libSDL3",
         ),
         SdlLibSpec(
             name = "SDL_image",
             entrypoint_header = "SDL_image.h",
             include_headers = ["SDL_image.h"],
             repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.2.x",
-            pixi_dl_name = "libSDL_image",
         ),
         SdlLibSpec(
             name = "SDL_ttf",
             entrypoint_header = "SDL_ttf.h",
             include_headers = ["SDL_ttf.h", "SDL_textengine.h"],
             repo_url = "https://api.github.com/repos/libsdl-org/SDL_ttf/contents/include/SDL3_ttf?ref=release-3.2.x",
-            pixi_dl_name = None,
         )
     ]
 
@@ -722,32 +719,11 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "\n\n",
         f"fn {load_dl_name}[PathLike: PathLike](path: PathLike) raises:\n",
         f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n",
-        f"    try:\n",
-        f"        fn_table.init_pointee_move({function_table_type_name}(path))\n",
-        f"    except:\n",
-        f'        raise "Couldn\'t load SDL."\n',
+        f"    fn_table.init_pointee_move({function_table_type_name}(path))\n",
+        f"\n\n",
+        f"struct {function_table_type_name}(Movable):\n",
+        f"    var dlhandle: OwnedDLHandle\n",
     ]
-    if lib_spec.pixi_dl_name is not None:
-        functions_table_file_parts.append((
-            f"\n\n"
-            f"fn {load_dl_name}() raises:\n"
-            f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n"
-            f"    try:\n"
-            f"        @parameter\n"
-            f"        if CompilationTarget.is_linux():\n"
-            f'            fn_table.init_pointee_move({function_table_type_name}(".pixi/envs/default/lib/{lib_spec.pixi_dl_name}.so"))\n'
-            f"        elif CompilationTarget.is_macos():\n"
-            f'            fn_table.init_pointee_move({function_table_type_name}(".pixi/envs/default/lib/{lib_spec.pixi_dl_name}.dylib"))\n'
-            f"        else:\n"
-            f'            constrained[False, "Target OS isn\'t supported."]()\n'
-            f"    except:\n"
-            f'       raise "Couldn\'t load SDL."\n'
-        ))
-    functions_table_file_parts.append((
-        f"\n\n"
-        f"struct {function_table_type_name}(Movable):\n"
-        f"    var dlhandle: OwnedDLHandle\n"
-    ))
     for function in functions:
         mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
         functions_table_file_parts.append(f'    var {mojo_fn_name}: {emit_mojo_type(function.as_fn_type())}\n')
@@ -1015,7 +991,6 @@ class SdlLibSpec:
     entrypoint_header: str
     include_headers: List[str]
     repo_url: str
-    pixi_dl_name: Optional[str]
 
 
 @dataclass

@@ -30,10 +30,7 @@ fn get_sdl_ttf_function_table() -> ref [MutOrigin.external] SdlTtfFunctionTable:
 
 fn load_ttf_dl[PathLike: PathLike](path: PathLike) raises:
     var fn_table = Ptr(to=get_sdl_ttf_function_table())
-    try:
-        fn_table.init_pointee_move(SdlTtfFunctionTable(path))
-    except:
-        raise "Couldn't load SDL."
+    fn_table.init_pointee_move(SdlTtfFunctionTable(path))
 
 
 struct SdlTtfFunctionTable(Movable):
