@@ -29,7 +29,7 @@ fn get_sdl3_function_table() -> ref [MutOrigin.external] Sdl3FunctionTable:
     ]().bitcast[Sdl3FunctionTable]()[]
 
 
-fn load_dl(path: Path="SDL3.so") raises:
+fn load_dl(path: Path="libSDL3.so") raises:
     var fn_table = Ptr(to=get_sdl3_function_table())
     fn_table.init_pointee_move(Sdl3FunctionTable(path))
 

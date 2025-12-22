@@ -29,7 +29,7 @@ fn get_sdl_image_function_table() -> ref [MutOrigin.external] SdlImageFunctionTa
     ]().bitcast[SdlImageFunctionTable]()[]
 
 
-fn load_image_dl(path: Path="SDL_image.so") raises:
+fn load_image_dl(path: Path="libSDL_image.so") raises:
     var fn_table = Ptr(to=get_sdl_image_function_table())
     fn_table.init_pointee_move(SdlImageFunctionTable(path))
 

@@ -718,7 +718,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         f'        "{function_table_global_name}", zero_init_{function_table_global_name}, destroy_{function_table_global_name},\n',
         f"    ]().bitcast[{function_table_type_name}]()[]\n",
         "\n\n",
-        f'fn {load_dl_name}(path: Path="{lib_spec.name}.so") raises:\n',
+        f'fn {load_dl_name}(path: Path="lib{lib_spec.name}.so") raises:\n',
         f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n",
         f"    fn_table.init_pointee_move({function_table_type_name}(path))\n",
         f"\n\n",
