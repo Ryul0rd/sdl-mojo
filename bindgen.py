@@ -25,6 +25,7 @@ def main():
     lib_specs = [
         SdlLibSpec(
             name = "SDL3",
+            dlname = "libSDL3",
             entrypoint_header = "SDL.h",
             include_headers = [
                     # "SDL_assert.h",
@@ -103,12 +104,14 @@ def main():
         ),
         SdlLibSpec(
             name = "SDL_image",
+            dlname = "libSDL3_image",
             entrypoint_header = "SDL_image.h",
             include_headers = ["SDL_image.h"],
             repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.2.x",
         ),
         SdlLibSpec(
             name = "SDL_ttf",
+            dlname = "libSDL3_ttf",
             entrypoint_header = "SDL_ttf.h",
             include_headers = ["SDL_ttf.h", "SDL_textengine.h"],
             repo_url = "https://api.github.com/repos/libsdl-org/SDL_ttf/contents/include/SDL3_ttf?ref=release-3.2.x",
@@ -718,7 +721,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         f'        "{function_table_global_name}", zero_init_{function_table_global_name}, destroy_{function_table_global_name},\n',
         f"    ]().bitcast[{function_table_type_name}]()[]\n",
         "\n\n",
-        f'fn {load_dl_name}(path: Path="lib{lib_spec.name}.so") raises:\n',
+        f'fn {load_dl_name}(path: Path="{lib_spec.dlname}.so") raises:\n',
         f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n",
         f"    fn_table.init_pointee_move({function_table_type_name}(path))\n",
         f"\n\n",
@@ -989,6 +992,7 @@ def pascal_to_snake_case(name: str) -> str:
 @dataclass
 class SdlLibSpec:
     name: str
+    dlname: str
     entrypoint_header: str
     include_headers: List[str]
     repo_url: str

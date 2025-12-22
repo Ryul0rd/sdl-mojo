@@ -29,7 +29,7 @@ fn get_sdl_ttf_function_table() -> ref [MutOrigin.external] SdlTtfFunctionTable:
     ]().bitcast[SdlTtfFunctionTable]()[]
 
 
-fn load_ttf_dl(path: Path="libSDL_ttf.so") raises:
+fn load_ttf_dl(path: Path="libSDL3_ttf.so") raises:
     var fn_table = Ptr(to=get_sdl_ttf_function_table())
     fn_table.init_pointee_move(SdlTtfFunctionTable(path))
 
