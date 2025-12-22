@@ -1,5 +1,6 @@
 from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
 from os import PathLike
+from pathlib import Path
 from .misc import *
 from .typedefs import *
 from .structs import *
@@ -28,7 +29,7 @@ fn get_sdl_ttf_function_table() -> ref [MutOrigin.external] SdlTtfFunctionTable:
     ]().bitcast[SdlTtfFunctionTable]()[]
 
 
-fn load_ttf_dl[PathLike: PathLike](path: PathLike) raises:
+fn load_ttf_dl(path: Path="SDL_ttf.so") raises:
     var fn_table = Ptr(to=get_sdl_ttf_function_table())
     fn_table.init_pointee_move(SdlTtfFunctionTable(path))
 

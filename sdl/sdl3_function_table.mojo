@@ -1,5 +1,6 @@
 from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
 from os import PathLike
+from pathlib import Path
 from .misc import *
 from .typedefs import *
 from .structs import *
@@ -28,7 +29,7 @@ fn get_sdl3_function_table() -> ref [MutOrigin.external] Sdl3FunctionTable:
     ]().bitcast[Sdl3FunctionTable]()[]
 
 
-fn load_dl[PathLike: PathLike](path: PathLike) raises:
+fn load_dl(path: Path="SDL3.so") raises:
     var fn_table = Ptr(to=get_sdl3_function_table())
     fn_table.init_pointee_move(Sdl3FunctionTable(path))
 
