@@ -1,4 +1,5 @@
 from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
+from sys import CompilationTarget
 from os import PathLike
 from pathlib import Path
 from .misc import *
@@ -30,7 +31,21 @@ fn get_sdl_ttf_function_table() -> ref [MutOrigin.external] SdlTtfFunctionTable:
     ]().bitcast[SdlTtfFunctionTable]()[]
 
 
-fn load_ttf_dl(path: Path="libSDL3_ttf.so") raises:
+fn load_ttf_dl() raises:
+    var path: Path
+    @parameter
+    if CompilationTarget.is_linux():
+        path = Path("libSDL3_ttf.so")
+    elif CompilationTarget.is_macos():
+        path = Path("libSDL3_ttf.dylib")
+    else:
+        constrained[False, "Target OS is not supported."]()
+        path = Path()
+    var fn_table = Ptr(to=get_sdl_ttf_function_table())
+    fn_table.init_pointee_move(SdlTtfFunctionTable(path))
+
+
+fn load_ttf_dl(path: Some[PathLike]) raises:
     var fn_table = Ptr(to=get_sdl_ttf_function_table())
     fn_table.init_pointee_move(SdlTtfFunctionTable(path))
 

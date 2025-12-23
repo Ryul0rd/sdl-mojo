@@ -1,4 +1,5 @@
 from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
+from sys import CompilationTarget
 from os import PathLike
 from pathlib import Path
 from .misc import *
@@ -30,7 +31,21 @@ fn get_sdl_image_function_table() -> ref [MutOrigin.external] SdlImageFunctionTa
     ]().bitcast[SdlImageFunctionTable]()[]
 
 
-fn load_image_dl(path: Path="libSDL3_image.so") raises:
+fn load_image_dl() raises:
+    var path: Path
+    @parameter
+    if CompilationTarget.is_linux():
+        path = Path("libSDL3_image.so")
+    elif CompilationTarget.is_macos():
+        path = Path("libSDL3_image.dylib")
+    else:
+        constrained[False, "Target OS is not supported."]()
+        path = Path()
+    var fn_table = Ptr(to=get_sdl_image_function_table())
+    fn_table.init_pointee_move(SdlImageFunctionTable(path))
+
+
+fn load_image_dl(path: Some[PathLike]) raises:
     var fn_table = Ptr(to=get_sdl_image_function_table())
     fn_table.init_pointee_move(SdlImageFunctionTable(path))
 
