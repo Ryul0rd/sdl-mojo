@@ -1,6 +1,7 @@
 from .typedefs import *
 from .structs import *
 from .enums import *
+from .vulkan import *
 from .sdl3_function_table import get_sdl3_function_table
 from sys.ffi import CStringSlice, c_char
 
@@ -9287,3 +9288,83 @@ fn gl_destroy_context(context: GLContext) raises:
     var success = get_sdl3_function_table().gl_destroy_context(context)
     if not success:
         raise get_error()
+
+
+fn vulkan_load_library(path: CStringSlice) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_LoadLibrary
+    """
+    var success = get_sdl3_function_table().vulkan_load_library(path.unsafe_ptr())
+    if not success:
+        raise get_error()
+
+
+fn vulkan_get_vk_get_instance_proc_addr() -> FunctionPointer:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_GetVkGetInstanceProcAddr
+    """
+    return get_sdl3_function_table().vulkan_get_vk_get_instance_proc_addr()
+
+
+fn vulkan_unload_library():
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_UnloadLibrary
+    """
+    get_sdl3_function_table().vulkan_unload_library()
+
+
+fn vulkan_get_instance_extensions(
+    count: Ptr[UInt32, MutAnyOrigin]
+) raises -> Ptr[Ptr[c_char, ImmutOrigin.external], ImmutOrigin.external]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_GetInstanceExtensions
+    """
+    var result = get_sdl3_function_table().vulkan_get_instance_extensions(count)
+    if not result:
+        raise get_error()
+    return result
+
+
+fn vulkan_create_surface(
+    window: Ptr[Window, MutAnyOrigin],
+    instance: VkInstance,
+    allocator: Ptr[VkAllocationCallbacks, ImmutAnyOrigin],
+    surface: Ptr[VkSurfaceKHR, MutAnyOrigin],
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_CreateSurface
+    """
+    var success = get_sdl3_function_table().vulkan_create_surface(
+        window, instance, allocator, surface
+    )
+    if not success:
+        raise get_error()
+
+
+fn vulkan_destroy_surface(
+    instance: VkInstance,
+    surface: VkSurfaceKHR,
+    allocator: Ptr[VkAllocationCallbacks, ImmutAnyOrigin],
+):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_DestroySurface
+    """
+    get_sdl3_function_table().vulkan_destroy_surface(instance, surface, allocator)
+
+
+fn vulkan_get_presentation_support(
+    instance: VkInstance, physicalDevice: VkPhysicalDevice, queueFamilyIndex: UInt32
+) -> Bool:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_Vulkan_GetPresentationSupport
+    """
+    return get_sdl3_function_table().vulkan_get_presentation_support(
+        instance, physicalDevice, queueFamilyIndex
+    )

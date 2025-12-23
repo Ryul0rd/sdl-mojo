@@ -5,6 +5,7 @@ from .misc import *
 from .typedefs import *
 from .structs import *
 from .enums import *
+from .vulkan import *
 
 
 comptime Ptr = UnsafePointer
@@ -895,6 +896,13 @@ struct Sdl3FunctionTable(Movable):
     var gl_get_swap_interval: fn(Ptr[Int32, MutAnyOrigin]) -> Bool
     var gl_swap_window: fn(Ptr[Window, MutAnyOrigin]) -> Bool
     var gl_destroy_context: fn(GLContext) -> Bool
+    var vulkan_load_library: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var vulkan_get_vk_get_instance_proc_addr: fn() -> FunctionPointer
+    var vulkan_unload_library: fn() -> NoneType
+    var vulkan_get_instance_extensions: fn(Ptr[UInt32, MutAnyOrigin]) -> Ptr[Ptr[c_char, ImmutOrigin.external], ImmutOrigin.external]
+    var vulkan_create_surface: fn(Ptr[Window, MutAnyOrigin], VkInstance, Ptr[VkAllocationCallbacks, ImmutAnyOrigin], Ptr[VkSurfaceKHR, MutAnyOrigin]) -> Bool
+    var vulkan_destroy_surface: fn(VkInstance, VkSurfaceKHR, Ptr[VkAllocationCallbacks, ImmutAnyOrigin]) -> NoneType
+    var vulkan_get_presentation_support: fn(VkInstance, VkPhysicalDevice, UInt32) -> Bool
 
     fn __init__(out self, path: Some[PathLike]) raises:
         self.dlhandle = OwnedDLHandle(path)
@@ -1757,3 +1765,10 @@ struct Sdl3FunctionTable(Movable):
         self.gl_get_swap_interval = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Bool]("SDL_GL_GetSwapInterval")
         self.gl_swap_window = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Bool]("SDL_GL_SwapWindow")
         self.gl_destroy_context = self.dlhandle.get_function[fn(GLContext) -> Bool]("SDL_GL_DestroyContext")
+        self.vulkan_load_library = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_Vulkan_LoadLibrary")
+        self.vulkan_get_vk_get_instance_proc_addr = self.dlhandle.get_function[fn() -> FunctionPointer]("SDL_Vulkan_GetVkGetInstanceProcAddr")
+        self.vulkan_unload_library = self.dlhandle.get_function[fn() -> NoneType]("SDL_Vulkan_UnloadLibrary")
+        self.vulkan_get_instance_extensions = self.dlhandle.get_function[fn(Ptr[UInt32, MutAnyOrigin]) -> Ptr[Ptr[c_char, ImmutOrigin.external], ImmutOrigin.external]]("SDL_Vulkan_GetInstanceExtensions")
+        self.vulkan_create_surface = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], VkInstance, Ptr[VkAllocationCallbacks, ImmutAnyOrigin], Ptr[VkSurfaceKHR, MutAnyOrigin]) -> Bool]("SDL_Vulkan_CreateSurface")
+        self.vulkan_destroy_surface = self.dlhandle.get_function[fn(VkInstance, VkSurfaceKHR, Ptr[VkAllocationCallbacks, ImmutAnyOrigin]) -> NoneType]("SDL_Vulkan_DestroySurface")
+        self.vulkan_get_presentation_support = self.dlhandle.get_function[fn(VkInstance, VkPhysicalDevice, UInt32) -> Bool]("SDL_Vulkan_GetPresentationSupport")

@@ -1,6 +1,7 @@
 from .typedefs import *
 from .structs import *
 from .enums import *
+from .vulkan import *
 from .sdl_image_function_table import get_sdl_image_function_table
 from .sdl3_functions import get_error
 from sys.ffi import CStringSlice, c_char

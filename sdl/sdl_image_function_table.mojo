@@ -5,6 +5,7 @@ from .misc import *
 from .typedefs import *
 from .structs import *
 from .enums import *
+from .vulkan import *
 
 
 comptime Ptr = UnsafePointer

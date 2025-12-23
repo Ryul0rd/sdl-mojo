@@ -26,95 +26,79 @@ def main():
         SdlLibSpec(
             name = "SDL3",
             dlname = "libSDL3",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref=release-3.2.x",
             entrypoint_header = "SDL.h",
             include_headers = [
-                    # "SDL_assert.h",
-                    # "SDL_asyncio.h",
-                    # "SDL_atomic.h",
-                    "SDL_audio.h",
-                    # "SDL_begin_code.h",
-                    # "SDL_bits.h",
-                    "SDL_blendmode.h",
-                    "SDL_camera.h",
-                    "SDL_clipboard.h",
-                    # "SDL_close_code.h",
-                    # "SDL_copying.h",
-                    # "SDL_cpuinfo.h",
-                    # "SDL_dialog.h",
-                    # "SDL_egl.h",
-                    # "SDL_endian.h",
-                    "SDL_error.h",
-                    "SDL_events.h",
-                    "SDL_filesystem.h",
-                    "SDL_gamepad.h",
-                    "SDL_gpu.h",
-                    "SDL_guid.h",
-                    "SDL_haptic.h",
-                    # "SDL_hidapi.h",
-                    "SDL_hints.h",
-                    "SDL_init.h",
-                    # "SDL_intrin.h",
-                    "SDL_iostream.h",
-                    "SDL_joystick.h",
-                    "SDL_keyboard.h",
-                    "SDL_keycode.h",
-                    # "SDL_loadso.h",
-                    # "SDL_locale.h",
-                    "SDL_log.h",
-                    # "SDL_messagebox.h",
-                    # "SDL_metal.h",
-                    # "SDL_misc.h",
-                    "SDL_mouse.h",
-                    # "SDL_mutex.h",
-                    # "SDL_oldnames.h",
-                    # "SDL_opengl_gltext.h",
-                    # "SDL_opengl.h",
-                    # "SDL_opengles.h",
-                    # "SDL_opengles2_gl2.h",
-                    # "SDL_opengles2_gl2text.h",
-                    # "SDL_opengles2_gl2platform.h",
-                    # "SDL_opengles2_gl2khrplatform.h",
-                    # "SDL_opengles2.h",
-                    "SDL_pen.h",
-                    "SDL_pixels.h",
-                    # "SDL_platform_defines.h",
-                    # "SDL_platform.h",
-                    "SDL_power.h",
-                    # "SDL_process.h",
-                    "SDL_properties.h",
-                    "SDL_rect.h",
-                    "SDL_render.h",
-                    # "SDL_revision.h",
-                    "SDL_scancode.h",
-                    "SDL_sensor.h",
-                    # "SDL_stdinc.h",
-                    "SDL_storage.h",
-                    "SDL_surface.h",
-                    # "SDL_system.h",
-                    # "SDL_thread.h",
-                    "SDL_time.h",
-                    "SDL_timer.h",
-                    "SDL_touch.h",
-                    # "SDL_tray.h",
-                    "SDL_version.h",
-                    "SDL_video.h",
-                    "SDL_vulkan.h",
+                # "SDL_stdinc.h",
+                # "SDL_assert.h",
+                # "SDL_asyncio.h",
+                # "SDL_atomic.h",
+                "SDL_audio.h",
+                # "SDL_bits.h",
+                "SDL_blendmode.h",
+                "SDL_camera.h",
+                "SDL_clipboard.h",
+                # "SDL_cpuinfo.h",
+                # "SDL_dialog.h",
+                # "SDL_endian.h",
+                "SDL_error.h",
+                "SDL_events.h",
+                "SDL_filesystem.h",
+                "SDL_gamepad.h",
+                "SDL_gpu.h",
+                "SDL_guid.h",
+                "SDL_haptic.h",
+                # "SDL_hidapi.h",
+                "SDL_hints.h",
+                "SDL_init.h",
+                "SDL_iostream.h",
+                "SDL_joystick.h",
+                "SDL_keyboard.h",
+                "SDL_keycode.h",
+                # "SDL_loadso.h",
+                # "SDL_locale.h",
+                "SDL_log.h",
+                # "SDL_messagebox.h",
+                # "SDL_metal.h",
+                # "SDL_misc.h",
+                "SDL_mouse.h",
+                # "SDL_mutex.h",
+                "SDL_pen.h",
+                "SDL_pixels.h",
+                # "SDL_platform.h",
+                "SDL_power.h",
+                # "SDL_process.h",
+                "SDL_properties.h",
+                "SDL_rect.h",
+                "SDL_render.h",
+                "SDL_scancode.h",
+                "SDL_sensor.h",
+                "SDL_storage.h",
+                "SDL_surface.h",
+                # "SDL_system.h",
+                # "SDL_thread.h",
+                "SDL_time.h",
+                "SDL_timer.h",
+                # "SDL_tray.h",
+                "SDL_touch.h",
+                "SDL_version.h",
+                "SDL_video.h",
+                # "SDL_oldnames.h",
             ],
-            repo_url = "https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref=release-3.2.x",
         ),
         SdlLibSpec(
             name = "SDL_image",
             dlname = "libSDL3_image",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.2.x",
             entrypoint_header = "SDL_image.h",
             include_headers = ["SDL_image.h"],
-            repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.2.x",
         ),
         SdlLibSpec(
             name = "SDL_ttf",
             dlname = "libSDL3_ttf",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL_ttf/contents/include/SDL3_ttf?ref=release-3.2.x",
             entrypoint_header = "SDL_ttf.h",
             include_headers = ["SDL_ttf.h", "SDL_textengine.h"],
-            repo_url = "https://api.github.com/repos/libsdl-org/SDL_ttf/contents/include/SDL3_ttf?ref=release-3.2.x",
         )
     ]
 
@@ -147,9 +131,17 @@ def main():
         else:
             print(f"Skipping download for {lib_spec.name} (existing headers found).")
         
-        # create tu
+        # things to eventually emit
+        macro_constants: List[SdlMacroConstant] = []
+        typedefs: List[SdlTypedef] = []
+        structs: List[SdlStruct] = []
+        enums: List[SdlEnum] = []
+        functions: List[SdlFunction] = []
+        macro_functions: List[SdlMacroFunction] = []
+
+        # create entrypoint tu
         index = cindex.Index.create()
-        translation_unit = index.parse( # type: ignore
+        entrypoint_translation_unit = index.parse( # type: ignore
             os.path.join(lib_c_src_dir, lib_spec.entrypoint_header),
             args = [
                 "-std=c99",
@@ -159,17 +151,11 @@ def main():
             options = TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD,
         )
 
-        # for each node, parse and bin
-        macro_constants: List[SdlMacroConstant] = []
-        typedefs: List[SdlTypedef] = []
-        structs: List[SdlStruct] = []
-        enums: List[SdlEnum] = []
-        functions: List[SdlFunction] = []
-        macro_functions: List[SdlMacroFunction] = []
+        # for each node in entrypoint tu, parse and bin
         pbar = tqdm(lib_spec.include_headers)
         for header_name in pbar:
             pbar.set_description(f"Parsing {header_name} from {lib_spec.name}".ljust(32))
-            for cursor in assert_type(Cursor, translation_unit.cursor).get_children():
+            for cursor in assert_type(Cursor, entrypoint_translation_unit.cursor).get_children():
                 cursor = assert_type(Cursor, cursor)
                 location = assert_type(SourceLocation, cursor.location)
                 if location.file is None:
@@ -189,6 +175,27 @@ def main():
                     functions.append(sdl_node)
                 elif isinstance(sdl_node, SdlMacroFunction):
                     macro_functions.append(sdl_node)
+
+        if lib_spec.name == "SDL3":
+            vulkan_translation_unit = index.parse(  # type: ignore
+                os.path.join(lib_c_src_dir, "SDL_vulkan.h"),
+                args=[
+                    "-std=c99",
+                    "-I", C_SRC_ROOT,
+                    "-D", "bool=_Bool",
+                ],
+                options=TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD,
+            )
+            for cursor in assert_type(Cursor, vulkan_translation_unit.cursor).get_children():
+                cursor = assert_type(Cursor, cursor)
+                location = assert_type(SourceLocation, cursor.location)
+                if location.file is None:
+                    continue
+                if os.path.basename(assert_type(str, location.file.name)) != "SDL_vulkan.h":
+                    continue
+                sdl_node = parse_sdl_node(cursor)
+                if isinstance(sdl_node, SdlFunction):
+                    functions.append(sdl_node)
 
         # for each category, generate and emit file of that category
         emit_sdl_macro_constants(files, macro_constants, lib_spec)
@@ -703,6 +710,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "from .typedefs import *\n",
         "from .structs import *\n",
         "from .enums import *\n",
+        "from .vulkan import *\n",
         "\n\n",
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
@@ -749,6 +757,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         f"from .typedefs import *\n",
         f"from .structs import *\n",
         f"from .enums import *\n",
+        f"from .vulkan import *\n",
         f"from .{function_table_filename.removesuffix('.mojo')} import get_{function_table_global_name}\n",
         "" if lib_spec.name == "SDL3" else "from .sdl3_functions import get_error\n",
         f"from sys.ffi import CStringSlice, c_char\n",
@@ -993,9 +1002,9 @@ def pascal_to_snake_case(name: str) -> str:
 class SdlLibSpec:
     name: str
     dlname: str
+    repo_url: str
     entrypoint_header: str
     include_headers: List[str]
-    repo_url: str
 
 
 @dataclass
