@@ -789,10 +789,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
     original_docstring = emit_original_docstring(function.docstring)
     function_table_global_name = f"{lib_spec.name.lower()}_function_table"
-    if is_string(function.return_type):
-        return_type_mojo = "CStringSlice[ImmutOrigin.external]"
-    else:
-        return_type_mojo = emit_mojo_type(function.return_type)
+    return_type_mojo = emit_mojo_type(function.return_type)
     returns_bool_error = (
         return_type_mojo == "Bool"
         and "Returns: true on success or false on failure" in original_docstring
@@ -817,14 +814,14 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
         result_part = "var cstring = "
         return_part = f") raises -> {return_type_mojo}:\n"
         post_call_part = (
-            f"    if not cstring:\n"
+            f"    if not cstring.unsafe_ptr():\n"
             f"        raise {error}\n"
-            f"    return CStringSlice(unsafe_from_ptr=cstring)\n"
+            f"    return cstring\n"
         )
     elif is_string(function.return_type):
         result_part = "var cstring = "
         return_part = f") -> {return_type_mojo}:\n"
-        post_call_part = "    return CStringSlice(unsafe_from_ptr=cstring)\n"
+        post_call_part = "    return cstring\n"
     elif returns_ptr_error:
         result_part = "var result = "
         return_part = f") raises -> {return_type_mojo}:\n"
@@ -846,7 +843,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_fn_like(
         f"fn {mojo_fn_name}(",
         [
-            f"{arg.name}: {'CStringSlice' if is_string(arg.type) else emit_mojo_type(arg.type, use_any_origin=True)}"
+            f"{arg.name}: {emit_mojo_type(arg.type, use_any_origin=True)}"
             for arg in function.args
         ],
         return_part,
@@ -854,10 +851,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_wiki_docstring(lib_spec.name, function.name))
     parts.append(emit_fn_like(
         f"{result_part}get_{function_table_global_name}().{mojo_fn_name}(",
-        [
-            f"{arg.name}.unsafe_ptr()" if is_string(arg.type) else arg.name
-            for arg in function.args
-        ],
+        [arg.name for arg in function.args],
         f")\n",
         base_indent_level = 1,
     ))
@@ -868,6 +862,9 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
 def emit_mojo_type(sdl_type: SdlType, use_any_origin: bool=False) -> str:
     MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutOrigin.external"
     IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutOrigin.external"
+
+    if is_string(sdl_type):
+        return f"CStringSlice[{IMMUT_ORIGIN}]"
 
     if isinstance(sdl_type, SdlFunctionType):
         return emit_fn_like(

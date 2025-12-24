@@ -111,7 +111,7 @@ struct TextEditingEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var text: Ptr[c_char, ImmutOrigin.external]
+    var text: CStringSlice[ImmutOrigin.external]
     var start: Int32
     var length: Int32
 
@@ -126,7 +126,7 @@ struct TextEditingCandidatesEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var candidates: Ptr[Ptr[c_char, ImmutOrigin.external], ImmutOrigin.external]
+    var candidates: Ptr[CStringSlice[ImmutOrigin.external], ImmutOrigin.external]
     var num_candidates: Int32
     var selected_candidate: Int32
     var horizontal: Bool
@@ -145,7 +145,7 @@ struct TextInputEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var text: Ptr[c_char, ImmutOrigin.external]
+    var text: CStringSlice[ImmutOrigin.external]
 
 
 @fieldwise_init
@@ -543,8 +543,8 @@ struct DropEvent(Copyable):
     var windowID: WindowID
     var x: Float32
     var y: Float32
-    var source: Ptr[c_char, ImmutOrigin.external]
-    var data: Ptr[c_char, ImmutOrigin.external]
+    var source: CStringSlice[ImmutOrigin.external]
+    var data: CStringSlice[ImmutOrigin.external]
 
 
 @fieldwise_init
@@ -558,7 +558,7 @@ struct ClipboardEvent(Copyable):
     var timestamp: UInt64
     var owner: Bool
     var num_mime_types: Int32
-    var mime_types: Ptr[Ptr[c_char, ImmutOrigin.external], MutOrigin.external]
+    var mime_types: Ptr[CStringSlice[ImmutOrigin.external], MutOrigin.external]
 
 
 @fieldwise_init
@@ -852,7 +852,7 @@ struct GPUShaderCreateInfo(Copyable):
     """
     var code_size: Int32
     var code: Ptr[UInt8, ImmutOrigin.external]
-    var entrypoint: Ptr[c_char, ImmutOrigin.external]
+    var entrypoint: CStringSlice[ImmutOrigin.external]
     var format: GPUShaderFormat
     var stage: GPUShaderStage
     var num_samplers: UInt32
@@ -1002,7 +1002,7 @@ struct GPUComputePipelineCreateInfo(Copyable):
     """
     var code_size: Int32
     var code: Ptr[UInt8, ImmutOrigin.external]
-    var entrypoint: Ptr[c_char, ImmutOrigin.external]
+    var entrypoint: CStringSlice[ImmutOrigin.external]
     var format: GPUShaderFormat
     var num_samplers: UInt32
     var num_readonly_storage_textures: UInt32
@@ -1309,7 +1309,7 @@ struct VirtualJoystickDesc(Copyable):
     var padding2: InlineArray[UInt16, Int(2)]
     var button_mask: UInt32
     var axis_mask: UInt32
-    var name: Ptr[c_char, ImmutOrigin.external]
+    var name: CStringSlice[ImmutOrigin.external]
     var touchpads: Ptr[VirtualJoystickTouchpadDesc, ImmutOrigin.external]
     var sensors: Ptr[VirtualJoystickSensorDesc, ImmutOrigin.external]
     var userdata: Ptr[NoneType, MutOrigin.external]
@@ -1459,14 +1459,14 @@ struct StorageInterface(Copyable):
     var version: UInt32
     var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
     var ready: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var enumerate: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var info: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var read_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
-    var write_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
-    var mkdir: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var remove: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var rename: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var copy_: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var enumerate: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var info: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var read_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
+    var write_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
+    var mkdir: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var remove: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var rename: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var copy_: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
     var space_remaining: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> UInt64, ImmutOrigin.external]
 
 

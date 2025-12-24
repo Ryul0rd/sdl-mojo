@@ -57,7 +57,7 @@ struct Camera:
     pass
 
 
-comptime ClipboardDataCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, ImmutOrigin.external]
+comptime ClipboardDataCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, ImmutOrigin.external]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_ClipboardDataCallback
@@ -85,7 +85,7 @@ https://wiki.libsdl.org/SDL3/SDL_GlobFlags
 """
 
 
-comptime EnumerateDirectoryCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> EnumerationResult
+comptime EnumerateDirectoryCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> EnumerationResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EnumerateDirectoryCallback
@@ -255,7 +255,7 @@ https://wiki.libsdl.org/SDL3/SDL_HapticID
 """
 
 
-comptime HintCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+comptime HintCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HintCallback
@@ -348,7 +348,7 @@ https://wiki.libsdl.org/SDL3/SDL_Keymod
 """
 
 
-comptime LogOutputFunction = fn(Ptr[NoneType, MutAnyOrigin], Int32, LogPriority, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+comptime LogOutputFunction = fn(Ptr[NoneType, MutAnyOrigin], Int32, LogPriority, CStringSlice[ImmutAnyOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_LogOutputFunction
@@ -405,7 +405,7 @@ https://wiki.libsdl.org/SDL3/SDL_CleanupPropertyCallback
 """
 
 
-comptime EnumeratePropertiesCallback = fn(Ptr[NoneType, MutAnyOrigin], PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+comptime EnumeratePropertiesCallback = fn(Ptr[NoneType, MutAnyOrigin], PropertiesID, CStringSlice[ImmutAnyOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EnumeratePropertiesCallback

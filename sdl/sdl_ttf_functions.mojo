@@ -52,12 +52,14 @@ fn ttf_init() raises:
         raise get_error()
 
 
-fn ttf_open_font(file: CStringSlice, ptsize: Float32) raises -> Ptr[TTF_Font, MutOrigin.external]:
+fn ttf_open_font(
+    file: CStringSlice[ImmutAnyOrigin], ptsize: Float32
+) raises -> Ptr[TTF_Font, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_OpenFont
     """
-    var result = get_sdl_ttf_function_table().ttf_open_font(file.unsafe_ptr(), ptsize)
+    var result = get_sdl_ttf_function_table().ttf_open_font(file, ptsize)
     if not result:
         raise get_error()
     return result
@@ -370,7 +372,7 @@ fn ttf_get_font_family_name(
     https://wiki.libsdl.org/SDL_ttf/TTF_GetFontFamilyName
     """
     var cstring = get_sdl_ttf_function_table().ttf_get_font_family_name(font)
-    return CStringSlice(unsafe_from_ptr=cstring)
+    return cstring
 
 
 fn ttf_get_font_style_name(
@@ -381,7 +383,7 @@ fn ttf_get_font_style_name(
     https://wiki.libsdl.org/SDL_ttf/TTF_GetFontStyleName
     """
     var cstring = get_sdl_ttf_function_table().ttf_get_font_style_name(font)
-    return CStringSlice(unsafe_from_ptr=cstring)
+    return cstring
 
 
 fn ttf_set_font_direction(font: Ptr[TTF_Font, MutAnyOrigin], direction: TTF_Direction) raises:
@@ -402,12 +404,12 @@ fn ttf_get_font_direction(font: Ptr[TTF_Font, MutAnyOrigin]) -> TTF_Direction:
     return get_sdl_ttf_function_table().ttf_get_font_direction(font)
 
 
-fn ttf_string_to_tag(string: CStringSlice) -> UInt32:
+fn ttf_string_to_tag(string: CStringSlice[ImmutAnyOrigin]) -> UInt32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_StringToTag
     """
-    return get_sdl_ttf_function_table().ttf_string_to_tag(string.unsafe_ptr())
+    return get_sdl_ttf_function_table().ttf_string_to_tag(string)
 
 
 fn ttf_tag_to_string(tag: UInt32, string: Ptr[c_char, MutAnyOrigin], size: Int32):
@@ -444,14 +446,14 @@ fn ttf_get_glyph_script(ch: UInt32) -> UInt32:
     return get_sdl_ttf_function_table().ttf_get_glyph_script(ch)
 
 
-fn ttf_set_font_language(font: Ptr[TTF_Font, MutAnyOrigin], language_bcp47: CStringSlice) raises:
+fn ttf_set_font_language(
+    font: Ptr[TTF_Font, MutAnyOrigin], language_bcp47: CStringSlice[ImmutAnyOrigin]
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_SetFontLanguage
     """
-    var success = get_sdl_ttf_function_table().ttf_set_font_language(
-        font, language_bcp47.unsafe_ptr()
-    )
+    var success = get_sdl_ttf_function_table().ttf_set_font_language(font, language_bcp47)
     if not success:
         raise get_error()
 
@@ -533,7 +535,7 @@ fn ttf_get_glyph_kerning(
 
 fn ttf_get_string_size(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     w: Ptr[Int32, MutAnyOrigin],
     h: Ptr[Int32, MutAnyOrigin],
@@ -542,16 +544,14 @@ fn ttf_get_string_size(
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetStringSize
     """
-    var success = get_sdl_ttf_function_table().ttf_get_string_size(
-        font, text.unsafe_ptr(), length, w, h
-    )
+    var success = get_sdl_ttf_function_table().ttf_get_string_size(font, text, length, w, h)
     if not success:
         raise get_error()
 
 
 fn ttf_get_string_size_wrapped(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     wrap_width: Int32,
     w: Ptr[Int32, MutAnyOrigin],
@@ -562,7 +562,7 @@ fn ttf_get_string_size_wrapped(
     https://wiki.libsdl.org/SDL_ttf/TTF_GetStringSizeWrapped
     """
     var success = get_sdl_ttf_function_table().ttf_get_string_size_wrapped(
-        font, text.unsafe_ptr(), length, wrap_width, w, h
+        font, text, length, wrap_width, w, h
     )
     if not success:
         raise get_error()
@@ -570,7 +570,7 @@ fn ttf_get_string_size_wrapped(
 
 fn ttf_measure_string(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     max_width: Int32,
     measured_width: Ptr[Int32, MutAnyOrigin],
@@ -581,22 +581,20 @@ fn ttf_measure_string(
     https://wiki.libsdl.org/SDL_ttf/TTF_MeasureString
     """
     var success = get_sdl_ttf_function_table().ttf_measure_string(
-        font, text.unsafe_ptr(), length, max_width, measured_width, measured_length
+        font, text, length, max_width, measured_width, measured_length
     )
     if not success:
         raise get_error()
 
 
 fn ttf_render_text_solid(
-    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
+    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice[ImmutAnyOrigin], length: Int32, fg: Color
 ) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid
     """
-    var result = get_sdl_ttf_function_table().ttf_render_text_solid(
-        font, text.unsafe_ptr(), length, fg
-    )
+    var result = get_sdl_ttf_function_table().ttf_render_text_solid(font, text, length, fg)
     if not result:
         raise "Error in ttf_render_text_solid call. See official documentation for details."
     return result
@@ -604,7 +602,7 @@ fn ttf_render_text_solid(
 
 fn ttf_render_text_solid_wrapped(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     fg: Color,
     wrapLength: Int32,
@@ -614,7 +612,7 @@ fn ttf_render_text_solid_wrapped(
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid_Wrapped
     """
     var result = get_sdl_ttf_function_table().ttf_render_text_solid_wrapped(
-        font, text.unsafe_ptr(), length, fg, wrapLength
+        font, text, length, fg, wrapLength
     )
     if not result:
         raise "Error in ttf_render_text_solid_wrapped call. See official documentation for details."
@@ -635,15 +633,17 @@ fn ttf_render_glyph_solid(
 
 
 fn ttf_render_text_shaded(
-    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
+    font: Ptr[TTF_Font, MutAnyOrigin],
+    text: CStringSlice[ImmutAnyOrigin],
+    length: Int32,
+    fg: Color,
+    bg: Color,
 ) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded
     """
-    var result = get_sdl_ttf_function_table().ttf_render_text_shaded(
-        font, text.unsafe_ptr(), length, fg, bg
-    )
+    var result = get_sdl_ttf_function_table().ttf_render_text_shaded(font, text, length, fg, bg)
     if not result:
         raise "Error in ttf_render_text_shaded call. See official documentation for details."
     return result
@@ -651,7 +651,7 @@ fn ttf_render_text_shaded(
 
 fn ttf_render_text_shaded_wrapped(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     fg: Color,
     bg: Color,
@@ -662,7 +662,7 @@ fn ttf_render_text_shaded_wrapped(
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded_Wrapped
     """
     var result = get_sdl_ttf_function_table().ttf_render_text_shaded_wrapped(
-        font, text.unsafe_ptr(), length, fg, bg, wrap_width
+        font, text, length, fg, bg, wrap_width
     )
     if not result:
         raise "Error in ttf_render_text_shaded_wrapped call. See official documentation for details."
@@ -683,15 +683,13 @@ fn ttf_render_glyph_shaded(
 
 
 fn ttf_render_text_blended(
-    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
+    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice[ImmutAnyOrigin], length: Int32, fg: Color
 ) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended
     """
-    var result = get_sdl_ttf_function_table().ttf_render_text_blended(
-        font, text.unsafe_ptr(), length, fg
-    )
+    var result = get_sdl_ttf_function_table().ttf_render_text_blended(font, text, length, fg)
     if not result:
         raise "Error in ttf_render_text_blended call. See official documentation for details."
     return result
@@ -699,7 +697,7 @@ fn ttf_render_text_blended(
 
 fn ttf_render_text_blended_wrapped(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     fg: Color,
     wrap_width: Int32,
@@ -709,7 +707,7 @@ fn ttf_render_text_blended_wrapped(
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended_Wrapped
     """
     var result = get_sdl_ttf_function_table().ttf_render_text_blended_wrapped(
-        font, text.unsafe_ptr(), length, fg, wrap_width
+        font, text, length, fg, wrap_width
     )
     if not result:
         raise "Error in ttf_render_text_blended_wrapped call. See official documentation for details."
@@ -730,15 +728,17 @@ fn ttf_render_glyph_blended(
 
 
 fn ttf_render_text_lcd(
-    font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
+    font: Ptr[TTF_Font, MutAnyOrigin],
+    text: CStringSlice[ImmutAnyOrigin],
+    length: Int32,
+    fg: Color,
+    bg: Color,
 ) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD
     """
-    var result = get_sdl_ttf_function_table().ttf_render_text_lcd(
-        font, text.unsafe_ptr(), length, fg, bg
-    )
+    var result = get_sdl_ttf_function_table().ttf_render_text_lcd(font, text, length, fg, bg)
     if not result:
         raise "Error in ttf_render_text_lcd call. See official documentation for details."
     return result
@@ -746,7 +746,7 @@ fn ttf_render_text_lcd(
 
 fn ttf_render_text_lcd_wrapped(
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
     fg: Color,
     bg: Color,
@@ -757,7 +757,7 @@ fn ttf_render_text_lcd_wrapped(
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD_Wrapped
     """
     var result = get_sdl_ttf_function_table().ttf_render_text_lcd_wrapped(
-        font, text.unsafe_ptr(), length, fg, bg, wrap_width
+        font, text, length, fg, bg, wrap_width
     )
     if not result:
         raise "Error in ttf_render_text_lcd_wrapped call. See official documentation for details."
@@ -924,16 +924,14 @@ fn ttf_get_gpu_text_engine_winding(
 fn ttf_create_text(
     engine: Ptr[TTF_TextEngine, MutAnyOrigin],
     font: Ptr[TTF_Font, MutAnyOrigin],
-    text: CStringSlice,
+    text: CStringSlice[ImmutAnyOrigin],
     length: Int32,
 ) raises -> Ptr[TTF_Text, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateText
     """
-    var result = get_sdl_ttf_function_table().ttf_create_text(
-        engine, font, text.unsafe_ptr(), length
-    )
+    var result = get_sdl_ttf_function_table().ttf_create_text(engine, font, text, length)
     if not result:
         raise get_error()
     return result
@@ -1148,43 +1146,40 @@ fn ttf_text_wrap_whitespace_visible(text: Ptr[TTF_Text, MutAnyOrigin]) -> Bool:
 
 
 fn ttf_set_text_string(
-    text: Ptr[TTF_Text, MutAnyOrigin], string: CStringSlice, length: Int32
+    text: Ptr[TTF_Text, MutAnyOrigin], string: CStringSlice[ImmutAnyOrigin], length: Int32
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_SetTextString
     """
-    var success = get_sdl_ttf_function_table().ttf_set_text_string(
-        text, string.unsafe_ptr(), length
-    )
+    var success = get_sdl_ttf_function_table().ttf_set_text_string(text, string, length)
     if not success:
         raise get_error()
 
 
 fn ttf_insert_text_string(
-    text: Ptr[TTF_Text, MutAnyOrigin], offset: Int32, string: CStringSlice, length: Int32
+    text: Ptr[TTF_Text, MutAnyOrigin],
+    offset: Int32,
+    string: CStringSlice[ImmutAnyOrigin],
+    length: Int32,
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_InsertTextString
     """
-    var success = get_sdl_ttf_function_table().ttf_insert_text_string(
-        text, offset, string.unsafe_ptr(), length
-    )
+    var success = get_sdl_ttf_function_table().ttf_insert_text_string(text, offset, string, length)
     if not success:
         raise get_error()
 
 
 fn ttf_append_text_string(
-    text: Ptr[TTF_Text, MutAnyOrigin], string: CStringSlice, length: Int32
+    text: Ptr[TTF_Text, MutAnyOrigin], string: CStringSlice[ImmutAnyOrigin], length: Int32
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_AppendTextString
     """
-    var success = get_sdl_ttf_function_table().ttf_append_text_string(
-        text, string.unsafe_ptr(), length
-    )
+    var success = get_sdl_ttf_function_table().ttf_append_text_string(text, string, length)
     if not success:
         raise get_error()
 
