@@ -561,7 +561,7 @@ fn load_wav_io(
 
 
 fn load_wav(
-    path: CStringSlice[ImmutAnyOrigin],
+    path: CStringSlice,
     spec: Ptr[AudioSpec, MutAnyOrigin],
     audio_buf: Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin],
     audio_len: Ptr[UInt32, MutAnyOrigin],
@@ -570,7 +570,7 @@ fn load_wav(
     
     https://wiki.libsdl.org/SDL3/SDL_LoadWAV
     """
-    return get_sdl3_function_table().load_wav(path, spec, audio_buf, audio_len)
+    return get_sdl3_function_table().load_wav(path.unsafe_ptr(), spec, audio_buf, audio_len)
 
 
 fn mix_audio(
@@ -798,12 +798,12 @@ fn close_camera(camera: Ptr[Camera, MutAnyOrigin]):
     get_sdl3_function_table().close_camera(camera)
 
 
-fn set_clipboard_text(text: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_clipboard_text(text: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetClipboardText
     """
-    var success = get_sdl3_function_table().set_clipboard_text(text)
+    var success = get_sdl3_function_table().set_clipboard_text(text.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -824,12 +824,12 @@ fn has_clipboard_text() -> Bool:
     return get_sdl3_function_table().has_clipboard_text()
 
 
-fn set_primary_selection_text(text: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_primary_selection_text(text: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetPrimarySelectionText
     """
-    var success = get_sdl3_function_table().set_primary_selection_text(text)
+    var success = get_sdl3_function_table().set_primary_selection_text(text.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -879,24 +879,24 @@ fn clear_clipboard_data() raises:
 
 
 fn get_clipboard_data(
-    mime_type: CStringSlice[ImmutAnyOrigin], size: Ptr[Int32, MutAnyOrigin]
+    mime_type: CStringSlice, size: Ptr[Int32, MutAnyOrigin]
 ) raises -> Ptr[NoneType, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetClipboardData
     """
-    var result = get_sdl3_function_table().get_clipboard_data(mime_type, size)
+    var result = get_sdl3_function_table().get_clipboard_data(mime_type.unsafe_ptr(), size)
     if not result:
         raise get_error()
     return result
 
 
-fn has_clipboard_data(mime_type: CStringSlice[ImmutAnyOrigin]) -> Bool:
+fn has_clipboard_data(mime_type: CStringSlice) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_HasClipboardData
     """
-    return get_sdl3_function_table().has_clipboard_data(mime_type)
+    return get_sdl3_function_table().has_clipboard_data(mime_type.unsafe_ptr())
 
 
 fn get_clipboard_mime_types(
@@ -912,20 +912,20 @@ fn get_clipboard_mime_types(
     return result
 
 
-fn set_error(fmt: CStringSlice[ImmutAnyOrigin]) -> Bool:
+fn set_error(fmt: CStringSlice) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetError
     """
-    return get_sdl3_function_table().set_error(fmt)
+    return get_sdl3_function_table().set_error(fmt.unsafe_ptr())
 
 
-fn set_error_v(fmt: CStringSlice[ImmutAnyOrigin], ap: Int32) -> Bool:
+fn set_error_v(fmt: CStringSlice, ap: Int32) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetErrorV
     """
-    return get_sdl3_function_table().set_error_v(fmt, ap)
+    return get_sdl3_function_table().set_error_v(fmt.unsafe_ptr(), ap)
 
 
 fn out_of_memory() -> Bool:
@@ -1132,14 +1132,12 @@ fn get_base_path() raises -> CStringSlice[ImmutOrigin.external]:
     return cstring
 
 
-fn get_pref_path(
-    org: CStringSlice[ImmutAnyOrigin], app: CStringSlice[ImmutAnyOrigin]
-) raises -> Ptr[c_char, MutOrigin.external]:
+fn get_pref_path(org: CStringSlice, app: CStringSlice) raises -> Ptr[c_char, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetPrefPath
     """
-    var result = get_sdl3_function_table().get_pref_path(org, app)
+    var result = get_sdl3_function_table().get_pref_path(org.unsafe_ptr(), app.unsafe_ptr())
     if not result:
         raise "Error in get_pref_path call. See official documentation for details."
     return result
@@ -1156,81 +1154,78 @@ fn get_user_folder(folder: Folder) raises -> CStringSlice[ImmutOrigin.external]:
     return cstring
 
 
-fn create_directory(path: CStringSlice[ImmutAnyOrigin]) raises:
+fn create_directory(path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateDirectory
     """
-    var success = get_sdl3_function_table().create_directory(path)
+    var success = get_sdl3_function_table().create_directory(path.unsafe_ptr())
     if not success:
         raise get_error()
 
 
 fn enumerate_directory(
-    path: CStringSlice[ImmutAnyOrigin],
-    callback: EnumerateDirectoryCallback,
-    userdata: Ptr[NoneType, MutAnyOrigin],
+    path: CStringSlice, callback: EnumerateDirectoryCallback, userdata: Ptr[NoneType, MutAnyOrigin]
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_EnumerateDirectory
     """
-    var success = get_sdl3_function_table().enumerate_directory(path, callback, userdata)
+    var success = get_sdl3_function_table().enumerate_directory(
+        path.unsafe_ptr(), callback, userdata
+    )
     if not success:
         raise get_error()
 
 
-fn remove_path(path: CStringSlice[ImmutAnyOrigin]) raises:
+fn remove_path(path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RemovePath
     """
-    var success = get_sdl3_function_table().remove_path(path)
+    var success = get_sdl3_function_table().remove_path(path.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn rename_path(
-    oldpath: CStringSlice[ImmutAnyOrigin], newpath: CStringSlice[ImmutAnyOrigin]
-) raises:
+fn rename_path(oldpath: CStringSlice, newpath: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RenamePath
     """
-    var success = get_sdl3_function_table().rename_path(oldpath, newpath)
+    var success = get_sdl3_function_table().rename_path(oldpath.unsafe_ptr(), newpath.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn copy_file(oldpath: CStringSlice[ImmutAnyOrigin], newpath: CStringSlice[ImmutAnyOrigin]) raises:
+fn copy_file(oldpath: CStringSlice, newpath: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CopyFile
     """
-    var success = get_sdl3_function_table().copy_file(oldpath, newpath)
+    var success = get_sdl3_function_table().copy_file(oldpath.unsafe_ptr(), newpath.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn get_path_info(path: CStringSlice[ImmutAnyOrigin], info: Ptr[PathInfo, MutAnyOrigin]) -> Bool:
+fn get_path_info(path: CStringSlice, info: Ptr[PathInfo, MutAnyOrigin]) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetPathInfo
     """
-    return get_sdl3_function_table().get_path_info(path, info)
+    return get_sdl3_function_table().get_path_info(path.unsafe_ptr(), info)
 
 
 fn glob_directory(
-    path: CStringSlice[ImmutAnyOrigin],
-    pattern: CStringSlice[ImmutAnyOrigin],
-    flags: GlobFlags,
-    count: Ptr[Int32, MutAnyOrigin],
+    path: CStringSlice, pattern: CStringSlice, flags: GlobFlags, count: Ptr[Int32, MutAnyOrigin]
 ) raises -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GlobDirectory
     """
-    var result = get_sdl3_function_table().glob_directory(path, pattern, flags, count)
+    var result = get_sdl3_function_table().glob_directory(
+        path.unsafe_ptr(), pattern.unsafe_ptr(), flags, count
+    )
     if not result:
         raise get_error()
     return result
@@ -1247,12 +1242,12 @@ fn get_current_directory() raises -> Ptr[c_char, MutOrigin.external]:
     return result
 
 
-fn add_gamepad_mapping(mapping: CStringSlice[ImmutAnyOrigin]) -> Int32:
+fn add_gamepad_mapping(mapping: CStringSlice) -> Int32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AddGamepadMapping
     """
-    return get_sdl3_function_table().add_gamepad_mapping(mapping)
+    return get_sdl3_function_table().add_gamepad_mapping(mapping.unsafe_ptr())
 
 
 fn add_gamepad_mappings_from_io(src: Ptr[IOStream, MutAnyOrigin], closeio: Bool) -> Int32:
@@ -1263,12 +1258,12 @@ fn add_gamepad_mappings_from_io(src: Ptr[IOStream, MutAnyOrigin], closeio: Bool)
     return get_sdl3_function_table().add_gamepad_mappings_from_io(src, closeio)
 
 
-fn add_gamepad_mappings_from_file(file: CStringSlice[ImmutAnyOrigin]) -> Int32:
+fn add_gamepad_mappings_from_file(file: CStringSlice) -> Int32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AddGamepadMappingsFromFile
     """
-    return get_sdl3_function_table().add_gamepad_mappings_from_file(file)
+    return get_sdl3_function_table().add_gamepad_mappings_from_file(file.unsafe_ptr())
 
 
 fn reload_gamepad_mappings() raises:
@@ -1318,12 +1313,12 @@ fn get_gamepad_mapping(
     return result
 
 
-fn set_gamepad_mapping(instance_id: JoystickID, mapping: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_gamepad_mapping(instance_id: JoystickID, mapping: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetGamepadMapping
     """
-    var success = get_sdl3_function_table().set_gamepad_mapping(instance_id, mapping)
+    var success = get_sdl3_function_table().set_gamepad_mapping(instance_id, mapping.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -1679,12 +1674,12 @@ fn update_gamepads():
     get_sdl3_function_table().update_gamepads()
 
 
-fn get_gamepad_type_from_string(str: CStringSlice[ImmutAnyOrigin]) -> GamepadType:
+fn get_gamepad_type_from_string(str: CStringSlice) -> GamepadType:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadTypeFromString
     """
-    return get_sdl3_function_table().get_gamepad_type_from_string(str)
+    return get_sdl3_function_table().get_gamepad_type_from_string(str.unsafe_ptr())
 
 
 fn get_gamepad_string_for_type(type: GamepadType) raises -> CStringSlice[ImmutOrigin.external]:
@@ -1698,12 +1693,12 @@ fn get_gamepad_string_for_type(type: GamepadType) raises -> CStringSlice[ImmutOr
     return cstring
 
 
-fn get_gamepad_axis_from_string(str: CStringSlice[ImmutAnyOrigin]) -> GamepadAxis:
+fn get_gamepad_axis_from_string(str: CStringSlice) -> GamepadAxis:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadAxisFromString
     """
-    return get_sdl3_function_table().get_gamepad_axis_from_string(str)
+    return get_sdl3_function_table().get_gamepad_axis_from_string(str.unsafe_ptr())
 
 
 fn get_gamepad_string_for_axis(axis: GamepadAxis) raises -> CStringSlice[ImmutOrigin.external]:
@@ -1733,12 +1728,12 @@ fn get_gamepad_axis(gamepad: Ptr[Gamepad, MutAnyOrigin], axis: GamepadAxis) -> I
     return get_sdl3_function_table().get_gamepad_axis(gamepad, axis)
 
 
-fn get_gamepad_button_from_string(str: CStringSlice[ImmutAnyOrigin]) -> GamepadButton:
+fn get_gamepad_button_from_string(str: CStringSlice) -> GamepadButton:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetGamepadButtonFromString
     """
-    return get_sdl3_function_table().get_gamepad_button_from_string(str)
+    return get_sdl3_function_table().get_gamepad_button_from_string(str.unsafe_ptr())
 
 
 fn get_gamepad_string_for_button(
@@ -1975,14 +1970,12 @@ fn get_gamepad_apple_sf_symbols_name_for_axis(
     return cstring
 
 
-fn gpu_supports_shader_formats(
-    format_flags: GPUShaderFormat, name: CStringSlice[ImmutAnyOrigin]
-) -> Bool:
+fn gpu_supports_shader_formats(format_flags: GPUShaderFormat, name: CStringSlice) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GPUSupportsShaderFormats
     """
-    return get_sdl3_function_table().gpu_supports_shader_formats(format_flags, name)
+    return get_sdl3_function_table().gpu_supports_shader_formats(format_flags, name.unsafe_ptr())
 
 
 fn gpu_supports_properties(props: PropertiesID) -> Bool:
@@ -1994,13 +1987,15 @@ fn gpu_supports_properties(props: PropertiesID) -> Bool:
 
 
 fn create_gpu_device(
-    format_flags: GPUShaderFormat, debug_mode: Bool, name: CStringSlice[ImmutAnyOrigin]
+    format_flags: GPUShaderFormat, debug_mode: Bool, name: CStringSlice
 ) raises -> Ptr[GPUDevice, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateGPUDevice
     """
-    var result = get_sdl3_function_table().create_gpu_device(format_flags, debug_mode, name)
+    var result = get_sdl3_function_table().create_gpu_device(
+        format_flags, debug_mode, name.unsafe_ptr()
+    )
     if not result:
         raise get_error()
     return result
@@ -2160,47 +2155,39 @@ fn create_gpu_transfer_buffer(
 
 
 fn set_gpu_buffer_name(
-    device: Ptr[GPUDevice, MutAnyOrigin],
-    buffer: Ptr[GPUBuffer, MutAnyOrigin],
-    text: CStringSlice[ImmutAnyOrigin],
+    device: Ptr[GPUDevice, MutAnyOrigin], buffer: Ptr[GPUBuffer, MutAnyOrigin], text: CStringSlice
 ):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetGPUBufferName
     """
-    get_sdl3_function_table().set_gpu_buffer_name(device, buffer, text)
+    get_sdl3_function_table().set_gpu_buffer_name(device, buffer, text.unsafe_ptr())
 
 
 fn set_gpu_texture_name(
-    device: Ptr[GPUDevice, MutAnyOrigin],
-    texture: Ptr[GPUTexture, MutAnyOrigin],
-    text: CStringSlice[ImmutAnyOrigin],
+    device: Ptr[GPUDevice, MutAnyOrigin], texture: Ptr[GPUTexture, MutAnyOrigin], text: CStringSlice
 ):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetGPUTextureName
     """
-    get_sdl3_function_table().set_gpu_texture_name(device, texture, text)
+    get_sdl3_function_table().set_gpu_texture_name(device, texture, text.unsafe_ptr())
 
 
-fn insert_gpu_debug_label(
-    command_buffer: Ptr[GPUCommandBuffer, MutAnyOrigin], text: CStringSlice[ImmutAnyOrigin]
-):
+fn insert_gpu_debug_label(command_buffer: Ptr[GPUCommandBuffer, MutAnyOrigin], text: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_InsertGPUDebugLabel
     """
-    get_sdl3_function_table().insert_gpu_debug_label(command_buffer, text)
+    get_sdl3_function_table().insert_gpu_debug_label(command_buffer, text.unsafe_ptr())
 
 
-fn push_gpu_debug_group(
-    command_buffer: Ptr[GPUCommandBuffer, MutAnyOrigin], name: CStringSlice[ImmutAnyOrigin]
-):
+fn push_gpu_debug_group(command_buffer: Ptr[GPUCommandBuffer, MutAnyOrigin], name: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_PushGPUDebugGroup
     """
-    get_sdl3_function_table().push_gpu_debug_group(command_buffer, name)
+    get_sdl3_function_table().push_gpu_debug_group(command_buffer, name.unsafe_ptr())
 
 
 fn pop_gpu_debug_group(command_buffer: Ptr[GPUCommandBuffer, MutAnyOrigin]):
@@ -3092,12 +3079,12 @@ fn guid_to_string(guid: GUID, pszGUID: Ptr[c_char, MutAnyOrigin], cbGUID: Int32)
     get_sdl3_function_table().guid_to_string(guid, pszGUID, cbGUID)
 
 
-fn string_to_guid(pchGUID: CStringSlice[ImmutAnyOrigin]) -> GUID:
+fn string_to_guid(pchGUID: CStringSlice) -> GUID:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_StringToGUID
     """
-    return get_sdl3_function_table().string_to_guid(pchGUID)
+    return get_sdl3_function_table().string_to_guid(pchGUID.unsafe_ptr())
 
 
 fn get_haptics(count: Ptr[Int32, MutAnyOrigin]) raises -> Ptr[HapticID, MutOrigin.external]:
@@ -3399,34 +3386,34 @@ fn stop_haptic_rumble(haptic: Ptr[Haptic, MutAnyOrigin]) raises:
         raise get_error()
 
 
-fn set_hint_with_priority(
-    name: CStringSlice[ImmutAnyOrigin], value: CStringSlice[ImmutAnyOrigin], priority: HintPriority
-) raises:
+fn set_hint_with_priority(name: CStringSlice, value: CStringSlice, priority: HintPriority) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetHintWithPriority
     """
-    var success = get_sdl3_function_table().set_hint_with_priority(name, value, priority)
+    var success = get_sdl3_function_table().set_hint_with_priority(
+        name.unsafe_ptr(), value.unsafe_ptr(), priority
+    )
     if not success:
         raise get_error()
 
 
-fn set_hint(name: CStringSlice[ImmutAnyOrigin], value: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_hint(name: CStringSlice, value: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetHint
     """
-    var success = get_sdl3_function_table().set_hint(name, value)
+    var success = get_sdl3_function_table().set_hint(name.unsafe_ptr(), value.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn reset_hint(name: CStringSlice[ImmutAnyOrigin]) raises:
+fn reset_hint(name: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ResetHint
     """
-    var success = get_sdl3_function_table().reset_hint(name)
+    var success = get_sdl3_function_table().reset_hint(name.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -3439,49 +3426,47 @@ fn reset_hints():
     get_sdl3_function_table().reset_hints()
 
 
-fn get_hint(name: CStringSlice[ImmutAnyOrigin]) raises -> CStringSlice[ImmutOrigin.external]:
+fn get_hint(name: CStringSlice) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetHint
     """
-    var cstring = get_sdl3_function_table().get_hint(name)
+    var cstring = get_sdl3_function_table().get_hint(name.unsafe_ptr())
     if not cstring.unsafe_ptr():
         raise "Error in get_hint call. See official documentation for details."
     return cstring
 
 
-fn get_hint_boolean(name: CStringSlice[ImmutAnyOrigin], default_value: Bool) -> Bool:
+fn get_hint_boolean(name: CStringSlice, default_value: Bool) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetHintBoolean
     """
-    return get_sdl3_function_table().get_hint_boolean(name, default_value)
+    return get_sdl3_function_table().get_hint_boolean(name.unsafe_ptr(), default_value)
 
 
 fn add_hint_callback(
-    name: CStringSlice[ImmutAnyOrigin],
-    callback: HintCallback,
-    userdata: Ptr[NoneType, MutAnyOrigin],
+    name: CStringSlice, callback: HintCallback, userdata: Ptr[NoneType, MutAnyOrigin]
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AddHintCallback
     """
-    var success = get_sdl3_function_table().add_hint_callback(name, callback, userdata)
+    var success = get_sdl3_function_table().add_hint_callback(
+        name.unsafe_ptr(), callback, userdata
+    )
     if not success:
         raise get_error()
 
 
 fn remove_hint_callback(
-    name: CStringSlice[ImmutAnyOrigin],
-    callback: HintCallback,
-    userdata: Ptr[NoneType, MutAnyOrigin],
+    name: CStringSlice, callback: HintCallback, userdata: Ptr[NoneType, MutAnyOrigin]
 ):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RemoveHintCallback
     """
-    get_sdl3_function_table().remove_hint_callback(name, callback, userdata)
+    get_sdl3_function_table().remove_hint_callback(name.unsafe_ptr(), callback, userdata)
 
 
 fn init(flags: InitFlags) raises:
@@ -3549,52 +3534,50 @@ fn run_on_main_thread(
 
 
 fn set_app_metadata(
-    appname: CStringSlice[ImmutAnyOrigin],
-    appversion: CStringSlice[ImmutAnyOrigin],
-    appidentifier: CStringSlice[ImmutAnyOrigin],
+    appname: CStringSlice, appversion: CStringSlice, appidentifier: CStringSlice
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetAppMetadata
     """
-    var success = get_sdl3_function_table().set_app_metadata(appname, appversion, appidentifier)
+    var success = get_sdl3_function_table().set_app_metadata(
+        appname.unsafe_ptr(), appversion.unsafe_ptr(), appidentifier.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
 
-fn set_app_metadata_property(
-    name: CStringSlice[ImmutAnyOrigin], value: CStringSlice[ImmutAnyOrigin]
-) raises:
+fn set_app_metadata_property(name: CStringSlice, value: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetAppMetadataProperty
     """
-    var success = get_sdl3_function_table().set_app_metadata_property(name, value)
+    var success = get_sdl3_function_table().set_app_metadata_property(
+        name.unsafe_ptr(), value.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
 
-fn get_app_metadata_property(
-    name: CStringSlice[ImmutAnyOrigin]
-) raises -> CStringSlice[ImmutOrigin.external]:
+fn get_app_metadata_property(name: CStringSlice) raises -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetAppMetadataProperty
     """
-    var cstring = get_sdl3_function_table().get_app_metadata_property(name)
+    var cstring = get_sdl3_function_table().get_app_metadata_property(name.unsafe_ptr())
     if not cstring.unsafe_ptr():
         raise "Error in get_app_metadata_property call. See official documentation for details."
     return cstring
 
 
 fn io_from_file(
-    file: CStringSlice[ImmutAnyOrigin], mode: CStringSlice[ImmutAnyOrigin]
+    file: CStringSlice, mode: CStringSlice
 ) raises -> Ptr[IOStream, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_IOFromFile
     """
-    var result = get_sdl3_function_table().io_from_file(file, mode)
+    var result = get_sdl3_function_table().io_from_file(file.unsafe_ptr(), mode.unsafe_ptr())
     if not result:
         raise get_error()
     return result
@@ -3720,22 +3703,20 @@ fn write_io(
     return get_sdl3_function_table().write_io(context, ptr, size)
 
 
-fn i_oprintf(context: Ptr[IOStream, MutAnyOrigin], fmt: CStringSlice[ImmutAnyOrigin]) -> Int32:
+fn i_oprintf(context: Ptr[IOStream, MutAnyOrigin], fmt: CStringSlice) -> Int32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_IOprintf
     """
-    return get_sdl3_function_table().i_oprintf(context, fmt)
+    return get_sdl3_function_table().i_oprintf(context, fmt.unsafe_ptr())
 
 
-fn i_ovprintf(
-    context: Ptr[IOStream, MutAnyOrigin], fmt: CStringSlice[ImmutAnyOrigin], ap: Int32
-) -> Int32:
+fn i_ovprintf(context: Ptr[IOStream, MutAnyOrigin], fmt: CStringSlice, ap: Int32) -> Int32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_IOvprintf
     """
-    return get_sdl3_function_table().i_ovprintf(context, fmt, ap)
+    return get_sdl3_function_table().i_ovprintf(context, fmt.unsafe_ptr(), ap)
 
 
 fn flush_io(context: Ptr[IOStream, MutAnyOrigin]) raises:
@@ -3762,13 +3743,13 @@ fn load_file_io(
 
 
 fn load_file(
-    file: CStringSlice[ImmutAnyOrigin], datasize: Ptr[Int32, MutAnyOrigin]
+    file: CStringSlice, datasize: Ptr[Int32, MutAnyOrigin]
 ) raises -> Ptr[NoneType, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LoadFile
     """
-    var result = get_sdl3_function_table().load_file(file, datasize)
+    var result = get_sdl3_function_table().load_file(file.unsafe_ptr(), datasize)
     if not result:
         raise get_error()
     return result
@@ -3789,14 +3770,12 @@ fn save_file_io(
         raise get_error()
 
 
-fn save_file(
-    file: CStringSlice[ImmutAnyOrigin], data: Ptr[NoneType, ImmutAnyOrigin], datasize: Int32
-) raises:
+fn save_file(file: CStringSlice, data: Ptr[NoneType, ImmutAnyOrigin], datasize: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SaveFile
     """
-    var success = get_sdl3_function_table().save_file(file, data, datasize)
+    var success = get_sdl3_function_table().save_file(file.unsafe_ptr(), data, datasize)
     if not success:
         raise get_error()
 
@@ -4698,12 +4677,12 @@ fn get_scancode_from_key(key: Keycode, modstate: Ptr[Keymod, MutAnyOrigin]) -> S
     return get_sdl3_function_table().get_scancode_from_key(key, modstate)
 
 
-fn set_scancode_name(scancode: Scancode, name: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_scancode_name(scancode: Scancode, name: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetScancodeName
     """
-    var success = get_sdl3_function_table().set_scancode_name(scancode, name)
+    var success = get_sdl3_function_table().set_scancode_name(scancode, name.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -4717,12 +4696,12 @@ fn get_scancode_name(scancode: Scancode) -> CStringSlice[ImmutOrigin.external]:
     return cstring
 
 
-fn get_scancode_from_name(name: CStringSlice[ImmutAnyOrigin]) -> Scancode:
+fn get_scancode_from_name(name: CStringSlice) -> Scancode:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetScancodeFromName
     """
-    return get_sdl3_function_table().get_scancode_from_name(name)
+    return get_sdl3_function_table().get_scancode_from_name(name.unsafe_ptr())
 
 
 fn get_key_name(key: Keycode) -> CStringSlice[ImmutOrigin.external]:
@@ -4734,12 +4713,12 @@ fn get_key_name(key: Keycode) -> CStringSlice[ImmutOrigin.external]:
     return cstring
 
 
-fn get_key_from_name(name: CStringSlice[ImmutAnyOrigin]) -> Keycode:
+fn get_key_from_name(name: CStringSlice) -> Keycode:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetKeyFromName
     """
-    return get_sdl3_function_table().get_key_from_name(name)
+    return get_sdl3_function_table().get_key_from_name(name.unsafe_ptr())
 
 
 fn start_text_input(window: Ptr[Window, MutAnyOrigin]) raises:
@@ -4864,96 +4843,94 @@ fn reset_log_priorities():
     get_sdl3_function_table().reset_log_priorities()
 
 
-fn set_log_priority_prefix(priority: LogPriority, prefix: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_log_priority_prefix(priority: LogPriority, prefix: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetLogPriorityPrefix
     """
-    var success = get_sdl3_function_table().set_log_priority_prefix(priority, prefix)
+    var success = get_sdl3_function_table().set_log_priority_prefix(priority, prefix.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn log(fmt: CStringSlice[ImmutAnyOrigin]):
+fn log(fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Log
     """
-    get_sdl3_function_table().log(fmt)
+    get_sdl3_function_table().log(fmt.unsafe_ptr())
 
 
-fn log_trace(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_trace(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogTrace
     """
-    get_sdl3_function_table().log_trace(category, fmt)
+    get_sdl3_function_table().log_trace(category, fmt.unsafe_ptr())
 
 
-fn log_verbose(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_verbose(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogVerbose
     """
-    get_sdl3_function_table().log_verbose(category, fmt)
+    get_sdl3_function_table().log_verbose(category, fmt.unsafe_ptr())
 
 
-fn log_debug(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_debug(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogDebug
     """
-    get_sdl3_function_table().log_debug(category, fmt)
+    get_sdl3_function_table().log_debug(category, fmt.unsafe_ptr())
 
 
-fn log_info(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_info(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogInfo
     """
-    get_sdl3_function_table().log_info(category, fmt)
+    get_sdl3_function_table().log_info(category, fmt.unsafe_ptr())
 
 
-fn log_warn(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_warn(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogWarn
     """
-    get_sdl3_function_table().log_warn(category, fmt)
+    get_sdl3_function_table().log_warn(category, fmt.unsafe_ptr())
 
 
-fn log_error(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_error(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogError
     """
-    get_sdl3_function_table().log_error(category, fmt)
+    get_sdl3_function_table().log_error(category, fmt.unsafe_ptr())
 
 
-fn log_critical(category: Int32, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_critical(category: Int32, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogCritical
     """
-    get_sdl3_function_table().log_critical(category, fmt)
+    get_sdl3_function_table().log_critical(category, fmt.unsafe_ptr())
 
 
-fn log_message(category: Int32, priority: LogPriority, fmt: CStringSlice[ImmutAnyOrigin]):
+fn log_message(category: Int32, priority: LogPriority, fmt: CStringSlice):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogMessage
     """
-    get_sdl3_function_table().log_message(category, priority, fmt)
+    get_sdl3_function_table().log_message(category, priority, fmt.unsafe_ptr())
 
 
-fn log_message_v(
-    category: Int32, priority: LogPriority, fmt: CStringSlice[ImmutAnyOrigin], ap: Int32
-):
+fn log_message_v(category: Int32, priority: LogPriority, fmt: CStringSlice, ap: Int32):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LogMessageV
     """
-    get_sdl3_function_table().log_message_v(category, priority, fmt, ap)
+    get_sdl3_function_table().log_message_v(category, priority, fmt.unsafe_ptr(), ap)
 
 
 fn get_default_log_output_function() -> LogOutputFunction:
@@ -5410,7 +5387,7 @@ fn unlock_properties(props: PropertiesID):
 
 fn set_pointer_property_with_cleanup(
     props: PropertiesID,
-    name: CStringSlice[ImmutAnyOrigin],
+    name: CStringSlice,
     value: Ptr[NoneType, MutAnyOrigin],
     cleanup: CleanupPropertyCallback,
     userdata: Ptr[NoneType, MutAnyOrigin],
@@ -5420,149 +5397,135 @@ fn set_pointer_property_with_cleanup(
     https://wiki.libsdl.org/SDL3/SDL_SetPointerPropertyWithCleanup
     """
     var success = get_sdl3_function_table().set_pointer_property_with_cleanup(
-        props, name, value, cleanup, userdata
+        props, name.unsafe_ptr(), value, cleanup, userdata
     )
     if not success:
         raise get_error()
 
 
 fn set_pointer_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], value: Ptr[NoneType, MutAnyOrigin]
+    props: PropertiesID, name: CStringSlice, value: Ptr[NoneType, MutAnyOrigin]
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetPointerProperty
     """
-    var success = get_sdl3_function_table().set_pointer_property(props, name, value)
+    var success = get_sdl3_function_table().set_pointer_property(props, name.unsafe_ptr(), value)
     if not success:
         raise get_error()
 
 
-fn set_string_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], value: CStringSlice[ImmutAnyOrigin]
-) raises:
+fn set_string_property(props: PropertiesID, name: CStringSlice, value: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetStringProperty
     """
-    var success = get_sdl3_function_table().set_string_property(props, name, value)
+    var success = get_sdl3_function_table().set_string_property(
+        props, name.unsafe_ptr(), value.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
 
-fn set_number_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], value: Int64
-) raises:
+fn set_number_property(props: PropertiesID, name: CStringSlice, value: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetNumberProperty
     """
-    var success = get_sdl3_function_table().set_number_property(props, name, value)
+    var success = get_sdl3_function_table().set_number_property(props, name.unsafe_ptr(), value)
     if not success:
         raise get_error()
 
 
-fn set_float_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], value: Float32
-) raises:
+fn set_float_property(props: PropertiesID, name: CStringSlice, value: Float32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetFloatProperty
     """
-    var success = get_sdl3_function_table().set_float_property(props, name, value)
+    var success = get_sdl3_function_table().set_float_property(props, name.unsafe_ptr(), value)
     if not success:
         raise get_error()
 
 
-fn set_boolean_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], value: Bool
-) raises:
+fn set_boolean_property(props: PropertiesID, name: CStringSlice, value: Bool) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetBooleanProperty
     """
-    var success = get_sdl3_function_table().set_boolean_property(props, name, value)
+    var success = get_sdl3_function_table().set_boolean_property(props, name.unsafe_ptr(), value)
     if not success:
         raise get_error()
 
 
-fn has_property(props: PropertiesID, name: CStringSlice[ImmutAnyOrigin]) -> Bool:
+fn has_property(props: PropertiesID, name: CStringSlice) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_HasProperty
     """
-    return get_sdl3_function_table().has_property(props, name)
+    return get_sdl3_function_table().has_property(props, name.unsafe_ptr())
 
 
-fn get_property_type(props: PropertiesID, name: CStringSlice[ImmutAnyOrigin]) -> PropertyType:
+fn get_property_type(props: PropertiesID, name: CStringSlice) -> PropertyType:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetPropertyType
     """
-    return get_sdl3_function_table().get_property_type(props, name)
+    return get_sdl3_function_table().get_property_type(props, name.unsafe_ptr())
 
 
 fn get_pointer_property(
-    props: PropertiesID,
-    name: CStringSlice[ImmutAnyOrigin],
-    default_value: Ptr[NoneType, MutAnyOrigin],
+    props: PropertiesID, name: CStringSlice, default_value: Ptr[NoneType, MutAnyOrigin]
 ) -> Ptr[NoneType, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetPointerProperty
     """
-    return get_sdl3_function_table().get_pointer_property(props, name, default_value)
+    return get_sdl3_function_table().get_pointer_property(props, name.unsafe_ptr(), default_value)
 
 
 fn get_string_property(
-    props: PropertiesID,
-    name: CStringSlice[ImmutAnyOrigin],
-    default_value: CStringSlice[ImmutAnyOrigin],
+    props: PropertiesID, name: CStringSlice, default_value: CStringSlice
 ) -> CStringSlice[ImmutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetStringProperty
     """
-    var cstring = get_sdl3_function_table().get_string_property(props, name, default_value)
+    var cstring = get_sdl3_function_table().get_string_property(
+        props, name.unsafe_ptr(), default_value.unsafe_ptr()
+    )
     return cstring
 
 
-fn get_number_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], default_value: Int64
-) -> Int64:
+fn get_number_property(props: PropertiesID, name: CStringSlice, default_value: Int64) -> Int64:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetNumberProperty
     """
-    return get_sdl3_function_table().get_number_property(props, name, default_value)
+    return get_sdl3_function_table().get_number_property(props, name.unsafe_ptr(), default_value)
 
 
-fn get_float_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], default_value: Float32
-) -> Float32:
+fn get_float_property(props: PropertiesID, name: CStringSlice, default_value: Float32) -> Float32:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetFloatProperty
     """
-    return get_sdl3_function_table().get_float_property(props, name, default_value)
+    return get_sdl3_function_table().get_float_property(props, name.unsafe_ptr(), default_value)
 
 
-fn get_boolean_property(
-    props: PropertiesID, name: CStringSlice[ImmutAnyOrigin], default_value: Bool
-) -> Bool:
+fn get_boolean_property(props: PropertiesID, name: CStringSlice, default_value: Bool) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetBooleanProperty
     """
-    return get_sdl3_function_table().get_boolean_property(props, name, default_value)
+    return get_sdl3_function_table().get_boolean_property(props, name.unsafe_ptr(), default_value)
 
 
-fn clear_property(props: PropertiesID, name: CStringSlice[ImmutAnyOrigin]) raises:
+fn clear_property(props: PropertiesID, name: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ClearProperty
     """
-    var success = get_sdl3_function_table().clear_property(props, name)
+    var success = get_sdl3_function_table().clear_property(props, name.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -5725,7 +5688,7 @@ fn get_render_driver(index: Int32) raises -> CStringSlice[ImmutOrigin.external]:
 
 
 fn create_window_and_renderer(
-    title: CStringSlice[ImmutAnyOrigin],
+    title: CStringSlice,
     width: Int32,
     height: Int32,
     window_flags: WindowFlags,
@@ -5737,20 +5700,20 @@ fn create_window_and_renderer(
     https://wiki.libsdl.org/SDL3/SDL_CreateWindowAndRenderer
     """
     var success = get_sdl3_function_table().create_window_and_renderer(
-        title, width, height, window_flags, window, renderer
+        title.unsafe_ptr(), width, height, window_flags, window, renderer
     )
     if not success:
         raise get_error()
 
 
 fn create_renderer(
-    window: Ptr[Window, MutAnyOrigin], name: CStringSlice[ImmutAnyOrigin]
+    window: Ptr[Window, MutAnyOrigin], name: CStringSlice
 ) raises -> Ptr[Renderer, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateRenderer
     """
-    var result = get_sdl3_function_table().create_renderer(window, name)
+    var result = get_sdl3_function_table().create_renderer(window, name.unsafe_ptr())
     if not result:
         raise get_error()
     return result
@@ -6847,25 +6810,27 @@ fn get_render_v_sync(
 
 
 fn render_debug_text(
-    renderer: Ptr[Renderer, MutAnyOrigin], x: Float32, y: Float32, str: CStringSlice[ImmutAnyOrigin]
+    renderer: Ptr[Renderer, MutAnyOrigin], x: Float32, y: Float32, str: CStringSlice
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RenderDebugText
     """
-    var success = get_sdl3_function_table().render_debug_text(renderer, x, y, str)
+    var success = get_sdl3_function_table().render_debug_text(renderer, x, y, str.unsafe_ptr())
     if not success:
         raise get_error()
 
 
 fn render_debug_text_format(
-    renderer: Ptr[Renderer, MutAnyOrigin], x: Float32, y: Float32, fmt: CStringSlice[ImmutAnyOrigin]
+    renderer: Ptr[Renderer, MutAnyOrigin], x: Float32, y: Float32, fmt: CStringSlice
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RenderDebugTextFormat
     """
-    var success = get_sdl3_function_table().render_debug_text_format(renderer, x, y, fmt)
+    var success = get_sdl3_function_table().render_debug_text_format(
+        renderer, x, y, fmt.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
@@ -7002,39 +6967,39 @@ fn update_sensors():
 
 
 fn open_title_storage(
-    override: CStringSlice[ImmutAnyOrigin], props: PropertiesID
+    override: CStringSlice, props: PropertiesID
 ) raises -> Ptr[Storage, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_OpenTitleStorage
     """
-    var result = get_sdl3_function_table().open_title_storage(override, props)
+    var result = get_sdl3_function_table().open_title_storage(override.unsafe_ptr(), props)
     if not result:
         raise get_error()
     return result
 
 
 fn open_user_storage(
-    org: CStringSlice[ImmutAnyOrigin], app: CStringSlice[ImmutAnyOrigin], props: PropertiesID
+    org: CStringSlice, app: CStringSlice, props: PropertiesID
 ) raises -> Ptr[Storage, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_OpenUserStorage
     """
-    var result = get_sdl3_function_table().open_user_storage(org, app, props)
+    var result = get_sdl3_function_table().open_user_storage(
+        org.unsafe_ptr(), app.unsafe_ptr(), props
+    )
     if not result:
         raise get_error()
     return result
 
 
-fn open_file_storage(
-    path: CStringSlice[ImmutAnyOrigin]
-) raises -> Ptr[Storage, MutOrigin.external]:
+fn open_file_storage(path: CStringSlice) raises -> Ptr[Storage, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_OpenFileStorage
     """
-    var result = get_sdl3_function_table().open_file_storage(path)
+    var result = get_sdl3_function_table().open_file_storage(path.unsafe_ptr())
     if not result:
         raise get_error()
     return result
@@ -7070,20 +7035,18 @@ fn storage_ready(storage: Ptr[Storage, MutAnyOrigin]) -> Bool:
 
 
 fn get_storage_file_size(
-    storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
-    length: Ptr[UInt64, MutAnyOrigin],
+    storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice, length: Ptr[UInt64, MutAnyOrigin]
 ) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetStorageFileSize
     """
-    return get_sdl3_function_table().get_storage_file_size(storage, path, length)
+    return get_sdl3_function_table().get_storage_file_size(storage, path.unsafe_ptr(), length)
 
 
 fn read_storage_file(
     storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
+    path: CStringSlice,
     destination: Ptr[NoneType, MutAnyOrigin],
     length: UInt64,
 ) -> Bool:
@@ -7091,12 +7054,14 @@ fn read_storage_file(
     
     https://wiki.libsdl.org/SDL3/SDL_ReadStorageFile
     """
-    return get_sdl3_function_table().read_storage_file(storage, path, destination, length)
+    return get_sdl3_function_table().read_storage_file(
+        storage, path.unsafe_ptr(), destination, length
+    )
 
 
 fn write_storage_file(
     storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
+    path: CStringSlice,
     source: Ptr[NoneType, ImmutAnyOrigin],
     length: UInt64,
 ) -> Bool:
@@ -7104,24 +7069,22 @@ fn write_storage_file(
     
     https://wiki.libsdl.org/SDL3/SDL_WriteStorageFile
     """
-    return get_sdl3_function_table().write_storage_file(storage, path, source, length)
+    return get_sdl3_function_table().write_storage_file(storage, path.unsafe_ptr(), source, length)
 
 
-fn create_storage_directory(
-    storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice[ImmutAnyOrigin]
-) raises:
+fn create_storage_directory(storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateStorageDirectory
     """
-    var success = get_sdl3_function_table().create_storage_directory(storage, path)
+    var success = get_sdl3_function_table().create_storage_directory(storage, path.unsafe_ptr())
     if not success:
         raise get_error()
 
 
 fn enumerate_storage_directory(
     storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
+    path: CStringSlice,
     callback: EnumerateDirectoryCallback,
     userdata: Ptr[NoneType, MutAnyOrigin],
 ) raises:
@@ -7130,62 +7093,58 @@ fn enumerate_storage_directory(
     https://wiki.libsdl.org/SDL3/SDL_EnumerateStorageDirectory
     """
     var success = get_sdl3_function_table().enumerate_storage_directory(
-        storage, path, callback, userdata
+        storage, path.unsafe_ptr(), callback, userdata
     )
     if not success:
         raise get_error()
 
 
-fn remove_storage_path(
-    storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice[ImmutAnyOrigin]
-) raises:
+fn remove_storage_path(storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RemoveStoragePath
     """
-    var success = get_sdl3_function_table().remove_storage_path(storage, path)
+    var success = get_sdl3_function_table().remove_storage_path(storage, path.unsafe_ptr())
     if not success:
         raise get_error()
 
 
 fn rename_storage_path(
-    storage: Ptr[Storage, MutAnyOrigin],
-    oldpath: CStringSlice[ImmutAnyOrigin],
-    newpath: CStringSlice[ImmutAnyOrigin],
+    storage: Ptr[Storage, MutAnyOrigin], oldpath: CStringSlice, newpath: CStringSlice
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RenameStoragePath
     """
-    var success = get_sdl3_function_table().rename_storage_path(storage, oldpath, newpath)
+    var success = get_sdl3_function_table().rename_storage_path(
+        storage, oldpath.unsafe_ptr(), newpath.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
 
 fn copy_storage_file(
-    storage: Ptr[Storage, MutAnyOrigin],
-    oldpath: CStringSlice[ImmutAnyOrigin],
-    newpath: CStringSlice[ImmutAnyOrigin],
+    storage: Ptr[Storage, MutAnyOrigin], oldpath: CStringSlice, newpath: CStringSlice
 ) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CopyStorageFile
     """
-    var success = get_sdl3_function_table().copy_storage_file(storage, oldpath, newpath)
+    var success = get_sdl3_function_table().copy_storage_file(
+        storage, oldpath.unsafe_ptr(), newpath.unsafe_ptr()
+    )
     if not success:
         raise get_error()
 
 
 fn get_storage_path_info(
-    storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
-    info: Ptr[PathInfo, MutAnyOrigin],
+    storage: Ptr[Storage, MutAnyOrigin], path: CStringSlice, info: Ptr[PathInfo, MutAnyOrigin]
 ) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetStoragePathInfo
     """
-    return get_sdl3_function_table().get_storage_path_info(storage, path, info)
+    return get_sdl3_function_table().get_storage_path_info(storage, path.unsafe_ptr(), info)
 
 
 fn get_storage_space_remaining(storage: Ptr[Storage, MutAnyOrigin]) -> UInt64:
@@ -7198,8 +7157,8 @@ fn get_storage_space_remaining(storage: Ptr[Storage, MutAnyOrigin]) -> UInt64:
 
 fn glob_storage_directory(
     storage: Ptr[Storage, MutAnyOrigin],
-    path: CStringSlice[ImmutAnyOrigin],
-    pattern: CStringSlice[ImmutAnyOrigin],
+    path: CStringSlice,
+    pattern: CStringSlice,
     flags: GlobFlags,
     count: Ptr[Int32, MutAnyOrigin],
 ) raises -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]:
@@ -7208,7 +7167,7 @@ fn glob_storage_directory(
     https://wiki.libsdl.org/SDL3/SDL_GlobStorageDirectory
     """
     var result = get_sdl3_function_table().glob_storage_directory(
-        storage, path, pattern, flags, count
+        storage, path.unsafe_ptr(), pattern.unsafe_ptr(), flags, count
     )
     if not result:
         raise get_error()
@@ -7391,12 +7350,12 @@ fn load_bmp_io(
     return result
 
 
-fn load_bmp(file: CStringSlice[ImmutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn load_bmp(file: CStringSlice) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_LoadBMP
     """
-    var result = get_sdl3_function_table().load_bmp(file)
+    var result = get_sdl3_function_table().load_bmp(file.unsafe_ptr())
     if not result:
         raise get_error()
     return result
@@ -7414,12 +7373,12 @@ fn save_bmp_io(
         raise get_error()
 
 
-fn save_bmp(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice[ImmutAnyOrigin]) raises:
+fn save_bmp(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SaveBMP
     """
-    var success = get_sdl3_function_table().save_bmp(surface, file)
+    var success = get_sdl3_function_table().save_bmp(surface, file.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -8492,13 +8451,13 @@ fn get_windows(
 
 
 fn create_window(
-    title: CStringSlice[ImmutAnyOrigin], w: Int32, h: Int32, flags: WindowFlags
+    title: CStringSlice, w: Int32, h: Int32, flags: WindowFlags
 ) raises -> Ptr[Window, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateWindow
     """
-    var result = get_sdl3_function_table().create_window(title, w, h, flags)
+    var result = get_sdl3_function_table().create_window(title.unsafe_ptr(), w, h, flags)
     if not result:
         raise get_error()
     return result
@@ -8581,12 +8540,12 @@ fn get_window_flags(window: Ptr[Window, MutAnyOrigin]) -> WindowFlags:
     return get_sdl3_function_table().get_window_flags(window)
 
 
-fn set_window_title(window: Ptr[Window, MutAnyOrigin], title: CStringSlice[ImmutAnyOrigin]) raises:
+fn set_window_title(window: Ptr[Window, MutAnyOrigin], title: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetWindowTitle
     """
-    var success = get_sdl3_function_table().set_window_title(window, title)
+    var success = get_sdl3_function_table().set_window_title(window, title.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -9145,30 +9104,30 @@ fn disable_screen_saver() raises:
         raise get_error()
 
 
-fn gl_load_library(path: CStringSlice[ImmutAnyOrigin]) raises:
+fn gl_load_library(path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GL_LoadLibrary
     """
-    var success = get_sdl3_function_table().gl_load_library(path)
+    var success = get_sdl3_function_table().gl_load_library(path.unsafe_ptr())
     if not success:
         raise get_error()
 
 
-fn gl_get_proc_address(proc: CStringSlice[ImmutAnyOrigin]) -> FunctionPointer:
+fn gl_get_proc_address(proc: CStringSlice) -> FunctionPointer:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GL_GetProcAddress
     """
-    return get_sdl3_function_table().gl_get_proc_address(proc)
+    return get_sdl3_function_table().gl_get_proc_address(proc.unsafe_ptr())
 
 
-fn egl_get_proc_address(proc: CStringSlice[ImmutAnyOrigin]) -> FunctionPointer:
+fn egl_get_proc_address(proc: CStringSlice) -> FunctionPointer:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_EGL_GetProcAddress
     """
-    return get_sdl3_function_table().egl_get_proc_address(proc)
+    return get_sdl3_function_table().egl_get_proc_address(proc.unsafe_ptr())
 
 
 fn gl_unload_library():
@@ -9179,12 +9138,12 @@ fn gl_unload_library():
     get_sdl3_function_table().gl_unload_library()
 
 
-fn gl_extension_supported(extension: CStringSlice[ImmutAnyOrigin]) -> Bool:
+fn gl_extension_supported(extension: CStringSlice) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GL_ExtensionSupported
     """
-    return get_sdl3_function_table().gl_extension_supported(extension)
+    return get_sdl3_function_table().gl_extension_supported(extension.unsafe_ptr())
 
 
 fn gl_reset_attributes():
@@ -9331,12 +9290,12 @@ fn gl_destroy_context(context: GLContext) raises:
         raise get_error()
 
 
-fn vulkan_load_library(path: CStringSlice[ImmutAnyOrigin]) raises:
+fn vulkan_load_library(path: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Vulkan_LoadLibrary
     """
-    var success = get_sdl3_function_table().vulkan_load_library(path)
+    var success = get_sdl3_function_table().vulkan_load_library(path.unsafe_ptr())
     if not success:
         raise get_error()
 

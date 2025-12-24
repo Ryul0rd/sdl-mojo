@@ -752,7 +752,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
     ]
     for function in functions:
         mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        functions_table_file_parts.append(f'    var {mojo_fn_name}: {emit_mojo_type(function.as_fn_type())}\n')
+        functions_table_file_parts.append(f'    var {mojo_fn_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
     functions_table_file_parts.append((
         "\n"
         "    fn __init__(out self, path: Some[PathLike]) raises:\n"
@@ -760,7 +760,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
     ))
     for function in functions:
         mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        mojo_fn_type = emit_mojo_type(function.as_fn_type())
+        mojo_fn_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(
             f'        self.{mojo_fn_name} = self.dlhandle.get_function[{mojo_fn_type}]("{function.name}")\n'
         )
@@ -843,7 +843,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_fn_like(
         f"fn {mojo_fn_name}(",
         [
-            f"{arg.name}: {emit_mojo_type(arg.type, use_any_origin=True)}"
+            f"{arg.name}: {emit_mojo_type(arg.type, use_any_origin=True, omit_cstringslice_origin=True)}"
             for arg in function.args
         ],
         return_part,
@@ -851,7 +851,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_wiki_docstring(lib_spec.name, function.name))
     parts.append(emit_fn_like(
         f"{result_part}get_{function_table_global_name}().{mojo_fn_name}(",
-        [arg.name for arg in function.args],
+        [f"{arg.name}.unsafe_ptr()" if is_string(arg.type) else arg.name for arg in function.args],
         f")\n",
         base_indent_level = 1,
     ))
@@ -859,17 +859,22 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     return "".join(parts)
 
 
-def emit_mojo_type(sdl_type: SdlType, use_any_origin: bool=False) -> str:
+def emit_mojo_type(
+    sdl_type: SdlType,
+    use_any_origin: bool=False,
+    use_cstringslice: bool=True,
+    omit_cstringslice_origin: bool=False,
+) -> str:
     MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutOrigin.external"
     IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutOrigin.external"
 
-    if is_string(sdl_type):
-        return f"CStringSlice[{IMMUT_ORIGIN}]"
+    if use_cstringslice and is_string(sdl_type):
+        return "CStringSlice" if omit_cstringslice_origin else f"CStringSlice[{IMMUT_ORIGIN}]"
 
     if isinstance(sdl_type, SdlFunctionType):
         return emit_fn_like(
             "fn(",
-            [emit_mojo_type(arg_type, use_any_origin=True) for arg_type in sdl_type.arg_types],
+            [emit_mojo_type(arg_type, use_any_origin=True, use_cstringslice=use_cstringslice) for arg_type in sdl_type.arg_types],
             f") -> {emit_mojo_type(sdl_type.return_type)}",
             max_line_len = None,
         )

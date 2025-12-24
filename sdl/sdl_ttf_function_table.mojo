@@ -56,7 +56,7 @@ struct SdlTtfFunctionTable(Movable):
     var ttf_get_free_type_version: fn(Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> NoneType
     var ttf_get_harf_buzz_version: fn(Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> NoneType
     var ttf_init: fn() -> Bool
-    var ttf_open_font: fn(CStringSlice[ImmutAnyOrigin], Float32) -> Ptr[TTF_Font, MutOrigin.external]
+    var ttf_open_font: fn(Ptr[c_char, ImmutAnyOrigin], Float32) -> Ptr[TTF_Font, MutOrigin.external]
     var ttf_open_font_io: fn(Ptr[IOStream, MutAnyOrigin], Bool, Float32) -> Ptr[TTF_Font, MutOrigin.external]
     var ttf_open_font_with_properties: fn(PropertiesID) -> Ptr[TTF_Font, MutOrigin.external]
     var ttf_copy_font: fn(Ptr[TTF_Font, MutAnyOrigin]) -> Ptr[TTF_Font, MutOrigin.external]
@@ -94,31 +94,31 @@ struct SdlTtfFunctionTable(Movable):
     var ttf_get_font_style_name: fn(Ptr[TTF_Font, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
     var ttf_set_font_direction: fn(Ptr[TTF_Font, MutAnyOrigin], TTF_Direction) -> Bool
     var ttf_get_font_direction: fn(Ptr[TTF_Font, MutAnyOrigin]) -> TTF_Direction
-    var ttf_string_to_tag: fn(CStringSlice[ImmutAnyOrigin]) -> UInt32
+    var ttf_string_to_tag: fn(Ptr[c_char, ImmutAnyOrigin]) -> UInt32
     var ttf_tag_to_string: fn(UInt32, Ptr[c_char, MutAnyOrigin], Int32) -> NoneType
     var ttf_set_font_script: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32) -> Bool
     var ttf_get_font_script: fn(Ptr[TTF_Font, MutAnyOrigin]) -> UInt32
     var ttf_get_glyph_script: fn(UInt32) -> UInt32
-    var ttf_set_font_language: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
+    var ttf_set_font_language: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var ttf_font_has_glyph: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32) -> Bool
     var ttf_get_glyph_image: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[TTF_ImageType, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]
     var ttf_get_glyph_image_for_index: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[TTF_ImageType, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]
     var ttf_get_glyph_metrics: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
     var ttf_get_glyph_kerning: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, UInt32, Ptr[Int32, MutAnyOrigin]) -> Bool
-    var ttf_get_string_size: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
-    var ttf_get_string_size_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
-    var ttf_measure_string: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
-    var ttf_render_text_solid: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_solid_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]
+    var ttf_get_string_size: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
+    var ttf_get_string_size_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
+    var ttf_measure_string: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
+    var ttf_render_text_solid: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_solid_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]
     var ttf_render_glyph_solid: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_shaded: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_shaded_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_shaded: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_shaded_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]
     var ttf_render_glyph_shaded: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_blended: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_blended_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_blended: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_blended_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]
     var ttf_render_glyph_blended: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_lcd: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]
-    var ttf_render_text_lcd_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_lcd: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]
+    var ttf_render_text_lcd_wrapped: fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]
     var ttf_render_glyph_lcd: fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color, Color) -> Ptr[Surface, MutOrigin.external]
     var ttf_create_surface_text_engine: fn() -> Ptr[TTF_TextEngine, MutOrigin.external]
     var ttf_draw_surface_text: fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Int32, Ptr[Surface, MutAnyOrigin]) -> Bool
@@ -133,7 +133,7 @@ struct SdlTtfFunctionTable(Movable):
     var ttf_destroy_gpu_text_engine: fn(Ptr[TTF_TextEngine, MutAnyOrigin]) -> NoneType
     var ttf_set_gpu_text_engine_winding: fn(Ptr[TTF_TextEngine, MutAnyOrigin], TTF_GPUTextEngineWinding) -> NoneType
     var ttf_get_gpu_text_engine_winding: fn(Ptr[TTF_TextEngine, ImmutAnyOrigin]) -> TTF_GPUTextEngineWinding
-    var ttf_create_text: fn(Ptr[TTF_TextEngine, MutAnyOrigin], Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Ptr[TTF_Text, MutOrigin.external]
+    var ttf_create_text: fn(Ptr[TTF_TextEngine, MutAnyOrigin], Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Ptr[TTF_Text, MutOrigin.external]
     var ttf_get_text_properties: fn(Ptr[TTF_Text, MutAnyOrigin]) -> PropertiesID
     var ttf_set_text_engine: fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[TTF_TextEngine, MutAnyOrigin]) -> Bool
     var ttf_get_text_engine: fn(Ptr[TTF_Text, MutAnyOrigin]) -> Ptr[TTF_TextEngine, MutOrigin.external]
@@ -153,9 +153,9 @@ struct SdlTtfFunctionTable(Movable):
     var ttf_get_text_wrap_width: fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
     var ttf_set_text_wrap_whitespace_visible: fn(Ptr[TTF_Text, MutAnyOrigin], Bool) -> Bool
     var ttf_text_wrap_whitespace_visible: fn(Ptr[TTF_Text, MutAnyOrigin]) -> Bool
-    var ttf_set_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Bool
-    var ttf_insert_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], Int32, CStringSlice[ImmutAnyOrigin], Int32) -> Bool
-    var ttf_append_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Bool
+    var ttf_set_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool
+    var ttf_insert_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool
+    var ttf_append_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool
     var ttf_delete_text_string: fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Int32) -> Bool
     var ttf_get_text_size: fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
     var ttf_get_text_sub_string: fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Ptr[TTF_SubString, MutAnyOrigin]) -> Bool
@@ -176,7 +176,7 @@ struct SdlTtfFunctionTable(Movable):
         self.ttf_get_free_type_version = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> NoneType]("TTF_GetFreeTypeVersion")
         self.ttf_get_harf_buzz_version = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> NoneType]("TTF_GetHarfBuzzVersion")
         self.ttf_init = self.dlhandle.get_function[fn() -> Bool]("TTF_Init")
-        self.ttf_open_font = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Float32) -> Ptr[TTF_Font, MutOrigin.external]]("TTF_OpenFont")
+        self.ttf_open_font = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Float32) -> Ptr[TTF_Font, MutOrigin.external]]("TTF_OpenFont")
         self.ttf_open_font_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Bool, Float32) -> Ptr[TTF_Font, MutOrigin.external]]("TTF_OpenFontIO")
         self.ttf_open_font_with_properties = self.dlhandle.get_function[fn(PropertiesID) -> Ptr[TTF_Font, MutOrigin.external]]("TTF_OpenFontWithProperties")
         self.ttf_copy_font = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin]) -> Ptr[TTF_Font, MutOrigin.external]]("TTF_CopyFont")
@@ -214,31 +214,31 @@ struct SdlTtfFunctionTable(Movable):
         self.ttf_get_font_style_name = self.dlhandle.get_function[fn(Ptr[TTF_Font, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("TTF_GetFontStyleName")
         self.ttf_set_font_direction = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], TTF_Direction) -> Bool]("TTF_SetFontDirection")
         self.ttf_get_font_direction = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin]) -> TTF_Direction]("TTF_GetFontDirection")
-        self.ttf_string_to_tag = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> UInt32]("TTF_StringToTag")
+        self.ttf_string_to_tag = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> UInt32]("TTF_StringToTag")
         self.ttf_tag_to_string = self.dlhandle.get_function[fn(UInt32, Ptr[c_char, MutAnyOrigin], Int32) -> NoneType]("TTF_TagToString")
         self.ttf_set_font_script = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32) -> Bool]("TTF_SetFontScript")
         self.ttf_get_font_script = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin]) -> UInt32]("TTF_GetFontScript")
         self.ttf_get_glyph_script = self.dlhandle.get_function[fn(UInt32) -> UInt32]("TTF_GetGlyphScript")
-        self.ttf_set_font_language = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("TTF_SetFontLanguage")
+        self.ttf_set_font_language = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("TTF_SetFontLanguage")
         self.ttf_font_has_glyph = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32) -> Bool]("TTF_FontHasGlyph")
         self.ttf_get_glyph_image = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[TTF_ImageType, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]]("TTF_GetGlyphImage")
         self.ttf_get_glyph_image_for_index = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[TTF_ImageType, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]]("TTF_GetGlyphImageForIndex")
         self.ttf_get_glyph_metrics = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetGlyphMetrics")
         self.ttf_get_glyph_kerning = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, UInt32, Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetGlyphKerning")
-        self.ttf_get_string_size = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetStringSize")
-        self.ttf_get_string_size_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetStringSizeWrapped")
-        self.ttf_measure_string = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_MeasureString")
-        self.ttf_render_text_solid = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Solid")
-        self.ttf_render_text_solid_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Solid_Wrapped")
+        self.ttf_get_string_size = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetStringSize")
+        self.ttf_get_string_size_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetStringSizeWrapped")
+        self.ttf_measure_string = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Int32, Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_MeasureString")
+        self.ttf_render_text_solid = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Solid")
+        self.ttf_render_text_solid_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Solid_Wrapped")
         self.ttf_render_glyph_solid = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderGlyph_Solid")
-        self.ttf_render_text_shaded = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Shaded")
-        self.ttf_render_text_shaded_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Shaded_Wrapped")
+        self.ttf_render_text_shaded = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Shaded")
+        self.ttf_render_text_shaded_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Shaded_Wrapped")
         self.ttf_render_glyph_shaded = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderGlyph_Shaded")
-        self.ttf_render_text_blended = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Blended")
-        self.ttf_render_text_blended_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Blended_Wrapped")
+        self.ttf_render_text_blended = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Blended")
+        self.ttf_render_text_blended_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_Blended_Wrapped")
         self.ttf_render_glyph_blended = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderGlyph_Blended")
-        self.ttf_render_text_lcd = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_LCD")
-        self.ttf_render_text_lcd_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_LCD_Wrapped")
+        self.ttf_render_text_lcd = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_LCD")
+        self.ttf_render_text_lcd_wrapped = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32, Color, Color, Int32) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderText_LCD_Wrapped")
         self.ttf_render_glyph_lcd = self.dlhandle.get_function[fn(Ptr[TTF_Font, MutAnyOrigin], UInt32, Color, Color) -> Ptr[Surface, MutOrigin.external]]("TTF_RenderGlyph_LCD")
         self.ttf_create_surface_text_engine = self.dlhandle.get_function[fn() -> Ptr[TTF_TextEngine, MutOrigin.external]]("TTF_CreateSurfaceTextEngine")
         self.ttf_draw_surface_text = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Int32, Ptr[Surface, MutAnyOrigin]) -> Bool]("TTF_DrawSurfaceText")
@@ -253,7 +253,7 @@ struct SdlTtfFunctionTable(Movable):
         self.ttf_destroy_gpu_text_engine = self.dlhandle.get_function[fn(Ptr[TTF_TextEngine, MutAnyOrigin]) -> NoneType]("TTF_DestroyGPUTextEngine")
         self.ttf_set_gpu_text_engine_winding = self.dlhandle.get_function[fn(Ptr[TTF_TextEngine, MutAnyOrigin], TTF_GPUTextEngineWinding) -> NoneType]("TTF_SetGPUTextEngineWinding")
         self.ttf_get_gpu_text_engine_winding = self.dlhandle.get_function[fn(Ptr[TTF_TextEngine, ImmutAnyOrigin]) -> TTF_GPUTextEngineWinding]("TTF_GetGPUTextEngineWinding")
-        self.ttf_create_text = self.dlhandle.get_function[fn(Ptr[TTF_TextEngine, MutAnyOrigin], Ptr[TTF_Font, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Ptr[TTF_Text, MutOrigin.external]]("TTF_CreateText")
+        self.ttf_create_text = self.dlhandle.get_function[fn(Ptr[TTF_TextEngine, MutAnyOrigin], Ptr[TTF_Font, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Ptr[TTF_Text, MutOrigin.external]]("TTF_CreateText")
         self.ttf_get_text_properties = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin]) -> PropertiesID]("TTF_GetTextProperties")
         self.ttf_set_text_engine = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[TTF_TextEngine, MutAnyOrigin]) -> Bool]("TTF_SetTextEngine")
         self.ttf_get_text_engine = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin]) -> Ptr[TTF_TextEngine, MutOrigin.external]]("TTF_GetTextEngine")
@@ -273,9 +273,9 @@ struct SdlTtfFunctionTable(Movable):
         self.ttf_get_text_wrap_width = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetTextWrapWidth")
         self.ttf_set_text_wrap_whitespace_visible = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Bool) -> Bool]("TTF_SetTextWrapWhitespaceVisible")
         self.ttf_text_wrap_whitespace_visible = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin]) -> Bool]("TTF_TextWrapWhitespaceVisible")
-        self.ttf_set_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Bool]("TTF_SetTextString")
-        self.ttf_insert_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Int32, CStringSlice[ImmutAnyOrigin], Int32) -> Bool]("TTF_InsertTextString")
-        self.ttf_append_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Bool]("TTF_AppendTextString")
+        self.ttf_set_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool]("TTF_SetTextString")
+        self.ttf_insert_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool]("TTF_InsertTextString")
+        self.ttf_append_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool]("TTF_AppendTextString")
         self.ttf_delete_text_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Int32) -> Bool]("TTF_DeleteTextString")
         self.ttf_get_text_size = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("TTF_GetTextSize")
         self.ttf_get_text_sub_string = self.dlhandle.get_function[fn(Ptr[TTF_Text, MutAnyOrigin], Int32, Ptr[TTF_SubString, MutAnyOrigin]) -> Bool]("TTF_GetTextSubString")

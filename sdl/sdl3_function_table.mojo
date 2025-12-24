@@ -103,7 +103,7 @@ struct Sdl3FunctionTable(Movable):
     var open_audio_device_stream: fn(AudioDeviceID, Ptr[AudioSpec, ImmutAnyOrigin], AudioStreamCallback, Ptr[NoneType, MutAnyOrigin]) -> Ptr[AudioStream, MutOrigin.external]
     var set_audio_postmix_callback: fn(AudioDeviceID, AudioPostmixCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
     var load_wav_io: fn(Ptr[IOStream, MutAnyOrigin], Bool, Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool
-    var load_wav: fn(CStringSlice[ImmutAnyOrigin], Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool
+    var load_wav: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool
     var mix_audio: fn(Ptr[UInt8, MutAnyOrigin], Ptr[UInt8, ImmutAnyOrigin], AudioFormat, UInt32, Float32) -> Bool
     var convert_audio_samples: fn(Ptr[AudioSpec, ImmutAnyOrigin], Ptr[UInt8, ImmutAnyOrigin], Int32, Ptr[AudioSpec, ImmutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
     var get_audio_format_name: fn(AudioFormat) -> CStringSlice[ImmutOrigin.external]
@@ -124,19 +124,19 @@ struct Sdl3FunctionTable(Movable):
     var acquire_camera_frame: fn(Ptr[Camera, MutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]
     var release_camera_frame: fn(Ptr[Camera, MutAnyOrigin], Ptr[Surface, MutAnyOrigin]) -> NoneType
     var close_camera: fn(Ptr[Camera, MutAnyOrigin]) -> NoneType
-    var set_clipboard_text: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_clipboard_text: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_clipboard_text: fn() -> Ptr[c_char, MutOrigin.external]
     var has_clipboard_text: fn() -> Bool
-    var set_primary_selection_text: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_primary_selection_text: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_primary_selection_text: fn() -> Ptr[c_char, MutOrigin.external]
     var has_primary_selection_text: fn() -> Bool
     var set_clipboard_data: fn(ClipboardDataCallback, ClipboardCleanupCallback, Ptr[NoneType, MutAnyOrigin], Ptr[CStringSlice[ImmutOrigin.external], MutAnyOrigin], Int32) -> Bool
     var clear_clipboard_data: fn() -> Bool
-    var get_clipboard_data: fn(CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
-    var has_clipboard_data: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var get_clipboard_data: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
+    var has_clipboard_data: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_clipboard_mime_types: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
-    var set_error: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
-    var set_error_v: fn(CStringSlice[ImmutAnyOrigin], Int32) -> Bool
+    var set_error: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var set_error_v: fn(Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool
     var out_of_memory: fn() -> Bool
     var get_error: fn() -> CStringSlice[ImmutOrigin.external]
     var clear_error: fn() -> Bool
@@ -160,24 +160,24 @@ struct Sdl3FunctionTable(Movable):
     var register_events: fn(Int32) -> UInt32
     var get_window_from_event: fn(Ptr[Event, ImmutAnyOrigin]) -> Ptr[Window, MutOrigin.external]
     var get_base_path: fn() -> CStringSlice[ImmutOrigin.external]
-    var get_pref_path: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]
+    var get_pref_path: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]
     var get_user_folder: fn(Folder) -> CStringSlice[ImmutOrigin.external]
-    var create_directory: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
-    var enumerate_directory: fn(CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
-    var remove_path: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
-    var rename_path: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var copy_file: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var get_path_info: fn(CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool
-    var glob_directory: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
+    var create_directory: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var enumerate_directory: fn(Ptr[c_char, ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
+    var remove_path: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var rename_path: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var copy_file: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var get_path_info: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool
+    var glob_directory: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
     var get_current_directory: fn() -> Ptr[c_char, MutOrigin.external]
-    var add_gamepad_mapping: fn(CStringSlice[ImmutAnyOrigin]) -> Int32
+    var add_gamepad_mapping: fn(Ptr[c_char, ImmutAnyOrigin]) -> Int32
     var add_gamepad_mappings_from_io: fn(Ptr[IOStream, MutAnyOrigin], Bool) -> Int32
-    var add_gamepad_mappings_from_file: fn(CStringSlice[ImmutAnyOrigin]) -> Int32
+    var add_gamepad_mappings_from_file: fn(Ptr[c_char, ImmutAnyOrigin]) -> Int32
     var reload_gamepad_mappings: fn() -> Bool
     var get_gamepad_mappings: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
     var get_gamepad_mapping_for_guid: fn(GUID) -> Ptr[c_char, MutOrigin.external]
     var get_gamepad_mapping: fn(Ptr[Gamepad, MutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]
-    var set_gamepad_mapping: fn(JoystickID, CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_gamepad_mapping: fn(JoystickID, Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var has_gamepad: fn() -> Bool
     var get_gamepads: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[JoystickID, MutOrigin.external]
     var is_gamepad: fn(JoystickID) -> Bool
@@ -216,13 +216,13 @@ struct Sdl3FunctionTable(Movable):
     var gamepad_events_enabled: fn() -> Bool
     var get_gamepad_bindings: fn(Ptr[Gamepad, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[GamepadBinding, MutOrigin.external], MutOrigin.external]
     var update_gamepads: fn() -> NoneType
-    var get_gamepad_type_from_string: fn(CStringSlice[ImmutAnyOrigin]) -> GamepadType
+    var get_gamepad_type_from_string: fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadType
     var get_gamepad_string_for_type: fn(GamepadType) -> CStringSlice[ImmutOrigin.external]
-    var get_gamepad_axis_from_string: fn(CStringSlice[ImmutAnyOrigin]) -> GamepadAxis
+    var get_gamepad_axis_from_string: fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadAxis
     var get_gamepad_string_for_axis: fn(GamepadAxis) -> CStringSlice[ImmutOrigin.external]
     var gamepad_has_axis: fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> Bool
     var get_gamepad_axis: fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> Int16
-    var get_gamepad_button_from_string: fn(CStringSlice[ImmutAnyOrigin]) -> GamepadButton
+    var get_gamepad_button_from_string: fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadButton
     var get_gamepad_string_for_button: fn(GamepadButton) -> CStringSlice[ImmutOrigin.external]
     var gamepad_has_button: fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> Bool
     var get_gamepad_button: fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> Bool
@@ -243,9 +243,9 @@ struct Sdl3FunctionTable(Movable):
     var close_gamepad: fn(Ptr[Gamepad, MutAnyOrigin]) -> NoneType
     var get_gamepad_apple_sf_symbols_name_for_button: fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> CStringSlice[ImmutOrigin.external]
     var get_gamepad_apple_sf_symbols_name_for_axis: fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> CStringSlice[ImmutOrigin.external]
-    var gpu_supports_shader_formats: fn(GPUShaderFormat, CStringSlice[ImmutAnyOrigin]) -> Bool
+    var gpu_supports_shader_formats: fn(GPUShaderFormat, Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var gpu_supports_properties: fn(PropertiesID) -> Bool
-    var create_gpu_device: fn(GPUShaderFormat, Bool, CStringSlice[ImmutAnyOrigin]) -> Ptr[GPUDevice, MutOrigin.external]
+    var create_gpu_device: fn(GPUShaderFormat, Bool, Ptr[c_char, ImmutAnyOrigin]) -> Ptr[GPUDevice, MutOrigin.external]
     var create_gpu_device_with_properties: fn(PropertiesID) -> Ptr[GPUDevice, MutOrigin.external]
     var destroy_gpu_device: fn(Ptr[GPUDevice, MutAnyOrigin]) -> NoneType
     var get_num_gpu_drivers: fn() -> Int32
@@ -259,10 +259,10 @@ struct Sdl3FunctionTable(Movable):
     var create_gpu_texture: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTextureCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUTexture, MutOrigin.external]
     var create_gpu_buffer: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBufferCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUBuffer, MutOrigin.external]
     var create_gpu_transfer_buffer: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTransferBufferCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUTransferBuffer, MutOrigin.external]
-    var set_gpu_buffer_name: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var set_gpu_texture_name: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var insert_gpu_debug_label: fn(Ptr[GPUCommandBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var push_gpu_debug_group: fn(Ptr[GPUCommandBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
+    var set_gpu_buffer_name: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var set_gpu_texture_name: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var insert_gpu_debug_label: fn(Ptr[GPUCommandBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var push_gpu_debug_group: fn(Ptr[GPUCommandBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType
     var pop_gpu_debug_group: fn(Ptr[GPUCommandBuffer, MutAnyOrigin]) -> NoneType
     var release_gpu_texture: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin]) -> NoneType
     var release_gpu_sampler: fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUSampler, MutAnyOrigin]) -> NoneType
@@ -336,7 +336,7 @@ struct Sdl3FunctionTable(Movable):
     var gpu_texture_supports_sample_count: fn(Ptr[GPUDevice, MutAnyOrigin], GPUTextureFormat, GPUSampleCount) -> Bool
     var calculate_gpu_texture_format_size: fn(GPUTextureFormat, UInt32, UInt32, UInt32) -> UInt32
     var guid_to_string: fn(GUID, Ptr[c_char, MutAnyOrigin], Int32) -> NoneType
-    var string_to_guid: fn(CStringSlice[ImmutAnyOrigin]) -> GUID
+    var string_to_guid: fn(Ptr[c_char, ImmutAnyOrigin]) -> GUID
     var get_haptics: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[HapticID, MutOrigin.external]
     var get_haptic_name_for_id: fn(HapticID) -> CStringSlice[ImmutOrigin.external]
     var open_haptic: fn(HapticID) -> Ptr[Haptic, MutOrigin.external]
@@ -368,14 +368,14 @@ struct Sdl3FunctionTable(Movable):
     var init_haptic_rumble: fn(Ptr[Haptic, MutAnyOrigin]) -> Bool
     var play_haptic_rumble: fn(Ptr[Haptic, MutAnyOrigin], Float32, UInt32) -> Bool
     var stop_haptic_rumble: fn(Ptr[Haptic, MutAnyOrigin]) -> Bool
-    var set_hint_with_priority: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], HintPriority) -> Bool
-    var set_hint: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var reset_hint: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_hint_with_priority: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], HintPriority) -> Bool
+    var set_hint: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var reset_hint: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var reset_hints: fn() -> NoneType
-    var get_hint: fn(CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
-    var get_hint_boolean: fn(CStringSlice[ImmutAnyOrigin], Bool) -> Bool
-    var add_hint_callback: fn(CStringSlice[ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
-    var remove_hint_callback: fn(CStringSlice[ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> NoneType
+    var get_hint: fn(Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
+    var get_hint_boolean: fn(Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool
+    var add_hint_callback: fn(Ptr[c_char, ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
+    var remove_hint_callback: fn(Ptr[c_char, ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> NoneType
     var init: fn(InitFlags) -> Bool
     var init_sub_system: fn(InitFlags) -> Bool
     var quit_sub_system: fn(InitFlags) -> NoneType
@@ -383,10 +383,10 @@ struct Sdl3FunctionTable(Movable):
     var quit: fn() -> NoneType
     var is_main_thread: fn() -> Bool
     var run_on_main_thread: fn(MainThreadCallback, Ptr[NoneType, MutAnyOrigin], Bool) -> Bool
-    var set_app_metadata: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var set_app_metadata_property: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var get_app_metadata_property: fn(CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
-    var io_from_file: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[IOStream, MutOrigin.external]
+    var set_app_metadata: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var set_app_metadata_property: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var get_app_metadata_property: fn(Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
+    var io_from_file: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[IOStream, MutOrigin.external]
     var io_from_mem: fn(Ptr[NoneType, MutAnyOrigin], Int32) -> Ptr[IOStream, MutOrigin.external]
     var io_from_const_mem: fn(Ptr[NoneType, ImmutAnyOrigin], Int32) -> Ptr[IOStream, MutOrigin.external]
     var io_from_dynamic_mem: fn() -> Ptr[IOStream, MutOrigin.external]
@@ -399,13 +399,13 @@ struct Sdl3FunctionTable(Movable):
     var tell_io: fn(Ptr[IOStream, MutAnyOrigin]) -> Int64
     var read_io: fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, MutAnyOrigin], Int32) -> Int32
     var write_io: fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Int32
-    var i_oprintf: fn(Ptr[IOStream, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Int32
-    var i_ovprintf: fn(Ptr[IOStream, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Int32
+    var i_oprintf: fn(Ptr[IOStream, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Int32
+    var i_ovprintf: fn(Ptr[IOStream, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Int32
     var flush_io: fn(Ptr[IOStream, MutAnyOrigin]) -> Bool
     var load_file_io: fn(Ptr[IOStream, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Bool) -> Ptr[NoneType, MutOrigin.external]
-    var load_file: fn(CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
+    var load_file: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
     var save_file_io: fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32, Bool) -> Bool
-    var save_file: fn(CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool
+    var save_file: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool
     var read_u8: fn(Ptr[IOStream, MutAnyOrigin], Ptr[UInt8, MutAnyOrigin]) -> Bool
     var read_s8: fn(Ptr[IOStream, MutAnyOrigin], Ptr[Int8, MutAnyOrigin]) -> Bool
     var read_u16_le: fn(Ptr[IOStream, MutAnyOrigin], Ptr[UInt16, MutAnyOrigin]) -> Bool
@@ -502,11 +502,11 @@ struct Sdl3FunctionTable(Movable):
     var set_mod_state: fn(Keymod) -> NoneType
     var get_key_from_scancode: fn(Scancode, Keymod, Bool) -> Keycode
     var get_scancode_from_key: fn(Keycode, Ptr[Keymod, MutAnyOrigin]) -> Scancode
-    var set_scancode_name: fn(Scancode, CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_scancode_name: fn(Scancode, Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_scancode_name: fn(Scancode) -> CStringSlice[ImmutOrigin.external]
-    var get_scancode_from_name: fn(CStringSlice[ImmutAnyOrigin]) -> Scancode
+    var get_scancode_from_name: fn(Ptr[c_char, ImmutAnyOrigin]) -> Scancode
     var get_key_name: fn(Keycode) -> CStringSlice[ImmutOrigin.external]
-    var get_key_from_name: fn(CStringSlice[ImmutAnyOrigin]) -> Keycode
+    var get_key_from_name: fn(Ptr[c_char, ImmutAnyOrigin]) -> Keycode
     var start_text_input: fn(Ptr[Window, MutAnyOrigin]) -> Bool
     var start_text_input_with_properties: fn(Ptr[Window, MutAnyOrigin], PropertiesID) -> Bool
     var text_input_active: fn(Ptr[Window, MutAnyOrigin]) -> Bool
@@ -520,17 +520,17 @@ struct Sdl3FunctionTable(Movable):
     var set_log_priority: fn(Int32, LogPriority) -> NoneType
     var get_log_priority: fn(Int32) -> LogPriority
     var reset_log_priorities: fn() -> NoneType
-    var set_log_priority_prefix: fn(LogPriority, CStringSlice[ImmutAnyOrigin]) -> Bool
-    var log: fn(CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_trace: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_verbose: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_debug: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_info: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_warn: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_error: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_critical: fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_message: fn(Int32, LogPriority, CStringSlice[ImmutAnyOrigin]) -> NoneType
-    var log_message_v: fn(Int32, LogPriority, CStringSlice[ImmutAnyOrigin], Int32) -> NoneType
+    var set_log_priority_prefix: fn(LogPriority, Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var log: fn(Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_trace: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_verbose: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_debug: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_info: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_warn: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_error: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_critical: fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_message: fn(Int32, LogPriority, Ptr[c_char, ImmutAnyOrigin]) -> NoneType
+    var log_message_v: fn(Int32, LogPriority, Ptr[c_char, ImmutAnyOrigin], Int32) -> NoneType
     var get_default_log_output_function: fn() -> LogOutputFunction
     var get_log_output_function: fn(Ptr[LogOutputFunction, MutAnyOrigin], Ptr[Ptr[NoneType, MutOrigin.external], MutAnyOrigin]) -> NoneType
     var set_log_output_function: fn(LogOutputFunction, Ptr[NoneType, MutAnyOrigin]) -> NoneType
@@ -573,20 +573,20 @@ struct Sdl3FunctionTable(Movable):
     var copy_properties: fn(PropertiesID, PropertiesID) -> Bool
     var lock_properties: fn(PropertiesID) -> Bool
     var unlock_properties: fn(PropertiesID) -> NoneType
-    var set_pointer_property_with_cleanup: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], CleanupPropertyCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
-    var set_pointer_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Bool
-    var set_string_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var set_number_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Int64) -> Bool
-    var set_float_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Float32) -> Bool
-    var set_boolean_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Bool) -> Bool
-    var has_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> Bool
-    var get_property_type: fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> PropertyType
-    var get_pointer_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
-    var get_string_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
-    var get_number_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Int64) -> Int64
-    var get_float_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Float32) -> Float32
-    var get_boolean_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Bool) -> Bool
-    var clear_property: fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_pointer_property_with_cleanup: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], CleanupPropertyCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
+    var set_pointer_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Bool
+    var set_string_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var set_number_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Int64) -> Bool
+    var set_float_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Float32) -> Bool
+    var set_boolean_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool
+    var has_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var get_property_type: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> PropertyType
+    var get_pointer_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
+    var get_string_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
+    var get_number_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Int64) -> Int64
+    var get_float_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Float32) -> Float32
+    var get_boolean_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool
+    var clear_property: fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var enumerate_properties: fn(PropertiesID, EnumeratePropertiesCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
     var destroy_properties: fn(PropertiesID) -> NoneType
     var has_rect_intersection: fn(Ptr[Rect, ImmutAnyOrigin], Ptr[Rect, ImmutAnyOrigin]) -> Bool
@@ -601,8 +601,8 @@ struct Sdl3FunctionTable(Movable):
     var get_rect_and_line_intersection_float: fn(Ptr[FRect, ImmutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin]) -> Bool
     var get_num_render_drivers: fn() -> Int32
     var get_render_driver: fn(Int32) -> CStringSlice[ImmutOrigin.external]
-    var create_window_and_renderer: fn(CStringSlice[ImmutAnyOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutOrigin.external], MutAnyOrigin], Ptr[Ptr[Renderer, MutOrigin.external], MutAnyOrigin]) -> Bool
-    var create_renderer: fn(Ptr[Window, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]
+    var create_window_and_renderer: fn(Ptr[c_char, ImmutAnyOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutOrigin.external], MutAnyOrigin], Ptr[Ptr[Renderer, MutOrigin.external], MutAnyOrigin]) -> Bool
+    var create_renderer: fn(Ptr[Window, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]
     var create_renderer_with_properties: fn(PropertiesID) -> Ptr[Renderer, MutOrigin.external]
     var create_software_renderer: fn(Ptr[Surface, MutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]
     var get_renderer: fn(Ptr[Window, MutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]
@@ -686,8 +686,8 @@ struct Sdl3FunctionTable(Movable):
     var add_vulkan_render_semaphores: fn(Ptr[Renderer, MutAnyOrigin], UInt32, Int64, Int64) -> Bool
     var set_render_v_sync: fn(Ptr[Renderer, MutAnyOrigin], Int32) -> Bool
     var get_render_v_sync: fn(Ptr[Renderer, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool
-    var render_debug_text: fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, CStringSlice[ImmutAnyOrigin]) -> Bool
-    var render_debug_text_format: fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, CStringSlice[ImmutAnyOrigin]) -> Bool
+    var render_debug_text: fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var render_debug_text_format: fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_sensors: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[SensorID, MutOrigin.external]
     var get_sensor_name_for_id: fn(SensorID) -> CStringSlice[ImmutOrigin.external]
     var get_sensor_type_for_id: fn(SensorID) -> SensorType
@@ -702,23 +702,23 @@ struct Sdl3FunctionTable(Movable):
     var get_sensor_data: fn(Ptr[Sensor, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Int32) -> Bool
     var close_sensor: fn(Ptr[Sensor, MutAnyOrigin]) -> NoneType
     var update_sensors: fn() -> NoneType
-    var open_title_storage: fn(CStringSlice[ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]
-    var open_user_storage: fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]
-    var open_file_storage: fn(CStringSlice[ImmutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]
+    var open_title_storage: fn(Ptr[c_char, ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]
+    var open_user_storage: fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]
+    var open_file_storage: fn(Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]
     var open_storage: fn(Ptr[StorageInterface, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]
     var close_storage: fn(Ptr[Storage, MutAnyOrigin]) -> Bool
     var storage_ready: fn(Ptr[Storage, MutAnyOrigin]) -> Bool
-    var get_storage_file_size: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Bool
-    var read_storage_file: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool
-    var write_storage_file: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool
-    var create_storage_directory: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var enumerate_storage_directory: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
-    var remove_storage_path: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var rename_storage_path: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var copy_storage_file: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
-    var get_storage_path_info: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool
+    var get_storage_file_size: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Bool
+    var read_storage_file: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool
+    var write_storage_file: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool
+    var create_storage_directory: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var enumerate_storage_directory: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool
+    var remove_storage_path: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var rename_storage_path: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var copy_storage_file: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var get_storage_path_info: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool
     var get_storage_space_remaining: fn(Ptr[Storage, MutAnyOrigin]) -> UInt64
-    var glob_storage_directory: fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
+    var glob_storage_directory: fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]
     var create_surface: fn(Int32, Int32, PixelFormat) -> Ptr[Surface, MutOrigin.external]
     var create_surface_from: fn(Int32, Int32, PixelFormat, Ptr[NoneType, MutAnyOrigin], Int32) -> Ptr[Surface, MutOrigin.external]
     var destroy_surface: fn(Ptr[Surface, MutAnyOrigin]) -> NoneType
@@ -735,9 +735,9 @@ struct Sdl3FunctionTable(Movable):
     var lock_surface: fn(Ptr[Surface, MutAnyOrigin]) -> Bool
     var unlock_surface: fn(Ptr[Surface, MutAnyOrigin]) -> NoneType
     var load_bmp_io: fn(Ptr[IOStream, MutAnyOrigin], Bool) -> Ptr[Surface, MutOrigin.external]
-    var load_bmp: fn(CStringSlice[ImmutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]
+    var load_bmp: fn(Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]
     var save_bmp_io: fn(Ptr[Surface, MutAnyOrigin], Ptr[IOStream, MutAnyOrigin], Bool) -> Bool
-    var save_bmp: fn(Ptr[Surface, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
+    var save_bmp: fn(Ptr[Surface, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var set_surface_rle: fn(Ptr[Surface, MutAnyOrigin], Bool) -> Bool
     var surface_has_rle: fn(Ptr[Surface, MutAnyOrigin]) -> Bool
     var set_surface_color_key: fn(Ptr[Surface, MutAnyOrigin], Bool, UInt32) -> Bool
@@ -829,7 +829,7 @@ struct Sdl3FunctionTable(Movable):
     var get_window_icc_profile: fn(Ptr[Window, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]
     var get_window_pixel_format: fn(Ptr[Window, MutAnyOrigin]) -> PixelFormat
     var get_windows: fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[Window, MutOrigin.external], MutOrigin.external]
-    var create_window: fn(CStringSlice[ImmutAnyOrigin], Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]
+    var create_window: fn(Ptr[c_char, ImmutAnyOrigin], Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]
     var create_popup_window: fn(Ptr[Window, MutAnyOrigin], Int32, Int32, Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]
     var create_window_with_properties: fn(PropertiesID) -> Ptr[Window, MutOrigin.external]
     var get_window_id: fn(Ptr[Window, MutAnyOrigin]) -> WindowID
@@ -837,7 +837,7 @@ struct Sdl3FunctionTable(Movable):
     var get_window_parent: fn(Ptr[Window, MutAnyOrigin]) -> Ptr[Window, MutOrigin.external]
     var get_window_properties: fn(Ptr[Window, MutAnyOrigin]) -> PropertiesID
     var get_window_flags: fn(Ptr[Window, MutAnyOrigin]) -> WindowFlags
-    var set_window_title: fn(Ptr[Window, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool
+    var set_window_title: fn(Ptr[Window, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var get_window_title: fn(Ptr[Window, MutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]
     var set_window_icon: fn(Ptr[Window, MutAnyOrigin], Ptr[Surface, MutAnyOrigin]) -> Bool
     var set_window_position: fn(Ptr[Window, MutAnyOrigin], Int32, Int32) -> Bool
@@ -891,11 +891,11 @@ struct Sdl3FunctionTable(Movable):
     var screen_saver_enabled: fn() -> Bool
     var enable_screen_saver: fn() -> Bool
     var disable_screen_saver: fn() -> Bool
-    var gl_load_library: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
-    var gl_get_proc_address: fn(CStringSlice[ImmutAnyOrigin]) -> FunctionPointer
-    var egl_get_proc_address: fn(CStringSlice[ImmutAnyOrigin]) -> FunctionPointer
+    var gl_load_library: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
+    var gl_get_proc_address: fn(Ptr[c_char, ImmutAnyOrigin]) -> FunctionPointer
+    var egl_get_proc_address: fn(Ptr[c_char, ImmutAnyOrigin]) -> FunctionPointer
     var gl_unload_library: fn() -> NoneType
-    var gl_extension_supported: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var gl_extension_supported: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var gl_reset_attributes: fn() -> NoneType
     var gl_set_attribute: fn(GLAttr, Int32) -> Bool
     var gl_get_attribute: fn(GLAttr, Ptr[Int32, MutAnyOrigin]) -> Bool
@@ -911,7 +911,7 @@ struct Sdl3FunctionTable(Movable):
     var gl_get_swap_interval: fn(Ptr[Int32, MutAnyOrigin]) -> Bool
     var gl_swap_window: fn(Ptr[Window, MutAnyOrigin]) -> Bool
     var gl_destroy_context: fn(GLContext) -> Bool
-    var vulkan_load_library: fn(CStringSlice[ImmutAnyOrigin]) -> Bool
+    var vulkan_load_library: fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool
     var vulkan_get_vk_get_instance_proc_addr: fn() -> FunctionPointer
     var vulkan_unload_library: fn() -> NoneType
     var vulkan_get_instance_extensions: fn(Ptr[UInt32, MutAnyOrigin]) -> Ptr[CStringSlice[ImmutOrigin.external], ImmutOrigin.external]
@@ -972,7 +972,7 @@ struct Sdl3FunctionTable(Movable):
         self.open_audio_device_stream = self.dlhandle.get_function[fn(AudioDeviceID, Ptr[AudioSpec, ImmutAnyOrigin], AudioStreamCallback, Ptr[NoneType, MutAnyOrigin]) -> Ptr[AudioStream, MutOrigin.external]]("SDL_OpenAudioDeviceStream")
         self.set_audio_postmix_callback = self.dlhandle.get_function[fn(AudioDeviceID, AudioPostmixCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_SetAudioPostmixCallback")
         self.load_wav_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Bool, Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool]("SDL_LoadWAV_IO")
-        self.load_wav = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool]("SDL_LoadWAV")
+        self.load_wav = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[AudioSpec, MutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[UInt32, MutAnyOrigin]) -> Bool]("SDL_LoadWAV")
         self.mix_audio = self.dlhandle.get_function[fn(Ptr[UInt8, MutAnyOrigin], Ptr[UInt8, ImmutAnyOrigin], AudioFormat, UInt32, Float32) -> Bool]("SDL_MixAudio")
         self.convert_audio_samples = self.dlhandle.get_function[fn(Ptr[AudioSpec, ImmutAnyOrigin], Ptr[UInt8, ImmutAnyOrigin], Int32, Ptr[AudioSpec, ImmutAnyOrigin], Ptr[Ptr[UInt8, MutOrigin.external], MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("SDL_ConvertAudioSamples")
         self.get_audio_format_name = self.dlhandle.get_function[fn(AudioFormat) -> CStringSlice[ImmutOrigin.external]]("SDL_GetAudioFormatName")
@@ -993,19 +993,19 @@ struct Sdl3FunctionTable(Movable):
         self.acquire_camera_frame = self.dlhandle.get_function[fn(Ptr[Camera, MutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]]("SDL_AcquireCameraFrame")
         self.release_camera_frame = self.dlhandle.get_function[fn(Ptr[Camera, MutAnyOrigin], Ptr[Surface, MutAnyOrigin]) -> NoneType]("SDL_ReleaseCameraFrame")
         self.close_camera = self.dlhandle.get_function[fn(Ptr[Camera, MutAnyOrigin]) -> NoneType]("SDL_CloseCamera")
-        self.set_clipboard_text = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetClipboardText")
+        self.set_clipboard_text = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetClipboardText")
         self.get_clipboard_text = self.dlhandle.get_function[fn() -> Ptr[c_char, MutOrigin.external]]("SDL_GetClipboardText")
         self.has_clipboard_text = self.dlhandle.get_function[fn() -> Bool]("SDL_HasClipboardText")
-        self.set_primary_selection_text = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetPrimarySelectionText")
+        self.set_primary_selection_text = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetPrimarySelectionText")
         self.get_primary_selection_text = self.dlhandle.get_function[fn() -> Ptr[c_char, MutOrigin.external]]("SDL_GetPrimarySelectionText")
         self.has_primary_selection_text = self.dlhandle.get_function[fn() -> Bool]("SDL_HasPrimarySelectionText")
         self.set_clipboard_data = self.dlhandle.get_function[fn(ClipboardDataCallback, ClipboardCleanupCallback, Ptr[NoneType, MutAnyOrigin], Ptr[CStringSlice[ImmutOrigin.external], MutAnyOrigin], Int32) -> Bool]("SDL_SetClipboardData")
         self.clear_clipboard_data = self.dlhandle.get_function[fn() -> Bool]("SDL_ClearClipboardData")
-        self.get_clipboard_data = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_GetClipboardData")
-        self.has_clipboard_data = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_HasClipboardData")
+        self.get_clipboard_data = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_GetClipboardData")
+        self.has_clipboard_data = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_HasClipboardData")
         self.get_clipboard_mime_types = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GetClipboardMimeTypes")
-        self.set_error = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetError")
-        self.set_error_v = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Int32) -> Bool]("SDL_SetErrorV")
+        self.set_error = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetError")
+        self.set_error_v = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Int32) -> Bool]("SDL_SetErrorV")
         self.out_of_memory = self.dlhandle.get_function[fn() -> Bool]("SDL_OutOfMemory")
         self.get_error = self.dlhandle.get_function[fn() -> CStringSlice[ImmutOrigin.external]]("SDL_GetError")
         self.clear_error = self.dlhandle.get_function[fn() -> Bool]("SDL_ClearError")
@@ -1029,24 +1029,24 @@ struct Sdl3FunctionTable(Movable):
         self.register_events = self.dlhandle.get_function[fn(Int32) -> UInt32]("SDL_RegisterEvents")
         self.get_window_from_event = self.dlhandle.get_function[fn(Ptr[Event, ImmutAnyOrigin]) -> Ptr[Window, MutOrigin.external]]("SDL_GetWindowFromEvent")
         self.get_base_path = self.dlhandle.get_function[fn() -> CStringSlice[ImmutOrigin.external]]("SDL_GetBasePath")
-        self.get_pref_path = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]]("SDL_GetPrefPath")
+        self.get_pref_path = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]]("SDL_GetPrefPath")
         self.get_user_folder = self.dlhandle.get_function[fn(Folder) -> CStringSlice[ImmutOrigin.external]]("SDL_GetUserFolder")
-        self.create_directory = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_CreateDirectory")
-        self.enumerate_directory = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_EnumerateDirectory")
-        self.remove_path = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RemovePath")
-        self.rename_path = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RenamePath")
-        self.copy_file = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_CopyFile")
-        self.get_path_info = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool]("SDL_GetPathInfo")
-        self.glob_directory = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GlobDirectory")
+        self.create_directory = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_CreateDirectory")
+        self.enumerate_directory = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_EnumerateDirectory")
+        self.remove_path = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RemovePath")
+        self.rename_path = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RenamePath")
+        self.copy_file = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_CopyFile")
+        self.get_path_info = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool]("SDL_GetPathInfo")
+        self.glob_directory = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GlobDirectory")
         self.get_current_directory = self.dlhandle.get_function[fn() -> Ptr[c_char, MutOrigin.external]]("SDL_GetCurrentDirectory")
-        self.add_gamepad_mapping = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Int32]("SDL_AddGamepadMapping")
+        self.add_gamepad_mapping = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Int32]("SDL_AddGamepadMapping")
         self.add_gamepad_mappings_from_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Bool) -> Int32]("SDL_AddGamepadMappingsFromIO")
-        self.add_gamepad_mappings_from_file = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Int32]("SDL_AddGamepadMappingsFromFile")
+        self.add_gamepad_mappings_from_file = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Int32]("SDL_AddGamepadMappingsFromFile")
         self.reload_gamepad_mappings = self.dlhandle.get_function[fn() -> Bool]("SDL_ReloadGamepadMappings")
         self.get_gamepad_mappings = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GetGamepadMappings")
         self.get_gamepad_mapping_for_guid = self.dlhandle.get_function[fn(GUID) -> Ptr[c_char, MutOrigin.external]]("SDL_GetGamepadMappingForGUID")
         self.get_gamepad_mapping = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin]) -> Ptr[c_char, MutOrigin.external]]("SDL_GetGamepadMapping")
-        self.set_gamepad_mapping = self.dlhandle.get_function[fn(JoystickID, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetGamepadMapping")
+        self.set_gamepad_mapping = self.dlhandle.get_function[fn(JoystickID, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetGamepadMapping")
         self.has_gamepad = self.dlhandle.get_function[fn() -> Bool]("SDL_HasGamepad")
         self.get_gamepads = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[JoystickID, MutOrigin.external]]("SDL_GetGamepads")
         self.is_gamepad = self.dlhandle.get_function[fn(JoystickID) -> Bool]("SDL_IsGamepad")
@@ -1085,13 +1085,13 @@ struct Sdl3FunctionTable(Movable):
         self.gamepad_events_enabled = self.dlhandle.get_function[fn() -> Bool]("SDL_GamepadEventsEnabled")
         self.get_gamepad_bindings = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[GamepadBinding, MutOrigin.external], MutOrigin.external]]("SDL_GetGamepadBindings")
         self.update_gamepads = self.dlhandle.get_function[fn() -> NoneType]("SDL_UpdateGamepads")
-        self.get_gamepad_type_from_string = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> GamepadType]("SDL_GetGamepadTypeFromString")
+        self.get_gamepad_type_from_string = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadType]("SDL_GetGamepadTypeFromString")
         self.get_gamepad_string_for_type = self.dlhandle.get_function[fn(GamepadType) -> CStringSlice[ImmutOrigin.external]]("SDL_GetGamepadStringForType")
-        self.get_gamepad_axis_from_string = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> GamepadAxis]("SDL_GetGamepadAxisFromString")
+        self.get_gamepad_axis_from_string = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadAxis]("SDL_GetGamepadAxisFromString")
         self.get_gamepad_string_for_axis = self.dlhandle.get_function[fn(GamepadAxis) -> CStringSlice[ImmutOrigin.external]]("SDL_GetGamepadStringForAxis")
         self.gamepad_has_axis = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> Bool]("SDL_GamepadHasAxis")
         self.get_gamepad_axis = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> Int16]("SDL_GetGamepadAxis")
-        self.get_gamepad_button_from_string = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> GamepadButton]("SDL_GetGamepadButtonFromString")
+        self.get_gamepad_button_from_string = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> GamepadButton]("SDL_GetGamepadButtonFromString")
         self.get_gamepad_string_for_button = self.dlhandle.get_function[fn(GamepadButton) -> CStringSlice[ImmutOrigin.external]]("SDL_GetGamepadStringForButton")
         self.gamepad_has_button = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> Bool]("SDL_GamepadHasButton")
         self.get_gamepad_button = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> Bool]("SDL_GetGamepadButton")
@@ -1112,9 +1112,9 @@ struct Sdl3FunctionTable(Movable):
         self.close_gamepad = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin]) -> NoneType]("SDL_CloseGamepad")
         self.get_gamepad_apple_sf_symbols_name_for_button = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadButton) -> CStringSlice[ImmutOrigin.external]]("SDL_GetGamepadAppleSFSymbolsNameForButton")
         self.get_gamepad_apple_sf_symbols_name_for_axis = self.dlhandle.get_function[fn(Ptr[Gamepad, MutAnyOrigin], GamepadAxis) -> CStringSlice[ImmutOrigin.external]]("SDL_GetGamepadAppleSFSymbolsNameForAxis")
-        self.gpu_supports_shader_formats = self.dlhandle.get_function[fn(GPUShaderFormat, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_GPUSupportsShaderFormats")
+        self.gpu_supports_shader_formats = self.dlhandle.get_function[fn(GPUShaderFormat, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_GPUSupportsShaderFormats")
         self.gpu_supports_properties = self.dlhandle.get_function[fn(PropertiesID) -> Bool]("SDL_GPUSupportsProperties")
-        self.create_gpu_device = self.dlhandle.get_function[fn(GPUShaderFormat, Bool, CStringSlice[ImmutAnyOrigin]) -> Ptr[GPUDevice, MutOrigin.external]]("SDL_CreateGPUDevice")
+        self.create_gpu_device = self.dlhandle.get_function[fn(GPUShaderFormat, Bool, Ptr[c_char, ImmutAnyOrigin]) -> Ptr[GPUDevice, MutOrigin.external]]("SDL_CreateGPUDevice")
         self.create_gpu_device_with_properties = self.dlhandle.get_function[fn(PropertiesID) -> Ptr[GPUDevice, MutOrigin.external]]("SDL_CreateGPUDeviceWithProperties")
         self.destroy_gpu_device = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin]) -> NoneType]("SDL_DestroyGPUDevice")
         self.get_num_gpu_drivers = self.dlhandle.get_function[fn() -> Int32]("SDL_GetNumGPUDrivers")
@@ -1128,10 +1128,10 @@ struct Sdl3FunctionTable(Movable):
         self.create_gpu_texture = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTextureCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUTexture, MutOrigin.external]]("SDL_CreateGPUTexture")
         self.create_gpu_buffer = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBufferCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUBuffer, MutOrigin.external]]("SDL_CreateGPUBuffer")
         self.create_gpu_transfer_buffer = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTransferBufferCreateInfo, ImmutAnyOrigin]) -> Ptr[GPUTransferBuffer, MutOrigin.external]]("SDL_CreateGPUTransferBuffer")
-        self.set_gpu_buffer_name = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_SetGPUBufferName")
-        self.set_gpu_texture_name = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_SetGPUTextureName")
-        self.insert_gpu_debug_label = self.dlhandle.get_function[fn(Ptr[GPUCommandBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_InsertGPUDebugLabel")
-        self.push_gpu_debug_group = self.dlhandle.get_function[fn(Ptr[GPUCommandBuffer, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_PushGPUDebugGroup")
+        self.set_gpu_buffer_name = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_SetGPUBufferName")
+        self.set_gpu_texture_name = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_SetGPUTextureName")
+        self.insert_gpu_debug_label = self.dlhandle.get_function[fn(Ptr[GPUCommandBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_InsertGPUDebugLabel")
+        self.push_gpu_debug_group = self.dlhandle.get_function[fn(Ptr[GPUCommandBuffer, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_PushGPUDebugGroup")
         self.pop_gpu_debug_group = self.dlhandle.get_function[fn(Ptr[GPUCommandBuffer, MutAnyOrigin]) -> NoneType]("SDL_PopGPUDebugGroup")
         self.release_gpu_texture = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUTexture, MutAnyOrigin]) -> NoneType]("SDL_ReleaseGPUTexture")
         self.release_gpu_sampler = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], Ptr[GPUSampler, MutAnyOrigin]) -> NoneType]("SDL_ReleaseGPUSampler")
@@ -1205,7 +1205,7 @@ struct Sdl3FunctionTable(Movable):
         self.gpu_texture_supports_sample_count = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutAnyOrigin], GPUTextureFormat, GPUSampleCount) -> Bool]("SDL_GPUTextureSupportsSampleCount")
         self.calculate_gpu_texture_format_size = self.dlhandle.get_function[fn(GPUTextureFormat, UInt32, UInt32, UInt32) -> UInt32]("SDL_CalculateGPUTextureFormatSize")
         self.guid_to_string = self.dlhandle.get_function[fn(GUID, Ptr[c_char, MutAnyOrigin], Int32) -> NoneType]("SDL_GUIDToString")
-        self.string_to_guid = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> GUID]("SDL_StringToGUID")
+        self.string_to_guid = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> GUID]("SDL_StringToGUID")
         self.get_haptics = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[HapticID, MutOrigin.external]]("SDL_GetHaptics")
         self.get_haptic_name_for_id = self.dlhandle.get_function[fn(HapticID) -> CStringSlice[ImmutOrigin.external]]("SDL_GetHapticNameForID")
         self.open_haptic = self.dlhandle.get_function[fn(HapticID) -> Ptr[Haptic, MutOrigin.external]]("SDL_OpenHaptic")
@@ -1237,14 +1237,14 @@ struct Sdl3FunctionTable(Movable):
         self.init_haptic_rumble = self.dlhandle.get_function[fn(Ptr[Haptic, MutAnyOrigin]) -> Bool]("SDL_InitHapticRumble")
         self.play_haptic_rumble = self.dlhandle.get_function[fn(Ptr[Haptic, MutAnyOrigin], Float32, UInt32) -> Bool]("SDL_PlayHapticRumble")
         self.stop_haptic_rumble = self.dlhandle.get_function[fn(Ptr[Haptic, MutAnyOrigin]) -> Bool]("SDL_StopHapticRumble")
-        self.set_hint_with_priority = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], HintPriority) -> Bool]("SDL_SetHintWithPriority")
-        self.set_hint = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetHint")
-        self.reset_hint = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_ResetHint")
+        self.set_hint_with_priority = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], HintPriority) -> Bool]("SDL_SetHintWithPriority")
+        self.set_hint = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetHint")
+        self.reset_hint = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_ResetHint")
         self.reset_hints = self.dlhandle.get_function[fn() -> NoneType]("SDL_ResetHints")
-        self.get_hint = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetHint")
-        self.get_hint_boolean = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Bool) -> Bool]("SDL_GetHintBoolean")
-        self.add_hint_callback = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_AddHintCallback")
-        self.remove_hint_callback = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> NoneType]("SDL_RemoveHintCallback")
+        self.get_hint = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetHint")
+        self.get_hint_boolean = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool]("SDL_GetHintBoolean")
+        self.add_hint_callback = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_AddHintCallback")
+        self.remove_hint_callback = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], HintCallback, Ptr[NoneType, MutAnyOrigin]) -> NoneType]("SDL_RemoveHintCallback")
         self.init = self.dlhandle.get_function[fn(InitFlags) -> Bool]("SDL_Init")
         self.init_sub_system = self.dlhandle.get_function[fn(InitFlags) -> Bool]("SDL_InitSubSystem")
         self.quit_sub_system = self.dlhandle.get_function[fn(InitFlags) -> NoneType]("SDL_QuitSubSystem")
@@ -1252,10 +1252,10 @@ struct Sdl3FunctionTable(Movable):
         self.quit = self.dlhandle.get_function[fn() -> NoneType]("SDL_Quit")
         self.is_main_thread = self.dlhandle.get_function[fn() -> Bool]("SDL_IsMainThread")
         self.run_on_main_thread = self.dlhandle.get_function[fn(MainThreadCallback, Ptr[NoneType, MutAnyOrigin], Bool) -> Bool]("SDL_RunOnMainThread")
-        self.set_app_metadata = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetAppMetadata")
-        self.set_app_metadata_property = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetAppMetadataProperty")
-        self.get_app_metadata_property = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetAppMetadataProperty")
-        self.io_from_file = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[IOStream, MutOrigin.external]]("SDL_IOFromFile")
+        self.set_app_metadata = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetAppMetadata")
+        self.set_app_metadata_property = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetAppMetadataProperty")
+        self.get_app_metadata_property = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetAppMetadataProperty")
+        self.io_from_file = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[IOStream, MutOrigin.external]]("SDL_IOFromFile")
         self.io_from_mem = self.dlhandle.get_function[fn(Ptr[NoneType, MutAnyOrigin], Int32) -> Ptr[IOStream, MutOrigin.external]]("SDL_IOFromMem")
         self.io_from_const_mem = self.dlhandle.get_function[fn(Ptr[NoneType, ImmutAnyOrigin], Int32) -> Ptr[IOStream, MutOrigin.external]]("SDL_IOFromConstMem")
         self.io_from_dynamic_mem = self.dlhandle.get_function[fn() -> Ptr[IOStream, MutOrigin.external]]("SDL_IOFromDynamicMem")
@@ -1268,13 +1268,13 @@ struct Sdl3FunctionTable(Movable):
         self.tell_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin]) -> Int64]("SDL_TellIO")
         self.read_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, MutAnyOrigin], Int32) -> Int32]("SDL_ReadIO")
         self.write_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Int32]("SDL_WriteIO")
-        self.i_oprintf = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Int32]("SDL_IOprintf")
-        self.i_ovprintf = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Int32) -> Int32]("SDL_IOvprintf")
+        self.i_oprintf = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Int32]("SDL_IOprintf")
+        self.i_ovprintf = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Int32) -> Int32]("SDL_IOvprintf")
         self.flush_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin]) -> Bool]("SDL_FlushIO")
         self.load_file_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[Int32, MutAnyOrigin], Bool) -> Ptr[NoneType, MutOrigin.external]]("SDL_LoadFile_IO")
-        self.load_file = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_LoadFile")
+        self.load_file = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_LoadFile")
         self.save_file_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32, Bool) -> Bool]("SDL_SaveFile_IO")
-        self.save_file = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool]("SDL_SaveFile")
+        self.save_file = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool]("SDL_SaveFile")
         self.read_u8 = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[UInt8, MutAnyOrigin]) -> Bool]("SDL_ReadU8")
         self.read_s8 = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[Int8, MutAnyOrigin]) -> Bool]("SDL_ReadS8")
         self.read_u16_le = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Ptr[UInt16, MutAnyOrigin]) -> Bool]("SDL_ReadU16LE")
@@ -1371,11 +1371,11 @@ struct Sdl3FunctionTable(Movable):
         self.set_mod_state = self.dlhandle.get_function[fn(Keymod) -> NoneType]("SDL_SetModState")
         self.get_key_from_scancode = self.dlhandle.get_function[fn(Scancode, Keymod, Bool) -> Keycode]("SDL_GetKeyFromScancode")
         self.get_scancode_from_key = self.dlhandle.get_function[fn(Keycode, Ptr[Keymod, MutAnyOrigin]) -> Scancode]("SDL_GetScancodeFromKey")
-        self.set_scancode_name = self.dlhandle.get_function[fn(Scancode, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetScancodeName")
+        self.set_scancode_name = self.dlhandle.get_function[fn(Scancode, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetScancodeName")
         self.get_scancode_name = self.dlhandle.get_function[fn(Scancode) -> CStringSlice[ImmutOrigin.external]]("SDL_GetScancodeName")
-        self.get_scancode_from_name = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Scancode]("SDL_GetScancodeFromName")
+        self.get_scancode_from_name = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Scancode]("SDL_GetScancodeFromName")
         self.get_key_name = self.dlhandle.get_function[fn(Keycode) -> CStringSlice[ImmutOrigin.external]]("SDL_GetKeyName")
-        self.get_key_from_name = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Keycode]("SDL_GetKeyFromName")
+        self.get_key_from_name = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Keycode]("SDL_GetKeyFromName")
         self.start_text_input = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Bool]("SDL_StartTextInput")
         self.start_text_input_with_properties = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], PropertiesID) -> Bool]("SDL_StartTextInputWithProperties")
         self.text_input_active = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Bool]("SDL_TextInputActive")
@@ -1389,17 +1389,17 @@ struct Sdl3FunctionTable(Movable):
         self.set_log_priority = self.dlhandle.get_function[fn(Int32, LogPriority) -> NoneType]("SDL_SetLogPriority")
         self.get_log_priority = self.dlhandle.get_function[fn(Int32) -> LogPriority]("SDL_GetLogPriority")
         self.reset_log_priorities = self.dlhandle.get_function[fn() -> NoneType]("SDL_ResetLogPriorities")
-        self.set_log_priority_prefix = self.dlhandle.get_function[fn(LogPriority, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetLogPriorityPrefix")
-        self.log = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_Log")
-        self.log_trace = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogTrace")
-        self.log_verbose = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogVerbose")
-        self.log_debug = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogDebug")
-        self.log_info = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogInfo")
-        self.log_warn = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogWarn")
-        self.log_error = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogError")
-        self.log_critical = self.dlhandle.get_function[fn(Int32, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogCritical")
-        self.log_message = self.dlhandle.get_function[fn(Int32, LogPriority, CStringSlice[ImmutAnyOrigin]) -> NoneType]("SDL_LogMessage")
-        self.log_message_v = self.dlhandle.get_function[fn(Int32, LogPriority, CStringSlice[ImmutAnyOrigin], Int32) -> NoneType]("SDL_LogMessageV")
+        self.set_log_priority_prefix = self.dlhandle.get_function[fn(LogPriority, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetLogPriorityPrefix")
+        self.log = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_Log")
+        self.log_trace = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogTrace")
+        self.log_verbose = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogVerbose")
+        self.log_debug = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogDebug")
+        self.log_info = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogInfo")
+        self.log_warn = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogWarn")
+        self.log_error = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogError")
+        self.log_critical = self.dlhandle.get_function[fn(Int32, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogCritical")
+        self.log_message = self.dlhandle.get_function[fn(Int32, LogPriority, Ptr[c_char, ImmutAnyOrigin]) -> NoneType]("SDL_LogMessage")
+        self.log_message_v = self.dlhandle.get_function[fn(Int32, LogPriority, Ptr[c_char, ImmutAnyOrigin], Int32) -> NoneType]("SDL_LogMessageV")
         self.get_default_log_output_function = self.dlhandle.get_function[fn() -> LogOutputFunction]("SDL_GetDefaultLogOutputFunction")
         self.get_log_output_function = self.dlhandle.get_function[fn(Ptr[LogOutputFunction, MutAnyOrigin], Ptr[Ptr[NoneType, MutOrigin.external], MutAnyOrigin]) -> NoneType]("SDL_GetLogOutputFunction")
         self.set_log_output_function = self.dlhandle.get_function[fn(LogOutputFunction, Ptr[NoneType, MutAnyOrigin]) -> NoneType]("SDL_SetLogOutputFunction")
@@ -1442,20 +1442,20 @@ struct Sdl3FunctionTable(Movable):
         self.copy_properties = self.dlhandle.get_function[fn(PropertiesID, PropertiesID) -> Bool]("SDL_CopyProperties")
         self.lock_properties = self.dlhandle.get_function[fn(PropertiesID) -> Bool]("SDL_LockProperties")
         self.unlock_properties = self.dlhandle.get_function[fn(PropertiesID) -> NoneType]("SDL_UnlockProperties")
-        self.set_pointer_property_with_cleanup = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], CleanupPropertyCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_SetPointerPropertyWithCleanup")
-        self.set_pointer_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_SetPointerProperty")
-        self.set_string_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetStringProperty")
-        self.set_number_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Int64) -> Bool]("SDL_SetNumberProperty")
-        self.set_float_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Float32) -> Bool]("SDL_SetFloatProperty")
-        self.set_boolean_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Bool) -> Bool]("SDL_SetBooleanProperty")
-        self.has_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_HasProperty")
-        self.get_property_type = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> PropertyType]("SDL_GetPropertyType")
-        self.get_pointer_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_GetPointerProperty")
-        self.get_string_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetStringProperty")
-        self.get_number_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Int64) -> Int64]("SDL_GetNumberProperty")
-        self.get_float_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Float32) -> Float32]("SDL_GetFloatProperty")
-        self.get_boolean_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin], Bool) -> Bool]("SDL_GetBooleanProperty")
-        self.clear_property = self.dlhandle.get_function[fn(PropertiesID, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_ClearProperty")
+        self.set_pointer_property_with_cleanup = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], CleanupPropertyCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_SetPointerPropertyWithCleanup")
+        self.set_pointer_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_SetPointerProperty")
+        self.set_string_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetStringProperty")
+        self.set_number_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Int64) -> Bool]("SDL_SetNumberProperty")
+        self.set_float_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Float32) -> Bool]("SDL_SetFloatProperty")
+        self.set_boolean_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool]("SDL_SetBooleanProperty")
+        self.has_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_HasProperty")
+        self.get_property_type = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> PropertyType]("SDL_GetPropertyType")
+        self.get_pointer_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_GetPointerProperty")
+        self.get_string_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetStringProperty")
+        self.get_number_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Int64) -> Int64]("SDL_GetNumberProperty")
+        self.get_float_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Float32) -> Float32]("SDL_GetFloatProperty")
+        self.get_boolean_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin], Bool) -> Bool]("SDL_GetBooleanProperty")
+        self.clear_property = self.dlhandle.get_function[fn(PropertiesID, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_ClearProperty")
         self.enumerate_properties = self.dlhandle.get_function[fn(PropertiesID, EnumeratePropertiesCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_EnumerateProperties")
         self.destroy_properties = self.dlhandle.get_function[fn(PropertiesID) -> NoneType]("SDL_DestroyProperties")
         self.has_rect_intersection = self.dlhandle.get_function[fn(Ptr[Rect, ImmutAnyOrigin], Ptr[Rect, ImmutAnyOrigin]) -> Bool]("SDL_HasRectIntersection")
@@ -1470,8 +1470,8 @@ struct Sdl3FunctionTable(Movable):
         self.get_rect_and_line_intersection_float = self.dlhandle.get_function[fn(Ptr[FRect, ImmutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Ptr[Float32, MutAnyOrigin]) -> Bool]("SDL_GetRectAndLineIntersectionFloat")
         self.get_num_render_drivers = self.dlhandle.get_function[fn() -> Int32]("SDL_GetNumRenderDrivers")
         self.get_render_driver = self.dlhandle.get_function[fn(Int32) -> CStringSlice[ImmutOrigin.external]]("SDL_GetRenderDriver")
-        self.create_window_and_renderer = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutOrigin.external], MutAnyOrigin], Ptr[Ptr[Renderer, MutOrigin.external], MutAnyOrigin]) -> Bool]("SDL_CreateWindowAndRenderer")
-        self.create_renderer = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]]("SDL_CreateRenderer")
+        self.create_window_and_renderer = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutOrigin.external], MutAnyOrigin], Ptr[Ptr[Renderer, MutOrigin.external], MutAnyOrigin]) -> Bool]("SDL_CreateWindowAndRenderer")
+        self.create_renderer = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]]("SDL_CreateRenderer")
         self.create_renderer_with_properties = self.dlhandle.get_function[fn(PropertiesID) -> Ptr[Renderer, MutOrigin.external]]("SDL_CreateRendererWithProperties")
         self.create_software_renderer = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]]("SDL_CreateSoftwareRenderer")
         self.get_renderer = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Ptr[Renderer, MutOrigin.external]]("SDL_GetRenderer")
@@ -1555,8 +1555,8 @@ struct Sdl3FunctionTable(Movable):
         self.add_vulkan_render_semaphores = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], UInt32, Int64, Int64) -> Bool]("SDL_AddVulkanRenderSemaphores")
         self.set_render_v_sync = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Int32) -> Bool]("SDL_SetRenderVSync")
         self.get_render_v_sync = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Bool]("SDL_GetRenderVSync")
-        self.render_debug_text = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RenderDebugText")
-        self.render_debug_text_format = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RenderDebugTextFormat")
+        self.render_debug_text = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RenderDebugText")
+        self.render_debug_text_format = self.dlhandle.get_function[fn(Ptr[Renderer, MutAnyOrigin], Float32, Float32, Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RenderDebugTextFormat")
         self.get_sensors = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[SensorID, MutOrigin.external]]("SDL_GetSensors")
         self.get_sensor_name_for_id = self.dlhandle.get_function[fn(SensorID) -> CStringSlice[ImmutOrigin.external]]("SDL_GetSensorNameForID")
         self.get_sensor_type_for_id = self.dlhandle.get_function[fn(SensorID) -> SensorType]("SDL_GetSensorTypeForID")
@@ -1571,23 +1571,23 @@ struct Sdl3FunctionTable(Movable):
         self.get_sensor_data = self.dlhandle.get_function[fn(Ptr[Sensor, MutAnyOrigin], Ptr[Float32, MutAnyOrigin], Int32) -> Bool]("SDL_GetSensorData")
         self.close_sensor = self.dlhandle.get_function[fn(Ptr[Sensor, MutAnyOrigin]) -> NoneType]("SDL_CloseSensor")
         self.update_sensors = self.dlhandle.get_function[fn() -> NoneType]("SDL_UpdateSensors")
-        self.open_title_storage = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenTitleStorage")
-        self.open_user_storage = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenUserStorage")
-        self.open_file_storage = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenFileStorage")
+        self.open_title_storage = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenTitleStorage")
+        self.open_user_storage = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], PropertiesID) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenUserStorage")
+        self.open_file_storage = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenFileStorage")
         self.open_storage = self.dlhandle.get_function[fn(Ptr[StorageInterface, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> Ptr[Storage, MutOrigin.external]]("SDL_OpenStorage")
         self.close_storage = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin]) -> Bool]("SDL_CloseStorage")
         self.storage_ready = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin]) -> Bool]("SDL_StorageReady")
-        self.get_storage_file_size = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Bool]("SDL_GetStorageFileSize")
-        self.read_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool]("SDL_ReadStorageFile")
-        self.write_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool]("SDL_WriteStorageFile")
-        self.create_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_CreateStorageDirectory")
-        self.enumerate_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_EnumerateStorageDirectory")
-        self.remove_storage_path = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RemoveStoragePath")
-        self.rename_storage_path = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_RenameStoragePath")
-        self.copy_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_CopyStorageFile")
-        self.get_storage_path_info = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool]("SDL_GetStoragePathInfo")
+        self.get_storage_file_size = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[UInt64, MutAnyOrigin]) -> Bool]("SDL_GetStorageFileSize")
+        self.read_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool]("SDL_ReadStorageFile")
+        self.write_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool]("SDL_WriteStorageFile")
+        self.create_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_CreateStorageDirectory")
+        self.enumerate_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool]("SDL_EnumerateStorageDirectory")
+        self.remove_storage_path = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RemoveStoragePath")
+        self.rename_storage_path = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_RenameStoragePath")
+        self.copy_storage_file = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_CopyStorageFile")
+        self.get_storage_path_info = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool]("SDL_GetStoragePathInfo")
         self.get_storage_space_remaining = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin]) -> UInt64]("SDL_GetStorageSpaceRemaining")
-        self.glob_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GlobStorageDirectory")
+        self.glob_storage_directory = self.dlhandle.get_function[fn(Ptr[Storage, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], Ptr[c_char, ImmutAnyOrigin], GlobFlags, Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[c_char, MutOrigin.external], MutOrigin.external]]("SDL_GlobStorageDirectory")
         self.create_surface = self.dlhandle.get_function[fn(Int32, Int32, PixelFormat) -> Ptr[Surface, MutOrigin.external]]("SDL_CreateSurface")
         self.create_surface_from = self.dlhandle.get_function[fn(Int32, Int32, PixelFormat, Ptr[NoneType, MutAnyOrigin], Int32) -> Ptr[Surface, MutOrigin.external]]("SDL_CreateSurfaceFrom")
         self.destroy_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin]) -> NoneType]("SDL_DestroySurface")
@@ -1604,9 +1604,9 @@ struct Sdl3FunctionTable(Movable):
         self.lock_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin]) -> Bool]("SDL_LockSurface")
         self.unlock_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin]) -> NoneType]("SDL_UnlockSurface")
         self.load_bmp_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutAnyOrigin], Bool) -> Ptr[Surface, MutOrigin.external]]("SDL_LoadBMP_IO")
-        self.load_bmp = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]]("SDL_LoadBMP")
+        self.load_bmp = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Ptr[Surface, MutOrigin.external]]("SDL_LoadBMP")
         self.save_bmp_io = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin], Ptr[IOStream, MutAnyOrigin], Bool) -> Bool]("SDL_SaveBMP_IO")
-        self.save_bmp = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SaveBMP")
+        self.save_bmp = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SaveBMP")
         self.set_surface_rle = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin], Bool) -> Bool]("SDL_SetSurfaceRLE")
         self.surface_has_rle = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin]) -> Bool]("SDL_SurfaceHasRLE")
         self.set_surface_color_key = self.dlhandle.get_function[fn(Ptr[Surface, MutAnyOrigin], Bool, UInt32) -> Bool]("SDL_SetSurfaceColorKey")
@@ -1698,7 +1698,7 @@ struct Sdl3FunctionTable(Movable):
         self.get_window_icc_profile = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, MutOrigin.external]]("SDL_GetWindowICCProfile")
         self.get_window_pixel_format = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> PixelFormat]("SDL_GetWindowPixelFormat")
         self.get_windows = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Ptr[Ptr[Window, MutOrigin.external], MutOrigin.external]]("SDL_GetWindows")
-        self.create_window = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin], Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]]("SDL_CreateWindow")
+        self.create_window = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin], Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]]("SDL_CreateWindow")
         self.create_popup_window = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Int32, Int32, Int32, Int32, WindowFlags) -> Ptr[Window, MutOrigin.external]]("SDL_CreatePopupWindow")
         self.create_window_with_properties = self.dlhandle.get_function[fn(PropertiesID) -> Ptr[Window, MutOrigin.external]]("SDL_CreateWindowWithProperties")
         self.get_window_id = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> WindowID]("SDL_GetWindowID")
@@ -1706,7 +1706,7 @@ struct Sdl3FunctionTable(Movable):
         self.get_window_parent = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Ptr[Window, MutOrigin.external]]("SDL_GetWindowParent")
         self.get_window_properties = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> PropertiesID]("SDL_GetWindowProperties")
         self.get_window_flags = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> WindowFlags]("SDL_GetWindowFlags")
-        self.set_window_title = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_SetWindowTitle")
+        self.set_window_title = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_SetWindowTitle")
         self.get_window_title = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> CStringSlice[ImmutOrigin.external]]("SDL_GetWindowTitle")
         self.set_window_icon = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Ptr[Surface, MutAnyOrigin]) -> Bool]("SDL_SetWindowIcon")
         self.set_window_position = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin], Int32, Int32) -> Bool]("SDL_SetWindowPosition")
@@ -1760,11 +1760,11 @@ struct Sdl3FunctionTable(Movable):
         self.screen_saver_enabled = self.dlhandle.get_function[fn() -> Bool]("SDL_ScreenSaverEnabled")
         self.enable_screen_saver = self.dlhandle.get_function[fn() -> Bool]("SDL_EnableScreenSaver")
         self.disable_screen_saver = self.dlhandle.get_function[fn() -> Bool]("SDL_DisableScreenSaver")
-        self.gl_load_library = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_GL_LoadLibrary")
-        self.gl_get_proc_address = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> FunctionPointer]("SDL_GL_GetProcAddress")
-        self.egl_get_proc_address = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> FunctionPointer]("SDL_EGL_GetProcAddress")
+        self.gl_load_library = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_GL_LoadLibrary")
+        self.gl_get_proc_address = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> FunctionPointer]("SDL_GL_GetProcAddress")
+        self.egl_get_proc_address = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> FunctionPointer]("SDL_EGL_GetProcAddress")
         self.gl_unload_library = self.dlhandle.get_function[fn() -> NoneType]("SDL_GL_UnloadLibrary")
-        self.gl_extension_supported = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_GL_ExtensionSupported")
+        self.gl_extension_supported = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_GL_ExtensionSupported")
         self.gl_reset_attributes = self.dlhandle.get_function[fn() -> NoneType]("SDL_GL_ResetAttributes")
         self.gl_set_attribute = self.dlhandle.get_function[fn(GLAttr, Int32) -> Bool]("SDL_GL_SetAttribute")
         self.gl_get_attribute = self.dlhandle.get_function[fn(GLAttr, Ptr[Int32, MutAnyOrigin]) -> Bool]("SDL_GL_GetAttribute")
@@ -1780,7 +1780,7 @@ struct Sdl3FunctionTable(Movable):
         self.gl_get_swap_interval = self.dlhandle.get_function[fn(Ptr[Int32, MutAnyOrigin]) -> Bool]("SDL_GL_GetSwapInterval")
         self.gl_swap_window = self.dlhandle.get_function[fn(Ptr[Window, MutAnyOrigin]) -> Bool]("SDL_GL_SwapWindow")
         self.gl_destroy_context = self.dlhandle.get_function[fn(GLContext) -> Bool]("SDL_GL_DestroyContext")
-        self.vulkan_load_library = self.dlhandle.get_function[fn(CStringSlice[ImmutAnyOrigin]) -> Bool]("SDL_Vulkan_LoadLibrary")
+        self.vulkan_load_library = self.dlhandle.get_function[fn(Ptr[c_char, ImmutAnyOrigin]) -> Bool]("SDL_Vulkan_LoadLibrary")
         self.vulkan_get_vk_get_instance_proc_addr = self.dlhandle.get_function[fn() -> FunctionPointer]("SDL_Vulkan_GetVkGetInstanceProcAddr")
         self.vulkan_unload_library = self.dlhandle.get_function[fn() -> NoneType]("SDL_Vulkan_UnloadLibrary")
         self.vulkan_get_instance_extensions = self.dlhandle.get_function[fn(Ptr[UInt32, MutAnyOrigin]) -> Ptr[CStringSlice[ImmutOrigin.external], ImmutOrigin.external]]("SDL_Vulkan_GetInstanceExtensions")

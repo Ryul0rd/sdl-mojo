@@ -19,24 +19,24 @@ fn img_version() -> Int32:
 
 
 fn img_load_typed_io(
-    src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice[ImmutAnyOrigin]
+    src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
 ) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTyped_IO
     """
-    var result = get_sdl_image_function_table().img_load_typed_io(src, closeio, type)
+    var result = get_sdl_image_function_table().img_load_typed_io(src, closeio, type.unsafe_ptr())
     if not result:
         raise "Error in img_load_typed_io call. See official documentation for details."
     return result
 
 
-fn img_load(file: CStringSlice[ImmutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load(file: CStringSlice) raises -> Ptr[Surface, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_Load
     """
-    var result = get_sdl_image_function_table().img_load(file)
+    var result = get_sdl_image_function_table().img_load(file.unsafe_ptr())
     if not result:
         raise "Error in img_load call. See official documentation for details."
     return result
@@ -56,13 +56,13 @@ fn img_load_io(
 
 
 fn img_load_texture(
-    renderer: Ptr[Renderer, MutAnyOrigin], file: CStringSlice[ImmutAnyOrigin]
+    renderer: Ptr[Renderer, MutAnyOrigin], file: CStringSlice
 ) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTexture
     """
-    var result = get_sdl_image_function_table().img_load_texture(renderer, file)
+    var result = get_sdl_image_function_table().img_load_texture(renderer, file.unsafe_ptr())
     if not result:
         raise "Error in img_load_texture call. See official documentation for details."
     return result
@@ -85,14 +85,14 @@ fn img_load_texture_typed_io(
     renderer: Ptr[Renderer, MutAnyOrigin],
     src: Ptr[IOStream, MutAnyOrigin],
     closeio: Bool,
-    type: CStringSlice[ImmutAnyOrigin],
+    type: CStringSlice,
 ) raises -> Ptr[Texture, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTextureTyped_IO
     """
     var result = get_sdl_image_function_table().img_load_texture_typed_io(
-        renderer, src, closeio, type
+        renderer, src, closeio, type.unsafe_ptr()
     )
     if not result:
         raise "Error in img_load_texture_typed_io call. See official documentation for details."
@@ -491,14 +491,12 @@ fn img_read_xpm_from_array_to_rg_b888(
     return result
 
 
-fn img_save_avif(
-    surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice[ImmutAnyOrigin], quality: Int32
-) raises:
+fn img_save_avif(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice, quality: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_SaveAVIF
     """
-    var success = get_sdl_image_function_table().img_save_avif(surface, file, quality)
+    var success = get_sdl_image_function_table().img_save_avif(surface, file.unsafe_ptr(), quality)
     if not success:
         raise get_error()
 
@@ -518,12 +516,12 @@ fn img_save_avif_io(
         raise get_error()
 
 
-fn img_save_png(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice[ImmutAnyOrigin]) raises:
+fn img_save_png(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_SavePNG
     """
-    var success = get_sdl_image_function_table().img_save_png(surface, file)
+    var success = get_sdl_image_function_table().img_save_png(surface, file.unsafe_ptr())
     if not success:
         raise get_error()
 
@@ -540,14 +538,12 @@ fn img_save_png_io(
         raise get_error()
 
 
-fn img_save_jpg(
-    surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice[ImmutAnyOrigin], quality: Int32
-) raises:
+fn img_save_jpg(surface: Ptr[Surface, MutAnyOrigin], file: CStringSlice, quality: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_SaveJPG
     """
-    var success = get_sdl_image_function_table().img_save_jpg(surface, file, quality)
+    var success = get_sdl_image_function_table().img_save_jpg(surface, file.unsafe_ptr(), quality)
     if not success:
         raise get_error()
 
@@ -567,14 +563,12 @@ fn img_save_jpg_io(
         raise get_error()
 
 
-fn img_load_animation(
-    file: CStringSlice[ImmutAnyOrigin]
-) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+fn img_load_animation(file: CStringSlice) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimation
     """
-    var result = get_sdl_image_function_table().img_load_animation(file)
+    var result = get_sdl_image_function_table().img_load_animation(file.unsafe_ptr())
     if not result:
         raise "Error in img_load_animation call. See official documentation for details."
     return result
@@ -594,13 +588,15 @@ fn img_load_animation_io(
 
 
 fn img_load_animation_typed_io(
-    src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice[ImmutAnyOrigin]
+    src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
 ) raises -> Ptr[IMG_Animation, MutOrigin.external]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimationTyped_IO
     """
-    var result = get_sdl_image_function_table().img_load_animation_typed_io(src, closeio, type)
+    var result = get_sdl_image_function_table().img_load_animation_typed_io(
+        src, closeio, type.unsafe_ptr()
+    )
     if not result:
         raise "Error in img_load_animation_typed_io call. See official documentation for details."
     return result
