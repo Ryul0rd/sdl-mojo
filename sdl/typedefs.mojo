@@ -57,7 +57,7 @@ struct Camera:
     pass
 
 
-comptime ClipboardDataCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, ImmutOrigin.external]
+comptime ClipboardDataCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, ImmutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_ClipboardDataCallback
@@ -269,7 +269,7 @@ https://wiki.libsdl.org/SDL3/SDL_InitFlags
 """
 
 
-comptime AppInit_func = fn(Ptr[Ptr[NoneType, MutOrigin.external], MutAnyOrigin], Int32, Ptr[Ptr[c_char, MutOrigin.external], MutAnyOrigin]) -> AppResult
+comptime AppInit_func = fn(Ptr[Ptr[NoneType, MutExternalOrigin], MutAnyOrigin], Int32, Ptr[Ptr[c_char, MutExternalOrigin], MutAnyOrigin]) -> AppResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AppInit_func
@@ -522,28 +522,28 @@ https://wiki.libsdl.org/SDL3/SDL_WindowFlags
 """
 
 
-comptime GLContext = Ptr[NoneType, MutOrigin.external]
+comptime GLContext = Ptr[NoneType, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_GLContext
 """
 
 
-comptime EGLDisplay = Ptr[NoneType, MutOrigin.external]
+comptime EGLDisplay = Ptr[NoneType, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLDisplay
 """
 
 
-comptime EGLConfig = Ptr[NoneType, MutOrigin.external]
+comptime EGLConfig = Ptr[NoneType, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLConfig
 """
 
 
-comptime EGLSurface = Ptr[NoneType, MutOrigin.external]
+comptime EGLSurface = Ptr[NoneType, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLSurface
@@ -564,14 +564,14 @@ https://wiki.libsdl.org/SDL3/SDL_EGLint
 """
 
 
-comptime EGLAttribArrayCallback = fn(Ptr[NoneType, MutAnyOrigin]) -> Ptr[EGLAttrib, MutOrigin.external]
+comptime EGLAttribArrayCallback = fn(Ptr[NoneType, MutAnyOrigin]) -> Ptr[EGLAttrib, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLAttribArrayCallback
 """
 
 
-comptime EGLIntArrayCallback = fn(Ptr[NoneType, MutAnyOrigin], EGLDisplay, EGLConfig) -> Ptr[EGLint, MutOrigin.external]
+comptime EGLIntArrayCallback = fn(Ptr[NoneType, MutAnyOrigin], EGLDisplay, EGLConfig) -> Ptr[EGLint, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLIntArrayCallback

@@ -668,8 +668,7 @@ def emit_sdl_enums(files: Dict[str, str], enums: List[SdlEnum], lib_spec: SdlLib
                 longest_common_prefix = longest_common_prefix[:-1]
         enums_file_parts.extend((
             "\n\n",
-            '@register_passable("trivial")\n',
-            f"struct {mojo_name}(Equatable, Intable, Indexer):\n",
+            f"struct {mojo_name}(TrivialRegisterType, Equatable, Intable, Indexer):\n",
             emit_wiki_docstring(lib_spec.name, enum.name),
             "    var value: Int32\n",
             "\n",
@@ -717,15 +716,15 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "\n\n",
         f'comptime {function_table_global_name} = _Global["{function_table_global_name}", zero_init[{function_table_type_name}]]()\n',
         "\n\n",
-        f"fn zero_init_{function_table_global_name}() -> OpaquePointer[MutOrigin.external]:\n"
+        f"fn zero_init_{function_table_global_name}() -> OpaquePointer[MutExternalOrigin]:\n"
         f"    var fn_table = alloc[{function_table_type_name}](1)\n"
         f"    memset_zero(fn_table, 1)\n"
         f"    return fn_table.bitcast[NoneType]()\n"
         "\n\n",
-        f"fn destroy_{function_table_global_name}(fn_table: OpaquePointer[MutOrigin.external]):\n"
+        f"fn destroy_{function_table_global_name}(fn_table: OpaquePointer[MutExternalOrigin]):\n"
         f"    fn_table.bitcast[{function_table_type_name}]().destroy_pointee()\n"
         "\n\n",
-        f"fn get_{function_table_global_name}() -> ref [MutOrigin.external] {function_table_type_name}:\n",
+        f"fn get_{function_table_global_name}() -> ref [MutExternalOrigin] {function_table_type_name}:\n",
         f"    return _get_global[\n",
         f'        "{function_table_global_name}", zero_init_{function_table_global_name}, destroy_{function_table_global_name},\n',
         f"    ]().bitcast[{function_table_type_name}]()[]\n",
@@ -865,8 +864,8 @@ def emit_mojo_type(
     use_cstringslice: bool=True,
     omit_cstringslice_origin: bool=False,
 ) -> str:
-    MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutOrigin.external"
-    IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutOrigin.external"
+    MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutExternalOrigin"
+    IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutExternalOrigin"
 
     if use_cstringslice and is_string(sdl_type):
         return "CStringSlice" if omit_cstringslice_origin else f"CStringSlice[{IMMUT_ORIGIN}]"

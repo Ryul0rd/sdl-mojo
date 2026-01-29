@@ -20,7 +20,7 @@ fn img_version() -> Int32:
 
 fn img_load_typed_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTyped_IO
@@ -31,7 +31,7 @@ fn img_load_typed_io(
     return result
 
 
-fn img_load(file: CStringSlice) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load(file: CStringSlice) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_Load
@@ -44,7 +44,7 @@ fn img_load(file: CStringSlice) raises -> Ptr[Surface, MutOrigin.external]:
 
 fn img_load_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_Load_IO
@@ -57,7 +57,7 @@ fn img_load_io(
 
 fn img_load_texture(
     renderer: Ptr[Renderer, MutAnyOrigin], file: CStringSlice
-) raises -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTexture
@@ -70,7 +70,7 @@ fn img_load_texture(
 
 fn img_load_texture_io(
     renderer: Ptr[Renderer, MutAnyOrigin], src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) raises -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTexture_IO
@@ -86,7 +86,7 @@ fn img_load_texture_typed_io(
     src: Ptr[IOStream, MutAnyOrigin],
     closeio: Bool,
     type: CStringSlice,
-) raises -> Ptr[Texture, MutOrigin.external]:
+) raises -> Ptr[Texture, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTextureTyped_IO
@@ -243,7 +243,7 @@ fn img_is_webp(src: Ptr[IOStream, MutAnyOrigin]) -> Bool:
     return get_sdl_image_function_table().img_is_webp(src)
 
 
-fn img_load_avif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_avif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAVIF_IO
@@ -254,7 +254,7 @@ fn img_load_avif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, Mut
     return result
 
 
-fn img_load_ico_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_ico_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadICO_IO
@@ -265,7 +265,7 @@ fn img_load_ico_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_cur_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_cur_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadCUR_IO
@@ -276,7 +276,7 @@ fn img_load_cur_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_bmp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_bmp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadBMP_IO
@@ -287,7 +287,7 @@ fn img_load_bmp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_gif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_gif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadGIF_IO
@@ -298,7 +298,7 @@ fn img_load_gif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_jpg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_jpg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadJPG_IO
@@ -309,7 +309,7 @@ fn img_load_jpg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_jxl_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_jxl_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadJXL_IO
@@ -320,7 +320,7 @@ fn img_load_jxl_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_lbm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_lbm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadLBM_IO
@@ -331,7 +331,7 @@ fn img_load_lbm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_pcx_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_pcx_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPCX_IO
@@ -342,7 +342,7 @@ fn img_load_pcx_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_png_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_png_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPNG_IO
@@ -353,7 +353,7 @@ fn img_load_png_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_pnm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_pnm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadPNM_IO
@@ -364,7 +364,7 @@ fn img_load_pnm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_svg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_svg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadSVG_IO
@@ -375,7 +375,7 @@ fn img_load_svg_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_qoi_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_qoi_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadQOI_IO
@@ -386,7 +386,7 @@ fn img_load_qoi_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_tga_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_tga_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTGA_IO
@@ -397,7 +397,7 @@ fn img_load_tga_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_tif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_tif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadTIF_IO
@@ -408,7 +408,7 @@ fn img_load_tif_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_xcf_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xcf_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXCF_IO
@@ -419,7 +419,7 @@ fn img_load_xcf_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_xpm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xpm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXPM_IO
@@ -430,7 +430,7 @@ fn img_load_xpm_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutO
     return result
 
 
-fn img_load_xv_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_xv_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadXV_IO
@@ -441,7 +441,7 @@ fn img_load_xv_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOr
     return result
 
 
-fn img_load_webp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutOrigin.external]:
+fn img_load_webp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadWEBP_IO
@@ -454,7 +454,7 @@ fn img_load_webp_io(src: Ptr[IOStream, MutAnyOrigin]) raises -> Ptr[Surface, Mut
 
 fn img_load_sized_svg_io(
     src: Ptr[IOStream, MutAnyOrigin], width: Int32, height: Int32
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadSizedSVG_IO
@@ -466,8 +466,8 @@ fn img_load_sized_svg_io(
 
 
 fn img_read_xpm_from_array(
-    xpm: Ptr[Ptr[c_char, MutOrigin.external], MutAnyOrigin]
-) raises -> Ptr[Surface, MutOrigin.external]:
+    xpm: Ptr[Ptr[c_char, MutExternalOrigin], MutAnyOrigin]
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_ReadXPMFromArray
@@ -479,8 +479,8 @@ fn img_read_xpm_from_array(
 
 
 fn img_read_xpm_from_array_to_rg_b888(
-    xpm: Ptr[Ptr[c_char, MutOrigin.external], MutAnyOrigin]
-) raises -> Ptr[Surface, MutOrigin.external]:
+    xpm: Ptr[Ptr[c_char, MutExternalOrigin], MutAnyOrigin]
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_ReadXPMFromArrayToRGB888
@@ -563,7 +563,7 @@ fn img_save_jpg_io(
         raise get_error()
 
 
-fn img_load_animation(file: CStringSlice) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+fn img_load_animation(file: CStringSlice) raises -> Ptr[IMG_Animation, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimation
@@ -576,7 +576,7 @@ fn img_load_animation(file: CStringSlice) raises -> Ptr[IMG_Animation, MutOrigin
 
 fn img_load_animation_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool
-) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimation_IO
@@ -589,7 +589,7 @@ fn img_load_animation_io(
 
 fn img_load_animation_typed_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, type: CStringSlice
-) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadAnimationTyped_IO
@@ -612,7 +612,7 @@ fn img_free_animation(anim: Ptr[IMG_Animation, MutAnyOrigin]):
 
 fn img_load_gif_animation_io(
     src: Ptr[IOStream, MutAnyOrigin]
-) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadGIFAnimation_IO
@@ -625,7 +625,7 @@ fn img_load_gif_animation_io(
 
 fn img_load_webp_animation_io(
     src: Ptr[IOStream, MutAnyOrigin]
-) raises -> Ptr[IMG_Animation, MutOrigin.external]:
+) raises -> Ptr[IMG_Animation, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_image/IMG_LoadWEBPAnimation_IO

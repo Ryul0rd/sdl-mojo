@@ -111,7 +111,7 @@ struct TextEditingEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var text: CStringSlice[ImmutOrigin.external]
+    var text: CStringSlice[ImmutExternalOrigin]
     var start: Int32
     var length: Int32
 
@@ -126,7 +126,7 @@ struct TextEditingCandidatesEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var candidates: Ptr[CStringSlice[ImmutOrigin.external], ImmutOrigin.external]
+    var candidates: Ptr[CStringSlice[ImmutExternalOrigin], ImmutExternalOrigin]
     var num_candidates: Int32
     var selected_candidate: Int32
     var horizontal: Bool
@@ -145,7 +145,7 @@ struct TextInputEvent(Copyable):
     var reserved: UInt32
     var timestamp: UInt64
     var windowID: WindowID
-    var text: CStringSlice[ImmutOrigin.external]
+    var text: CStringSlice[ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -543,8 +543,8 @@ struct DropEvent(Copyable):
     var windowID: WindowID
     var x: Float32
     var y: Float32
-    var source: CStringSlice[ImmutOrigin.external]
-    var data: CStringSlice[ImmutOrigin.external]
+    var source: CStringSlice[ImmutExternalOrigin]
+    var data: CStringSlice[ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -558,7 +558,7 @@ struct ClipboardEvent(Copyable):
     var timestamp: UInt64
     var owner: Bool
     var num_mime_types: Int32
-    var mime_types: Ptr[CStringSlice[ImmutOrigin.external], MutOrigin.external]
+    var mime_types: Ptr[CStringSlice[ImmutExternalOrigin], MutExternalOrigin]
 
 
 @fieldwise_init
@@ -597,8 +597,8 @@ struct UserEvent(Copyable):
     var timestamp: UInt64
     var windowID: WindowID
     var code: Int32
-    var data1: Ptr[NoneType, MutOrigin.external]
-    var data2: Ptr[NoneType, MutOrigin.external]
+    var data1: Ptr[NoneType, MutExternalOrigin]
+    var data2: Ptr[NoneType, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -634,7 +634,7 @@ struct GPUTextureTransferInfo(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureTransferInfo
     """
-    var transfer_buffer: Ptr[GPUTransferBuffer, MutOrigin.external]
+    var transfer_buffer: Ptr[GPUTransferBuffer, MutExternalOrigin]
     var offset: UInt32
     var pixels_per_row: UInt32
     var rows_per_layer: UInt32
@@ -646,7 +646,7 @@ struct GPUTransferBufferLocation(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTransferBufferLocation
     """
-    var transfer_buffer: Ptr[GPUTransferBuffer, MutOrigin.external]
+    var transfer_buffer: Ptr[GPUTransferBuffer, MutExternalOrigin]
     var offset: UInt32
 
 
@@ -656,7 +656,7 @@ struct GPUTextureLocation(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureLocation
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var mip_level: UInt32
     var layer: UInt32
     var x: UInt32
@@ -670,7 +670,7 @@ struct GPUTextureRegion(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureRegion
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var mip_level: UInt32
     var layer: UInt32
     var x: UInt32
@@ -687,7 +687,7 @@ struct GPUBlitRegion(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBlitRegion
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var mip_level: UInt32
     var layer_or_depth_plane: UInt32
     var x: UInt32
@@ -702,7 +702,7 @@ struct GPUBufferLocation(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBufferLocation
     """
-    var buffer: Ptr[GPUBuffer, MutOrigin.external]
+    var buffer: Ptr[GPUBuffer, MutExternalOrigin]
     var offset: UInt32
 
 
@@ -712,7 +712,7 @@ struct GPUBufferRegion(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBufferRegion
     """
-    var buffer: Ptr[GPUBuffer, MutOrigin.external]
+    var buffer: Ptr[GPUBuffer, MutExternalOrigin]
     var offset: UInt32
     var size: UInt32
 
@@ -807,9 +807,9 @@ struct GPUVertexInputState(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUVertexInputState
     """
-    var vertex_buffer_descriptions: Ptr[GPUVertexBufferDescription, ImmutOrigin.external]
+    var vertex_buffer_descriptions: Ptr[GPUVertexBufferDescription, ImmutExternalOrigin]
     var num_vertex_buffers: UInt32
-    var vertex_attributes: Ptr[GPUVertexAttribute, ImmutOrigin.external]
+    var vertex_attributes: Ptr[GPUVertexAttribute, ImmutExternalOrigin]
     var num_vertex_attributes: UInt32
 
 
@@ -851,8 +851,8 @@ struct GPUShaderCreateInfo(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_GPUShaderCreateInfo
     """
     var code_size: Int32
-    var code: Ptr[UInt8, ImmutOrigin.external]
-    var entrypoint: CStringSlice[ImmutOrigin.external]
+    var code: Ptr[UInt8, ImmutExternalOrigin]
+    var entrypoint: CStringSlice[ImmutExternalOrigin]
     var format: GPUShaderFormat
     var stage: GPUShaderStage
     var num_samplers: UInt32
@@ -968,7 +968,7 @@ struct GPUGraphicsPipelineTargetInfo(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUGraphicsPipelineTargetInfo
     """
-    var color_target_descriptions: Ptr[GPUColorTargetDescription, ImmutOrigin.external]
+    var color_target_descriptions: Ptr[GPUColorTargetDescription, ImmutExternalOrigin]
     var num_color_targets: UInt32
     var depth_stencil_format: GPUTextureFormat
     var has_depth_stencil_target: Bool
@@ -983,8 +983,8 @@ struct GPUGraphicsPipelineCreateInfo(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUGraphicsPipelineCreateInfo
     """
-    var vertex_shader: Ptr[GPUShader, MutOrigin.external]
-    var fragment_shader: Ptr[GPUShader, MutOrigin.external]
+    var vertex_shader: Ptr[GPUShader, MutExternalOrigin]
+    var fragment_shader: Ptr[GPUShader, MutExternalOrigin]
     var vertex_input_state: GPUVertexInputState
     var primitive_type: GPUPrimitiveType
     var rasterizer_state: GPURasterizerState
@@ -1001,8 +1001,8 @@ struct GPUComputePipelineCreateInfo(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_GPUComputePipelineCreateInfo
     """
     var code_size: Int32
-    var code: Ptr[UInt8, ImmutOrigin.external]
-    var entrypoint: CStringSlice[ImmutOrigin.external]
+    var code: Ptr[UInt8, ImmutExternalOrigin]
+    var entrypoint: CStringSlice[ImmutExternalOrigin]
     var format: GPUShaderFormat
     var num_samplers: UInt32
     var num_readonly_storage_textures: UInt32
@@ -1022,13 +1022,13 @@ struct GPUColorTargetInfo(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUColorTargetInfo
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var mip_level: UInt32
     var layer_or_depth_plane: UInt32
     var clear_color: FColor
     var load_op: GPULoadOp
     var store_op: GPUStoreOp
-    var resolve_texture: Ptr[GPUTexture, MutOrigin.external]
+    var resolve_texture: Ptr[GPUTexture, MutExternalOrigin]
     var resolve_mip_level: UInt32
     var resolve_layer: UInt32
     var cycle: Bool
@@ -1043,7 +1043,7 @@ struct GPUDepthStencilTargetInfo(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUDepthStencilTargetInfo
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var clear_depth: Float32
     var load_op: GPULoadOp
     var store_op: GPUStoreOp
@@ -1079,7 +1079,7 @@ struct GPUBufferBinding(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUBufferBinding
     """
-    var buffer: Ptr[GPUBuffer, MutOrigin.external]
+    var buffer: Ptr[GPUBuffer, MutExternalOrigin]
     var offset: UInt32
 
 
@@ -1089,8 +1089,8 @@ struct GPUTextureSamplerBinding(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUTextureSamplerBinding
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
-    var sampler: Ptr[GPUSampler, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
+    var sampler: Ptr[GPUSampler, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -1099,7 +1099,7 @@ struct GPUStorageBufferReadWriteBinding(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUStorageBufferReadWriteBinding
     """
-    var buffer: Ptr[GPUBuffer, MutOrigin.external]
+    var buffer: Ptr[GPUBuffer, MutExternalOrigin]
     var cycle: Bool
     var padding1: UInt8
     var padding2: UInt8
@@ -1112,7 +1112,7 @@ struct GPUStorageTextureReadWriteBinding(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_GPUStorageTextureReadWriteBinding
     """
-    var texture: Ptr[GPUTexture, MutOrigin.external]
+    var texture: Ptr[GPUTexture, MutExternalOrigin]
     var mip_level: UInt32
     var layer: UInt32
     var cycle: Bool
@@ -1248,7 +1248,7 @@ struct HapticCustom(Copyable):
     var channels: UInt8
     var period: UInt16
     var samples: UInt16
-    var data: Ptr[UInt16, MutOrigin.external]
+    var data: Ptr[UInt16, MutExternalOrigin]
     var attack_length: UInt16
     var attack_level: UInt16
     var fade_length: UInt16
@@ -1262,11 +1262,11 @@ struct IOStreamInterface(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_IOStreamInterface
     """
     var version: UInt32
-    var size: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Int64, ImmutOrigin.external]
-    var seek: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int64, IOWhence) -> Int64, ImmutOrigin.external]
+    var size: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Int64, ImmutExternalOrigin]
+    var seek: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int64, IOWhence) -> Int64, ImmutExternalOrigin]
     var size_t: fn(Ptr[Int32, MutAnyOrigin]) -> fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, MutAnyOrigin], Int32, Ptr[IOStatus, MutAnyOrigin]) -> Int32
-    var flush: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[IOStatus, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
+    var flush: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[IOStatus, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -1309,18 +1309,18 @@ struct VirtualJoystickDesc(Copyable):
     var padding2: InlineArray[UInt16, Int(2)]
     var button_mask: UInt32
     var axis_mask: UInt32
-    var name: CStringSlice[ImmutOrigin.external]
-    var touchpads: Ptr[VirtualJoystickTouchpadDesc, ImmutOrigin.external]
-    var sensors: Ptr[VirtualJoystickSensorDesc, ImmutOrigin.external]
-    var userdata: Ptr[NoneType, MutOrigin.external]
-    var Update: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutOrigin.external]
-    var SetPlayerIndex: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int32) -> NoneType, ImmutOrigin.external]
-    var Rumble: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutOrigin.external]
-    var RumbleTriggers: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutOrigin.external]
-    var SetLED: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt8, UInt8, UInt8) -> Bool, ImmutOrigin.external]
-    var SendEffect: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool, ImmutOrigin.external]
-    var SetSensorsEnabled: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Bool) -> Bool, ImmutOrigin.external]
-    var Cleanup: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutOrigin.external]
+    var name: CStringSlice[ImmutExternalOrigin]
+    var touchpads: Ptr[VirtualJoystickTouchpadDesc, ImmutExternalOrigin]
+    var sensors: Ptr[VirtualJoystickSensorDesc, ImmutExternalOrigin]
+    var userdata: Ptr[NoneType, MutExternalOrigin]
+    var Update: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutExternalOrigin]
+    var SetPlayerIndex: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int32) -> NoneType, ImmutExternalOrigin]
+    var Rumble: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
+    var RumbleTriggers: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
+    var SetLED: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt8, UInt8, UInt8) -> Bool, ImmutExternalOrigin]
+    var SendEffect: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool, ImmutExternalOrigin]
+    var SetSensorsEnabled: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Bool) -> Bool, ImmutExternalOrigin]
+    var Cleanup: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -1354,7 +1354,7 @@ struct Palette(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_Palette
     """
     var ncolors: Int32
-    var colors: Ptr[Color, MutOrigin.external]
+    var colors: Ptr[Color, MutExternalOrigin]
     var version: UInt32
     var refcount: Int32
 
@@ -1457,17 +1457,17 @@ struct StorageInterface(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_StorageInterface
     """
     var version: UInt32
-    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var ready: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var enumerate: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var info: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var read_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
-    var write_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool, ImmutOrigin.external]
-    var mkdir: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var remove: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var rename: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var copy_: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutOrigin.external]
-    var space_remaining: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> UInt64, ImmutOrigin.external]
+    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var ready: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var enumerate: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var info: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var read_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool, ImmutExternalOrigin]
+    var write_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool, ImmutExternalOrigin]
+    var mkdir: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var remove: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var rename: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var copy_: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var space_remaining: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> UInt64, ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -1481,9 +1481,9 @@ struct Surface(Copyable):
     var w: Int32
     var h: Int32
     var pitch: Int32
-    var pixels: Ptr[NoneType, MutOrigin.external]
+    var pixels: Ptr[NoneType, MutExternalOrigin]
     var refcount: Int32
-    var reserved: Ptr[NoneType, MutOrigin.external]
+    var reserved: Ptr[NoneType, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -1529,7 +1529,7 @@ struct DisplayMode(Copyable):
     var refresh_rate: Float32
     var refresh_rate_numerator: Int32
     var refresh_rate_denominator: Int32
-    var internal: Ptr[DisplayModeData, MutOrigin.external]
+    var internal: Ptr[DisplayModeData, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -1541,8 +1541,8 @@ struct IMG_Animation(Copyable):
     var w: Int32
     var h: Int32
     var count: Int32
-    var frames: Ptr[Ptr[Surface, MutOrigin.external], MutOrigin.external]
-    var delays: Ptr[Int32, MutOrigin.external]
+    var frames: Ptr[Ptr[Surface, MutExternalOrigin], MutExternalOrigin]
+    var delays: Ptr[Int32, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -1551,10 +1551,10 @@ struct TTF_Text(Copyable):
     
     https://wiki.libsdl.org/SDL_ttf/TTF_Text
     """
-    var text: Ptr[c_char, MutOrigin.external]
+    var text: Ptr[c_char, MutExternalOrigin]
     var num_lines: Int32
     var refcount: Int32
-    var internal: Ptr[TTF_TextData, MutOrigin.external]
+    var internal: Ptr[TTF_TextData, MutExternalOrigin]
 
 
 @fieldwise_init
@@ -1563,14 +1563,14 @@ struct TTF_GPUAtlasDrawSequence(Copyable):
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GPUAtlasDrawSequence
     """
-    var atlas_texture: Ptr[GPUTexture, MutOrigin.external]
-    var xy: Ptr[FPoint, MutOrigin.external]
-    var uv: Ptr[FPoint, MutOrigin.external]
+    var atlas_texture: Ptr[GPUTexture, MutExternalOrigin]
+    var xy: Ptr[FPoint, MutExternalOrigin]
+    var uv: Ptr[FPoint, MutExternalOrigin]
     var num_vertices: Int32
-    var indices: Ptr[Int32, MutOrigin.external]
+    var indices: Ptr[Int32, MutExternalOrigin]
     var num_indices: Int32
     var image_type: TTF_ImageType
-    var next: Ptr[TTF_GPUAtlasDrawSequence, MutOrigin.external]
+    var next: Ptr[TTF_GPUAtlasDrawSequence, MutExternalOrigin]
 
 
 @fieldwise_init

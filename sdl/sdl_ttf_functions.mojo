@@ -52,7 +52,7 @@ fn ttf_init() raises:
         raise get_error()
 
 
-fn ttf_open_font(file: CStringSlice, ptsize: Float32) raises -> Ptr[TTF_Font, MutOrigin.external]:
+fn ttf_open_font(file: CStringSlice, ptsize: Float32) raises -> Ptr[TTF_Font, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_OpenFont
@@ -65,7 +65,7 @@ fn ttf_open_font(file: CStringSlice, ptsize: Float32) raises -> Ptr[TTF_Font, Mu
 
 fn ttf_open_font_io(
     src: Ptr[IOStream, MutAnyOrigin], closeio: Bool, ptsize: Float32
-) raises -> Ptr[TTF_Font, MutOrigin.external]:
+) raises -> Ptr[TTF_Font, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_OpenFontIO
@@ -76,7 +76,7 @@ fn ttf_open_font_io(
     return result
 
 
-fn ttf_open_font_with_properties(props: PropertiesID) raises -> Ptr[TTF_Font, MutOrigin.external]:
+fn ttf_open_font_with_properties(props: PropertiesID) raises -> Ptr[TTF_Font, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_OpenFontWithProperties
@@ -89,7 +89,7 @@ fn ttf_open_font_with_properties(props: PropertiesID) raises -> Ptr[TTF_Font, Mu
 
 fn ttf_copy_font(
     existing_font: Ptr[TTF_Font, MutAnyOrigin]
-) raises -> Ptr[TTF_Font, MutOrigin.external]:
+) raises -> Ptr[TTF_Font, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CopyFont
@@ -364,7 +364,7 @@ fn ttf_font_is_scalable(font: Ptr[TTF_Font, ImmutAnyOrigin]) -> Bool:
 
 fn ttf_get_font_family_name(
     font: Ptr[TTF_Font, ImmutAnyOrigin]
-) -> CStringSlice[ImmutOrigin.external]:
+) -> CStringSlice[ImmutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetFontFamilyName
@@ -375,7 +375,7 @@ fn ttf_get_font_family_name(
 
 fn ttf_get_font_style_name(
     font: Ptr[TTF_Font, ImmutAnyOrigin]
-) -> CStringSlice[ImmutOrigin.external]:
+) -> CStringSlice[ImmutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetFontStyleName
@@ -466,7 +466,7 @@ fn ttf_font_has_glyph(font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32) -> Bool:
 
 fn ttf_get_glyph_image(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, image_type: Ptr[TTF_ImageType, MutAnyOrigin]
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetGlyphImage
@@ -481,7 +481,7 @@ fn ttf_get_glyph_image_for_index(
     font: Ptr[TTF_Font, MutAnyOrigin],
     glyph_index: UInt32,
     image_type: Ptr[TTF_ImageType, MutAnyOrigin],
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetGlyphImageForIndex
@@ -589,7 +589,7 @@ fn ttf_measure_string(
 
 fn ttf_render_text_solid(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid
@@ -608,7 +608,7 @@ fn ttf_render_text_solid_wrapped(
     length: Int32,
     fg: Color,
     wrapLength: Int32,
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Solid_Wrapped
@@ -623,7 +623,7 @@ fn ttf_render_text_solid_wrapped(
 
 fn ttf_render_glyph_solid(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Solid
@@ -636,7 +636,7 @@ fn ttf_render_glyph_solid(
 
 fn ttf_render_text_shaded(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded
@@ -656,7 +656,7 @@ fn ttf_render_text_shaded_wrapped(
     fg: Color,
     bg: Color,
     wrap_width: Int32,
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Shaded_Wrapped
@@ -671,7 +671,7 @@ fn ttf_render_text_shaded_wrapped(
 
 fn ttf_render_glyph_shaded(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color, bg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Shaded
@@ -684,7 +684,7 @@ fn ttf_render_glyph_shaded(
 
 fn ttf_render_text_blended(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended
@@ -703,7 +703,7 @@ fn ttf_render_text_blended_wrapped(
     length: Int32,
     fg: Color,
     wrap_width: Int32,
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_Blended_Wrapped
@@ -718,7 +718,7 @@ fn ttf_render_text_blended_wrapped(
 
 fn ttf_render_glyph_blended(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_Blended
@@ -731,7 +731,7 @@ fn ttf_render_glyph_blended(
 
 fn ttf_render_text_lcd(
     font: Ptr[TTF_Font, MutAnyOrigin], text: CStringSlice, length: Int32, fg: Color, bg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD
@@ -751,7 +751,7 @@ fn ttf_render_text_lcd_wrapped(
     fg: Color,
     bg: Color,
     wrap_width: Int32,
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderText_LCD_Wrapped
@@ -766,7 +766,7 @@ fn ttf_render_text_lcd_wrapped(
 
 fn ttf_render_glyph_lcd(
     font: Ptr[TTF_Font, MutAnyOrigin], ch: UInt32, fg: Color, bg: Color
-) raises -> Ptr[Surface, MutOrigin.external]:
+) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_RenderGlyph_LCD
@@ -777,7 +777,7 @@ fn ttf_render_glyph_lcd(
     return result
 
 
-fn ttf_create_surface_text_engine() raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+fn ttf_create_surface_text_engine() raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateSurfaceTextEngine
@@ -810,7 +810,7 @@ fn ttf_destroy_surface_text_engine(engine: Ptr[TTF_TextEngine, MutAnyOrigin]):
 
 fn ttf_create_renderer_text_engine(
     renderer: Ptr[Renderer, MutAnyOrigin]
-) raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+) raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateRendererTextEngine
@@ -823,7 +823,7 @@ fn ttf_create_renderer_text_engine(
 
 fn ttf_create_renderer_text_engine_with_properties(
     props: PropertiesID
-) raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+) raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateRendererTextEngineWithProperties
@@ -856,7 +856,7 @@ fn ttf_destroy_renderer_text_engine(engine: Ptr[TTF_TextEngine, MutAnyOrigin]):
 
 fn ttf_create_gpu_text_engine(
     device: Ptr[GPUDevice, MutAnyOrigin]
-) raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+) raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateGPUTextEngine
@@ -869,7 +869,7 @@ fn ttf_create_gpu_text_engine(
 
 fn ttf_create_gpu_text_engine_with_properties(
     props: PropertiesID
-) raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+) raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateGPUTextEngineWithProperties
@@ -882,7 +882,7 @@ fn ttf_create_gpu_text_engine_with_properties(
 
 fn ttf_get_gpu_text_draw_data(
     text: Ptr[TTF_Text, MutAnyOrigin]
-) raises -> Ptr[TTF_GPUAtlasDrawSequence, MutOrigin.external]:
+) raises -> Ptr[TTF_GPUAtlasDrawSequence, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetGPUTextDrawData
@@ -926,7 +926,7 @@ fn ttf_create_text(
     font: Ptr[TTF_Font, MutAnyOrigin],
     text: CStringSlice,
     length: Int32,
-) raises -> Ptr[TTF_Text, MutOrigin.external]:
+) raises -> Ptr[TTF_Text, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_CreateText
@@ -961,7 +961,7 @@ fn ttf_set_text_engine(
 
 fn ttf_get_text_engine(
     text: Ptr[TTF_Text, MutAnyOrigin]
-) raises -> Ptr[TTF_TextEngine, MutOrigin.external]:
+) raises -> Ptr[TTF_TextEngine, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetTextEngine
@@ -980,9 +980,7 @@ fn ttf_set_text_font(text: Ptr[TTF_Text, MutAnyOrigin], font: Ptr[TTF_Font, MutA
     return get_sdl_ttf_function_table().ttf_set_text_font(text, font)
 
 
-fn ttf_get_text_font(
-    text: Ptr[TTF_Text, MutAnyOrigin]
-) raises -> Ptr[TTF_Font, MutOrigin.external]:
+fn ttf_get_text_font(text: Ptr[TTF_Text, MutAnyOrigin]) raises -> Ptr[TTF_Font, MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetTextFont
@@ -1239,7 +1237,7 @@ fn ttf_get_text_sub_string_for_line(
 
 fn ttf_get_text_sub_strings_for_range(
     text: Ptr[TTF_Text, MutAnyOrigin], offset: Int32, length: Int32, count: Ptr[Int32, MutAnyOrigin]
-) raises -> Ptr[Ptr[TTF_SubString, MutOrigin.external], MutOrigin.external]:
+) raises -> Ptr[Ptr[TTF_SubString, MutExternalOrigin], MutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_ttf/TTF_GetTextSubStringsForRange
