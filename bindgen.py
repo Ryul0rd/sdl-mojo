@@ -842,7 +842,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_fn_like(
         f"fn {mojo_fn_name}(",
         [
-            f"{arg.name}: {emit_mojo_type(arg.type, use_any_origin=True, omit_cstringslice_origin=True)}"
+            f"{arg.name}: {emit_mojo_type(arg.type, omit_origin=True)}"
             for arg in function.args
         ],
         return_part,
@@ -850,7 +850,12 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     parts.append(emit_wiki_docstring(lib_spec.name, function.name))
     parts.append(emit_fn_like(
         f"{result_part}get_{function_table_global_name}().{mojo_fn_name}(",
-        [f"{arg.name}.unsafe_ptr()" if is_string(arg.type) else arg.name for arg in function.args],
+        [
+            f"{arg.name}.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()"
+            if is_string(arg.type) else
+            f"Ptr(to={arg.name}).bitcast[{emit_mojo_type(arg.type)}]()[]"
+            for arg in function.args
+        ],
         f")\n",
         base_indent_level = 1,
     ))
@@ -860,20 +865,16 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
 
 def emit_mojo_type(
     sdl_type: SdlType,
-    use_any_origin: bool=False,
     use_cstringslice: bool=True,
-    omit_cstringslice_origin: bool=False,
+    omit_origin: bool=False,
 ) -> str:
-    MUT_ORIGIN = "MutAnyOrigin" if use_any_origin else "MutExternalOrigin"
-    IMMUT_ORIGIN = "ImmutAnyOrigin" if use_any_origin else "ImmutExternalOrigin"
-
     if use_cstringslice and is_string(sdl_type):
-        return "CStringSlice" if omit_cstringslice_origin else f"CStringSlice[{IMMUT_ORIGIN}]"
+        return "CStringSlice" if omit_origin else f"CStringSlice[ImmutExternalOrigin]"
 
     if isinstance(sdl_type, SdlFunctionType):
         return emit_fn_like(
             "fn(",
-            [emit_mojo_type(arg_type, use_any_origin=True, use_cstringslice=use_cstringslice) for arg_type in sdl_type.arg_types],
+            [emit_mojo_type(arg_type, use_cstringslice=use_cstringslice) for arg_type in sdl_type.arg_types],
             f") -> {emit_mojo_type(sdl_type.return_type)}",
             max_line_len = None,
         )
@@ -883,14 +884,18 @@ def emit_mojo_type(
             (isinstance(sdl_type.pointee_type, SdlPointer) or isinstance(sdl_type.pointee_type, SdlBaseType))
             and not sdl_type.pointee_type.const
         )
-        origin = MUT_ORIGIN if is_mut else IMMUT_ORIGIN
-        return f"Ptr[{emit_mojo_type(sdl_type.pointee_type)}, {origin}]"
+        if omit_origin:
+            return f"Ptr[{emit_mojo_type(sdl_type.pointee_type)}]"
+        elif is_mut:
+            return f"Ptr[{emit_mojo_type(sdl_type.pointee_type)}, MutExternalOrigin]"
+        else:
+            return f"Ptr[{emit_mojo_type(sdl_type.pointee_type)}, ImmutExternalOrigin]"
     
     if isinstance(sdl_type, SdlArray):
         if sdl_type.length is not None:
             return f"InlineArray[{emit_mojo_type(sdl_type.element_type)}, Int({sdl_type.length})]"
         else:
-            return f"Ptr[{emit_mojo_type(sdl_type.element_type)}, {MUT_ORIGIN}]"
+            return f"Ptr[{emit_mojo_type(sdl_type.element_type)}, MutExternalOrigin]"
 
     # SdlBaseType
     mapping = {

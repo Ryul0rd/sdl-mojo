@@ -21,14 +21,14 @@ struct AudioStream:
     pass
 
 
-comptime AudioStreamCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[AudioStream, MutAnyOrigin], Int32, Int32) -> NoneType
+comptime AudioStreamCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[AudioStream, MutExternalOrigin], Int32, Int32) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AudioStreamCallback
 """
 
 
-comptime AudioPostmixCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[AudioSpec, ImmutAnyOrigin], Ptr[Float32, MutAnyOrigin], Int32) -> NoneType
+comptime AudioPostmixCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[AudioSpec, ImmutExternalOrigin], Ptr[Float32, MutExternalOrigin], Int32) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AudioPostmixCallback
@@ -57,21 +57,21 @@ struct Camera:
     pass
 
 
-comptime ClipboardDataCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[Int32, MutAnyOrigin]) -> Ptr[NoneType, ImmutExternalOrigin]
+comptime ClipboardDataCallback = fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], Ptr[Int32, MutExternalOrigin]) -> Ptr[NoneType, ImmutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_ClipboardDataCallback
 """
 
 
-comptime ClipboardCleanupCallback = fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType
+comptime ClipboardCleanupCallback = fn(Ptr[NoneType, MutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_ClipboardCleanupCallback
 """
 
 
-comptime EventFilter = fn(Ptr[NoneType, MutAnyOrigin], Ptr[Event, MutAnyOrigin]) -> Bool
+comptime EventFilter = fn(Ptr[NoneType, MutExternalOrigin], Ptr[Event, MutExternalOrigin]) -> Bool
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EventFilter
@@ -85,7 +85,7 @@ https://wiki.libsdl.org/SDL3/SDL_GlobFlags
 """
 
 
-comptime EnumerateDirectoryCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> EnumerationResult
+comptime EnumerateDirectoryCallback = fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> EnumerationResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EnumerateDirectoryCallback
@@ -255,7 +255,7 @@ https://wiki.libsdl.org/SDL3/SDL_HapticID
 """
 
 
-comptime HintCallback = fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> NoneType
+comptime HintCallback = fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], CStringSlice[ImmutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HintCallback
@@ -269,35 +269,35 @@ https://wiki.libsdl.org/SDL3/SDL_InitFlags
 """
 
 
-comptime AppInit_func = fn(Ptr[Ptr[NoneType, MutExternalOrigin], MutAnyOrigin], Int32, Ptr[Ptr[c_char, MutExternalOrigin], MutAnyOrigin]) -> AppResult
+comptime AppInit_func = fn(Ptr[Ptr[NoneType, MutExternalOrigin], MutExternalOrigin], Int32, Ptr[Ptr[c_char, MutExternalOrigin], MutExternalOrigin]) -> AppResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AppInit_func
 """
 
 
-comptime AppIterate_func = fn(Ptr[NoneType, MutAnyOrigin]) -> AppResult
+comptime AppIterate_func = fn(Ptr[NoneType, MutExternalOrigin]) -> AppResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AppIterate_func
 """
 
 
-comptime AppEvent_func = fn(Ptr[NoneType, MutAnyOrigin], Ptr[Event, MutAnyOrigin]) -> AppResult
+comptime AppEvent_func = fn(Ptr[NoneType, MutExternalOrigin], Ptr[Event, MutExternalOrigin]) -> AppResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AppEvent_func
 """
 
 
-comptime AppQuit_func = fn(Ptr[NoneType, MutAnyOrigin], AppResult) -> NoneType
+comptime AppQuit_func = fn(Ptr[NoneType, MutExternalOrigin], AppResult) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_AppQuit_func
 """
 
 
-comptime MainThreadCallback = fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType
+comptime MainThreadCallback = fn(Ptr[NoneType, MutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_MainThreadCallback
@@ -348,7 +348,7 @@ https://wiki.libsdl.org/SDL3/SDL_Keymod
 """
 
 
-comptime LogOutputFunction = fn(Ptr[NoneType, MutAnyOrigin], Int32, LogPriority, CStringSlice[ImmutAnyOrigin]) -> NoneType
+comptime LogOutputFunction = fn(Ptr[NoneType, MutExternalOrigin], Int32, LogPriority, CStringSlice[ImmutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_LogOutputFunction
@@ -398,14 +398,14 @@ https://wiki.libsdl.org/SDL3/SDL_PropertiesID
 """
 
 
-comptime CleanupPropertyCallback = fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> NoneType
+comptime CleanupPropertyCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[NoneType, MutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_CleanupPropertyCallback
 """
 
 
-comptime EnumeratePropertiesCallback = fn(Ptr[NoneType, MutAnyOrigin], PropertiesID, CStringSlice[ImmutAnyOrigin]) -> NoneType
+comptime EnumeratePropertiesCallback = fn(Ptr[NoneType, MutExternalOrigin], PropertiesID, CStringSlice[ImmutExternalOrigin]) -> NoneType
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EnumeratePropertiesCallback
@@ -457,14 +457,14 @@ https://wiki.libsdl.org/SDL3/SDL_TimerID
 """
 
 
-comptime TimerCallback = fn(Ptr[NoneType, MutAnyOrigin], TimerID, UInt32) -> UInt32
+comptime TimerCallback = fn(Ptr[NoneType, MutExternalOrigin], TimerID, UInt32) -> UInt32
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_TimerCallback
 """
 
 
-comptime NSTimerCallback = fn(Ptr[NoneType, MutAnyOrigin], TimerID, UInt64) -> UInt64
+comptime NSTimerCallback = fn(Ptr[NoneType, MutExternalOrigin], TimerID, UInt64) -> UInt64
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_NSTimerCallback
@@ -564,14 +564,14 @@ https://wiki.libsdl.org/SDL3/SDL_EGLint
 """
 
 
-comptime EGLAttribArrayCallback = fn(Ptr[NoneType, MutAnyOrigin]) -> Ptr[EGLAttrib, MutExternalOrigin]
+comptime EGLAttribArrayCallback = fn(Ptr[NoneType, MutExternalOrigin]) -> Ptr[EGLAttrib, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLAttribArrayCallback
 """
 
 
-comptime EGLIntArrayCallback = fn(Ptr[NoneType, MutAnyOrigin], EGLDisplay, EGLConfig) -> Ptr[EGLint, MutExternalOrigin]
+comptime EGLIntArrayCallback = fn(Ptr[NoneType, MutExternalOrigin], EGLDisplay, EGLConfig) -> Ptr[EGLint, MutExternalOrigin]
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_EGLIntArrayCallback
@@ -606,7 +606,7 @@ https://wiki.libsdl.org/SDL3/SDL_GLContextResetNotification
 """
 
 
-comptime HitTest = fn(Ptr[Window, MutAnyOrigin], Ptr[Point, ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin]) -> HitTestResult
+comptime HitTest = fn(Ptr[Window, MutExternalOrigin], Ptr[Point, ImmutExternalOrigin], Ptr[NoneType, MutExternalOrigin]) -> HitTestResult
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HitTest

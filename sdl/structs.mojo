@@ -1262,11 +1262,11 @@ struct IOStreamInterface(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_IOStreamInterface
     """
     var version: UInt32
-    var size: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Int64, ImmutExternalOrigin]
-    var seek: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int64, IOWhence) -> Int64, ImmutExternalOrigin]
-    var size_t: fn(Ptr[Int32, MutAnyOrigin]) -> fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, MutAnyOrigin], Int32, Ptr[IOStatus, MutAnyOrigin]) -> Int32
-    var flush: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[IOStatus, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
+    var size: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> Int64, ImmutExternalOrigin]
+    var seek: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Int64, IOWhence) -> Int64, ImmutExternalOrigin]
+    var size_t: fn(Ptr[Int32, MutExternalOrigin]) -> fn(Ptr[NoneType, MutExternalOrigin], Ptr[NoneType, MutExternalOrigin], Int32, Ptr[IOStatus, MutExternalOrigin]) -> Int32
+    var flush: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Ptr[IOStatus, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var close: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -1313,14 +1313,14 @@ struct VirtualJoystickDesc(Copyable):
     var touchpads: Ptr[VirtualJoystickTouchpadDesc, ImmutExternalOrigin]
     var sensors: Ptr[VirtualJoystickSensorDesc, ImmutExternalOrigin]
     var userdata: Ptr[NoneType, MutExternalOrigin]
-    var Update: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutExternalOrigin]
-    var SetPlayerIndex: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Int32) -> NoneType, ImmutExternalOrigin]
-    var Rumble: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
-    var RumbleTriggers: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
-    var SetLED: Ptr[fn(Ptr[NoneType, MutAnyOrigin], UInt8, UInt8, UInt8) -> Bool, ImmutExternalOrigin]
-    var SendEffect: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], Int32) -> Bool, ImmutExternalOrigin]
-    var SetSensorsEnabled: Ptr[fn(Ptr[NoneType, MutAnyOrigin], Bool) -> Bool, ImmutExternalOrigin]
-    var Cleanup: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> NoneType, ImmutExternalOrigin]
+    var Update: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> NoneType, ImmutExternalOrigin]
+    var SetPlayerIndex: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Int32) -> NoneType, ImmutExternalOrigin]
+    var Rumble: Ptr[fn(Ptr[NoneType, MutExternalOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
+    var RumbleTriggers: Ptr[fn(Ptr[NoneType, MutExternalOrigin], UInt16, UInt16) -> Bool, ImmutExternalOrigin]
+    var SetLED: Ptr[fn(Ptr[NoneType, MutExternalOrigin], UInt8, UInt8, UInt8) -> Bool, ImmutExternalOrigin]
+    var SendEffect: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32) -> Bool, ImmutExternalOrigin]
+    var SetSensorsEnabled: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Bool) -> Bool, ImmutExternalOrigin]
+    var Cleanup: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> NoneType, ImmutExternalOrigin]
 
 
 @fieldwise_init
@@ -1457,17 +1457,17 @@ struct StorageInterface(Copyable):
     https://wiki.libsdl.org/SDL3/SDL_StorageInterface
     """
     var version: UInt32
-    var close: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var ready: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var enumerate: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var info: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[PathInfo, MutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var read_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, MutAnyOrigin], UInt64) -> Bool, ImmutExternalOrigin]
-    var write_file: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], Ptr[NoneType, ImmutAnyOrigin], UInt64) -> Bool, ImmutExternalOrigin]
-    var mkdir: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var remove: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var rename: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var copy_: Ptr[fn(Ptr[NoneType, MutAnyOrigin], CStringSlice[ImmutAnyOrigin], CStringSlice[ImmutAnyOrigin]) -> Bool, ImmutExternalOrigin]
-    var space_remaining: Ptr[fn(Ptr[NoneType, MutAnyOrigin]) -> UInt64, ImmutExternalOrigin]
+    var close: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var ready: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var enumerate: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], EnumerateDirectoryCallback, Ptr[NoneType, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var info: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], Ptr[PathInfo, MutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var read_file: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], Ptr[NoneType, MutExternalOrigin], UInt64) -> Bool, ImmutExternalOrigin]
+    var write_file: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], UInt64) -> Bool, ImmutExternalOrigin]
+    var mkdir: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var remove: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var rename: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var copy_: Ptr[fn(Ptr[NoneType, MutExternalOrigin], CStringSlice[ImmutExternalOrigin], CStringSlice[ImmutExternalOrigin]) -> Bool, ImmutExternalOrigin]
+    var space_remaining: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> UInt64, ImmutExternalOrigin]
 
 
 @fieldwise_init
