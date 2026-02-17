@@ -26,7 +26,7 @@ def main():
         SdlLibSpec(
             name = "SDL3",
             dlname = "libSDL3",
-            repo_url = "https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref=release-3.2.x",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL/contents/include/SDL3?ref=release-3.4.x",
             entrypoint_header = "SDL.h",
             include_headers = [
                 # "SDL_stdinc.h",
@@ -89,7 +89,7 @@ def main():
         SdlLibSpec(
             name = "SDL_image",
             dlname = "libSDL3_image",
-            repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.2.x",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL_image/contents/include/SDL3_image?ref=release-3.4.x",
             entrypoint_header = "SDL_image.h",
             include_headers = ["SDL_image.h"],
         ),
@@ -99,7 +99,14 @@ def main():
             repo_url = "https://api.github.com/repos/libsdl-org/SDL_ttf/contents/include/SDL3_ttf?ref=release-3.2.x",
             entrypoint_header = "SDL_ttf.h",
             include_headers = ["SDL_ttf.h", "SDL_textengine.h"],
-        )
+        ),
+        SdlLibSpec(
+            name = "SDL_mixer",
+            dlname = "libSDL3_mixer",
+            repo_url = "https://api.github.com/repos/libsdl-org/SDL_mixer/contents/include/SDL3_mixer?ref=prerelease-3.1.x",
+            entrypoint_header = "SDL_mixer.h",
+            include_headers = ["SDL_mixer.h"],
+        ),
     ]
 
     files: Dict[str, str] = {}
@@ -326,7 +333,7 @@ SdlNode = SdlFunction | SdlStruct | SdlEnum | SdlTypedef | SdlMacroConstant | Sd
 
 
 def parse_sdl_node(node: Cursor) -> Optional[SdlNode]:
-    LIB_PREFIXES = ("SDL_", "IMG_", "TTF_")
+    LIB_PREFIXES = ("SDL_", "IMG_", "TTF_", "MIX_")
     name = assert_type(str, node.spelling)
     if not any(name.startswith(prefix) for prefix in LIB_PREFIXES) and not name.startswith("SDLK_"):
         return None

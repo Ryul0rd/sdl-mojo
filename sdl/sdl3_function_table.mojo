@@ -87,6 +87,8 @@ struct Sdl3FunctionTable(Movable):
     var set_audio_stream_input_channel_map: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool
     var set_audio_stream_output_channel_map: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool
     var put_audio_stream_data: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32) -> Bool
+    var put_audio_stream_data_no_copy: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32, AudioStreamDataCompleteCallback, Ptr[NoneType, MutExternalOrigin]) -> Bool
+    var put_audio_stream_planar_data: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Ptr[NoneType, ImmutExternalOrigin], ImmutExternalOrigin], Int32, Int32) -> Bool
     var get_audio_stream_data: fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, MutExternalOrigin], Int32) -> Int32
     var get_audio_stream_available: fn(Ptr[AudioStream, MutExternalOrigin]) -> Int32
     var get_audio_stream_queued: fn(Ptr[AudioStream, MutExternalOrigin]) -> Int32
@@ -117,7 +119,7 @@ struct Sdl3FunctionTable(Movable):
     var get_camera_name: fn(CameraID) -> CStringSlice[ImmutExternalOrigin]
     var get_camera_position: fn(CameraID) -> CameraPosition
     var open_camera: fn(CameraID, Ptr[CameraSpec, ImmutExternalOrigin]) -> Ptr[Camera, MutExternalOrigin]
-    var get_camera_permission_state: fn(Ptr[Camera, MutExternalOrigin]) -> Int32
+    var get_camera_permission_state: fn(Ptr[Camera, MutExternalOrigin]) -> CameraPermissionState
     var get_camera_id: fn(Ptr[Camera, MutExternalOrigin]) -> CameraID
     var get_camera_properties: fn(Ptr[Camera, MutExternalOrigin]) -> PropertiesID
     var get_camera_format: fn(Ptr[Camera, MutExternalOrigin], Ptr[CameraSpec, MutExternalOrigin]) -> Bool
@@ -159,6 +161,7 @@ struct Sdl3FunctionTable(Movable):
     var event_enabled: fn(UInt32) -> Bool
     var register_events: fn(Int32) -> UInt32
     var get_window_from_event: fn(Ptr[Event, ImmutExternalOrigin]) -> Ptr[Window, MutExternalOrigin]
+    var get_event_description: fn(Ptr[Event, ImmutExternalOrigin], Ptr[c_char, MutExternalOrigin], Int32) -> Int32
     var get_base_path: fn() -> CStringSlice[ImmutExternalOrigin]
     var get_pref_path: fn(Ptr[c_char, ImmutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Ptr[c_char, MutExternalOrigin]
     var get_user_folder: fn(Folder) -> CStringSlice[ImmutExternalOrigin]
@@ -252,6 +255,7 @@ struct Sdl3FunctionTable(Movable):
     var get_gpu_driver: fn(Int32) -> CStringSlice[ImmutExternalOrigin]
     var get_gpu_device_driver: fn(Ptr[GPUDevice, MutExternalOrigin]) -> CStringSlice[ImmutExternalOrigin]
     var get_gpu_shader_formats: fn(Ptr[GPUDevice, MutExternalOrigin]) -> GPUShaderFormat
+    var get_gpu_device_properties: fn(Ptr[GPUDevice, MutExternalOrigin]) -> PropertiesID
     var create_gpu_compute_pipeline: fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUComputePipelineCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUComputePipeline, MutExternalOrigin]
     var create_gpu_graphics_pipeline: fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUGraphicsPipelineCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUGraphicsPipeline, MutExternalOrigin]
     var create_gpu_sampler: fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUSamplerCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUSampler, MutExternalOrigin]
@@ -335,6 +339,8 @@ struct Sdl3FunctionTable(Movable):
     var gpu_texture_supports_format: fn(Ptr[GPUDevice, MutExternalOrigin], GPUTextureFormat, GPUTextureType, GPUTextureUsageFlags) -> Bool
     var gpu_texture_supports_sample_count: fn(Ptr[GPUDevice, MutExternalOrigin], GPUTextureFormat, GPUSampleCount) -> Bool
     var calculate_gpu_texture_format_size: fn(GPUTextureFormat, UInt32, UInt32, UInt32) -> UInt32
+    var get_pixel_format_from_gpu_texture_format: fn(GPUTextureFormat) -> PixelFormat
+    var get_gpu_texture_format_from_pixel_format: fn(PixelFormat) -> GPUTextureFormat
     var guid_to_string: fn(GUID, Ptr[c_char, MutExternalOrigin], Int32) -> NoneType
     var string_to_guid: fn(Ptr[c_char, ImmutExternalOrigin]) -> GUID
     var get_haptics: fn(Ptr[Int32, MutExternalOrigin]) -> Ptr[HapticID, MutExternalOrigin]
@@ -353,12 +359,12 @@ struct Sdl3FunctionTable(Movable):
     var get_haptic_features: fn(Ptr[Haptic, MutExternalOrigin]) -> UInt32
     var get_num_haptic_axes: fn(Ptr[Haptic, MutExternalOrigin]) -> Int32
     var haptic_effect_supported: fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool
-    var create_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> Int32
-    var update_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Int32, Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool
-    var run_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Int32, UInt32) -> Bool
-    var stop_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool
-    var destroy_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Int32) -> NoneType
-    var get_haptic_effect_status: fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool
+    var create_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> HapticEffectID
+    var update_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID, Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool
+    var run_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID, UInt32) -> Bool
+    var stop_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> Bool
+    var destroy_haptic_effect: fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> NoneType
+    var get_haptic_effect_status: fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> Bool
     var set_haptic_gain: fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool
     var set_haptic_autocenter: fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool
     var pause_haptic: fn(Ptr[Haptic, MutExternalOrigin]) -> Bool
@@ -543,11 +549,13 @@ struct Sdl3FunctionTable(Movable):
     var get_relative_mouse_state: fn(Ptr[Float32, MutExternalOrigin], Ptr[Float32, MutExternalOrigin]) -> MouseButtonFlags
     var warp_mouse_in_window: fn(Ptr[Window, MutExternalOrigin], Float32, Float32) -> NoneType
     var warp_mouse_global: fn(Float32, Float32) -> Bool
+    var set_relative_mouse_transform: fn(MouseMotionTransformCallback, Ptr[NoneType, MutExternalOrigin]) -> Bool
     var set_window_relative_mouse_mode: fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool
     var get_window_relative_mouse_mode: fn(Ptr[Window, MutExternalOrigin]) -> Bool
     var capture_mouse: fn(Bool) -> Bool
     var create_cursor: fn(Ptr[UInt8, ImmutExternalOrigin], Ptr[UInt8, ImmutExternalOrigin], Int32, Int32, Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]
     var create_color_cursor: fn(Ptr[Surface, MutExternalOrigin], Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]
+    var create_animated_cursor: fn(Ptr[CursorFrameInfo, MutExternalOrigin], Int32, Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]
     var create_system_cursor: fn(SystemCursor) -> Ptr[Cursor, MutExternalOrigin]
     var set_cursor: fn(Ptr[Cursor, MutExternalOrigin]) -> Bool
     var get_cursor: fn() -> Ptr[Cursor, MutExternalOrigin]
@@ -556,6 +564,7 @@ struct Sdl3FunctionTable(Movable):
     var show_cursor: fn() -> Bool
     var hide_cursor: fn() -> Bool
     var cursor_visible: fn() -> Bool
+    var get_pen_device_type: fn(PenID) -> PenDeviceType
     var get_pixel_format_name: fn(PixelFormat) -> CStringSlice[ImmutExternalOrigin]
     var get_masks_for_pixel_format: fn(PixelFormat, Ptr[Int32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin]) -> Bool
     var get_pixel_format_for_masks: fn(Int32, UInt32, UInt32, UInt32, UInt32) -> PixelFormat
@@ -604,6 +613,8 @@ struct Sdl3FunctionTable(Movable):
     var create_window_and_renderer: fn(Ptr[c_char, ImmutExternalOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutExternalOrigin], MutExternalOrigin], Ptr[Ptr[Renderer, MutExternalOrigin], MutExternalOrigin]) -> Bool
     var create_renderer: fn(Ptr[Window, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]
     var create_renderer_with_properties: fn(PropertiesID) -> Ptr[Renderer, MutExternalOrigin]
+    var create_gpu_renderer: fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[Window, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]
+    var get_gpu_renderer_device: fn(Ptr[Renderer, MutExternalOrigin]) -> Ptr[GPUDevice, MutExternalOrigin]
     var create_software_renderer: fn(Ptr[Surface, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]
     var get_renderer: fn(Ptr[Window, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]
     var get_render_window: fn(Ptr[Renderer, MutExternalOrigin]) -> Ptr[Window, MutExternalOrigin]
@@ -617,6 +628,8 @@ struct Sdl3FunctionTable(Movable):
     var get_texture_properties: fn(Ptr[Texture, MutExternalOrigin]) -> PropertiesID
     var get_renderer_from_texture: fn(Ptr[Texture, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]
     var get_texture_size: fn(Ptr[Texture, MutExternalOrigin], Ptr[Float32, MutExternalOrigin], Ptr[Float32, MutExternalOrigin]) -> Bool
+    var set_texture_palette: fn(Ptr[Texture, MutExternalOrigin], Ptr[Palette, MutExternalOrigin]) -> Bool
+    var get_texture_palette: fn(Ptr[Texture, MutExternalOrigin]) -> Ptr[Palette, MutExternalOrigin]
     var set_texture_color_mod: fn(Ptr[Texture, MutExternalOrigin], UInt8, UInt8, UInt8) -> Bool
     var set_texture_color_mod_float: fn(Ptr[Texture, MutExternalOrigin], Float32, Float32, Float32) -> Bool
     var get_texture_color_mod: fn(Ptr[Texture, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin]) -> Bool
@@ -674,8 +687,11 @@ struct Sdl3FunctionTable(Movable):
     var render_texture_affine: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin]) -> Bool
     var render_texture_tiled: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Ptr[FRect, ImmutExternalOrigin]) -> Bool
     var render_texture9_grid: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Float32, Float32, Float32, Float32, Ptr[FRect, ImmutExternalOrigin]) -> Bool
+    var render_texture9_grid_tiled: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Float32, Float32, Float32, Float32, Ptr[FRect, ImmutExternalOrigin], Float32) -> Bool
     var render_geometry: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[Vertex, ImmutExternalOrigin], Int32, Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool
     var render_geometry_raw: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[Float32, ImmutExternalOrigin], Int32, Ptr[FColor, ImmutExternalOrigin], Int32, Ptr[Float32, ImmutExternalOrigin], Int32, Int32, Ptr[NoneType, ImmutExternalOrigin], Int32, Int32) -> Bool
+    var set_render_texture_address_mode: fn(Ptr[Renderer, MutExternalOrigin], TextureAddressMode, TextureAddressMode) -> Bool
+    var get_render_texture_address_mode: fn(Ptr[Renderer, MutExternalOrigin], Ptr[TextureAddressMode, MutExternalOrigin], Ptr[TextureAddressMode, MutExternalOrigin]) -> Bool
     var render_read_pixels: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Rect, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]
     var render_present: fn(Ptr[Renderer, MutExternalOrigin]) -> Bool
     var destroy_texture: fn(Ptr[Texture, MutExternalOrigin]) -> NoneType
@@ -688,6 +704,12 @@ struct Sdl3FunctionTable(Movable):
     var get_render_v_sync: fn(Ptr[Renderer, MutExternalOrigin], Ptr[Int32, MutExternalOrigin]) -> Bool
     var render_debug_text: fn(Ptr[Renderer, MutExternalOrigin], Float32, Float32, Ptr[c_char, ImmutExternalOrigin]) -> Bool
     var render_debug_text_format: fn(Ptr[Renderer, MutExternalOrigin], Float32, Float32, Ptr[c_char, ImmutExternalOrigin]) -> Bool
+    var set_default_texture_scale_mode: fn(Ptr[Renderer, MutExternalOrigin], ScaleMode) -> Bool
+    var get_default_texture_scale_mode: fn(Ptr[Renderer, MutExternalOrigin], Ptr[ScaleMode, MutExternalOrigin]) -> Bool
+    var create_gpu_render_state: fn(Ptr[Renderer, MutExternalOrigin], Ptr[GPURenderStateCreateInfo, ImmutExternalOrigin]) -> Ptr[GPURenderState, MutExternalOrigin]
+    var set_gpu_render_state_fragment_uniforms: fn(Ptr[GPURenderState, MutExternalOrigin], UInt32, Ptr[NoneType, ImmutExternalOrigin], UInt32) -> Bool
+    var set_gpu_render_state: fn(Ptr[Renderer, MutExternalOrigin], Ptr[GPURenderState, MutExternalOrigin]) -> Bool
+    var destroy_gpu_render_state: fn(Ptr[GPURenderState, MutExternalOrigin]) -> NoneType
     var get_sensors: fn(Ptr[Int32, MutExternalOrigin]) -> Ptr[SensorID, MutExternalOrigin]
     var get_sensor_name_for_id: fn(SensorID) -> CStringSlice[ImmutExternalOrigin]
     var get_sensor_type_for_id: fn(SensorID) -> SensorType
@@ -734,10 +756,16 @@ struct Sdl3FunctionTable(Movable):
     var remove_surface_alternate_images: fn(Ptr[Surface, MutExternalOrigin]) -> NoneType
     var lock_surface: fn(Ptr[Surface, MutExternalOrigin]) -> Bool
     var unlock_surface: fn(Ptr[Surface, MutExternalOrigin]) -> NoneType
+    var load_surface_io: fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]
+    var load_surface: fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]
     var load_bmp_io: fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]
     var load_bmp: fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]
     var save_bmp_io: fn(Ptr[Surface, MutExternalOrigin], Ptr[IOStream, MutExternalOrigin], Bool) -> Bool
     var save_bmp: fn(Ptr[Surface, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Bool
+    var load_png_io: fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]
+    var load_png: fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]
+    var save_png_io: fn(Ptr[Surface, MutExternalOrigin], Ptr[IOStream, MutExternalOrigin], Bool) -> Bool
+    var save_png: fn(Ptr[Surface, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Bool
     var set_surface_rle: fn(Ptr[Surface, MutExternalOrigin], Bool) -> Bool
     var surface_has_rle: fn(Ptr[Surface, MutExternalOrigin]) -> Bool
     var set_surface_color_key: fn(Ptr[Surface, MutExternalOrigin], Bool, UInt32) -> Bool
@@ -752,6 +780,7 @@ struct Sdl3FunctionTable(Movable):
     var set_surface_clip_rect: fn(Ptr[Surface, MutExternalOrigin], Ptr[Rect, ImmutExternalOrigin]) -> Bool
     var get_surface_clip_rect: fn(Ptr[Surface, MutExternalOrigin], Ptr[Rect, MutExternalOrigin]) -> Bool
     var flip_surface: fn(Ptr[Surface, MutExternalOrigin], FlipMode) -> Bool
+    var rotate_surface: fn(Ptr[Surface, MutExternalOrigin], Float32) -> Ptr[Surface, MutExternalOrigin]
     var duplicate_surface: fn(Ptr[Surface, MutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]
     var scale_surface: fn(Ptr[Surface, MutExternalOrigin], Int32, Int32, ScaleMode) -> Ptr[Surface, MutExternalOrigin]
     var convert_surface: fn(Ptr[Surface, MutExternalOrigin], PixelFormat) -> Ptr[Surface, MutExternalOrigin]
@@ -856,6 +885,7 @@ struct Sdl3FunctionTable(Movable):
     var set_window_bordered: fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool
     var set_window_resizable: fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool
     var set_window_always_on_top: fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool
+    var set_window_fill_document: fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool
     var show_window: fn(Ptr[Window, MutExternalOrigin]) -> Bool
     var hide_window: fn(Ptr[Window, MutExternalOrigin]) -> Bool
     var raise_window: fn(Ptr[Window, MutExternalOrigin]) -> Bool
@@ -887,6 +917,10 @@ struct Sdl3FunctionTable(Movable):
     var set_window_hit_test: fn(Ptr[Window, MutExternalOrigin], HitTest, Ptr[NoneType, MutExternalOrigin]) -> Bool
     var set_window_shape: fn(Ptr[Window, MutExternalOrigin], Ptr[Surface, MutExternalOrigin]) -> Bool
     var flash_window: fn(Ptr[Window, MutExternalOrigin], FlashOperation) -> Bool
+    var set_window_progress_state: fn(Ptr[Window, MutExternalOrigin], ProgressState) -> Bool
+    var get_window_progress_state: fn(Ptr[Window, MutExternalOrigin]) -> ProgressState
+    var set_window_progress_value: fn(Ptr[Window, MutExternalOrigin], Float32) -> Bool
+    var get_window_progress_value: fn(Ptr[Window, MutExternalOrigin]) -> Float32
     var destroy_window: fn(Ptr[Window, MutExternalOrigin]) -> NoneType
     var screen_saver_enabled: fn() -> Bool
     var enable_screen_saver: fn() -> Bool
@@ -956,6 +990,8 @@ struct Sdl3FunctionTable(Movable):
         self.set_audio_stream_input_channel_map = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool]("SDL_SetAudioStreamInputChannelMap")
         self.set_audio_stream_output_channel_map = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool]("SDL_SetAudioStreamOutputChannelMap")
         self.put_audio_stream_data = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32) -> Bool]("SDL_PutAudioStreamData")
+        self.put_audio_stream_data_no_copy = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32, AudioStreamDataCompleteCallback, Ptr[NoneType, MutExternalOrigin]) -> Bool]("SDL_PutAudioStreamDataNoCopy")
+        self.put_audio_stream_planar_data = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[Ptr[NoneType, ImmutExternalOrigin], ImmutExternalOrigin], Int32, Int32) -> Bool]("SDL_PutAudioStreamPlanarData")
         self.get_audio_stream_data = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin], Ptr[NoneType, MutExternalOrigin], Int32) -> Int32]("SDL_GetAudioStreamData")
         self.get_audio_stream_available = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin]) -> Int32]("SDL_GetAudioStreamAvailable")
         self.get_audio_stream_queued = self.dlhandle.get_function[fn(Ptr[AudioStream, MutExternalOrigin]) -> Int32]("SDL_GetAudioStreamQueued")
@@ -986,7 +1022,7 @@ struct Sdl3FunctionTable(Movable):
         self.get_camera_name = self.dlhandle.get_function[fn(CameraID) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetCameraName")
         self.get_camera_position = self.dlhandle.get_function[fn(CameraID) -> CameraPosition]("SDL_GetCameraPosition")
         self.open_camera = self.dlhandle.get_function[fn(CameraID, Ptr[CameraSpec, ImmutExternalOrigin]) -> Ptr[Camera, MutExternalOrigin]]("SDL_OpenCamera")
-        self.get_camera_permission_state = self.dlhandle.get_function[fn(Ptr[Camera, MutExternalOrigin]) -> Int32]("SDL_GetCameraPermissionState")
+        self.get_camera_permission_state = self.dlhandle.get_function[fn(Ptr[Camera, MutExternalOrigin]) -> CameraPermissionState]("SDL_GetCameraPermissionState")
         self.get_camera_id = self.dlhandle.get_function[fn(Ptr[Camera, MutExternalOrigin]) -> CameraID]("SDL_GetCameraID")
         self.get_camera_properties = self.dlhandle.get_function[fn(Ptr[Camera, MutExternalOrigin]) -> PropertiesID]("SDL_GetCameraProperties")
         self.get_camera_format = self.dlhandle.get_function[fn(Ptr[Camera, MutExternalOrigin], Ptr[CameraSpec, MutExternalOrigin]) -> Bool]("SDL_GetCameraFormat")
@@ -1028,6 +1064,7 @@ struct Sdl3FunctionTable(Movable):
         self.event_enabled = self.dlhandle.get_function[fn(UInt32) -> Bool]("SDL_EventEnabled")
         self.register_events = self.dlhandle.get_function[fn(Int32) -> UInt32]("SDL_RegisterEvents")
         self.get_window_from_event = self.dlhandle.get_function[fn(Ptr[Event, ImmutExternalOrigin]) -> Ptr[Window, MutExternalOrigin]]("SDL_GetWindowFromEvent")
+        self.get_event_description = self.dlhandle.get_function[fn(Ptr[Event, ImmutExternalOrigin], Ptr[c_char, MutExternalOrigin], Int32) -> Int32]("SDL_GetEventDescription")
         self.get_base_path = self.dlhandle.get_function[fn() -> CStringSlice[ImmutExternalOrigin]]("SDL_GetBasePath")
         self.get_pref_path = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Ptr[c_char, MutExternalOrigin]]("SDL_GetPrefPath")
         self.get_user_folder = self.dlhandle.get_function[fn(Folder) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetUserFolder")
@@ -1121,6 +1158,7 @@ struct Sdl3FunctionTable(Movable):
         self.get_gpu_driver = self.dlhandle.get_function[fn(Int32) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetGPUDriver")
         self.get_gpu_device_driver = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin]) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetGPUDeviceDriver")
         self.get_gpu_shader_formats = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin]) -> GPUShaderFormat]("SDL_GetGPUShaderFormats")
+        self.get_gpu_device_properties = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin]) -> PropertiesID]("SDL_GetGPUDeviceProperties")
         self.create_gpu_compute_pipeline = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUComputePipelineCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUComputePipeline, MutExternalOrigin]]("SDL_CreateGPUComputePipeline")
         self.create_gpu_graphics_pipeline = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUGraphicsPipelineCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUGraphicsPipeline, MutExternalOrigin]]("SDL_CreateGPUGraphicsPipeline")
         self.create_gpu_sampler = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[GPUSamplerCreateInfo, ImmutExternalOrigin]) -> Ptr[GPUSampler, MutExternalOrigin]]("SDL_CreateGPUSampler")
@@ -1204,6 +1242,8 @@ struct Sdl3FunctionTable(Movable):
         self.gpu_texture_supports_format = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], GPUTextureFormat, GPUTextureType, GPUTextureUsageFlags) -> Bool]("SDL_GPUTextureSupportsFormat")
         self.gpu_texture_supports_sample_count = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], GPUTextureFormat, GPUSampleCount) -> Bool]("SDL_GPUTextureSupportsSampleCount")
         self.calculate_gpu_texture_format_size = self.dlhandle.get_function[fn(GPUTextureFormat, UInt32, UInt32, UInt32) -> UInt32]("SDL_CalculateGPUTextureFormatSize")
+        self.get_pixel_format_from_gpu_texture_format = self.dlhandle.get_function[fn(GPUTextureFormat) -> PixelFormat]("SDL_GetPixelFormatFromGPUTextureFormat")
+        self.get_gpu_texture_format_from_pixel_format = self.dlhandle.get_function[fn(PixelFormat) -> GPUTextureFormat]("SDL_GetGPUTextureFormatFromPixelFormat")
         self.guid_to_string = self.dlhandle.get_function[fn(GUID, Ptr[c_char, MutExternalOrigin], Int32) -> NoneType]("SDL_GUIDToString")
         self.string_to_guid = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin]) -> GUID]("SDL_StringToGUID")
         self.get_haptics = self.dlhandle.get_function[fn(Ptr[Int32, MutExternalOrigin]) -> Ptr[HapticID, MutExternalOrigin]]("SDL_GetHaptics")
@@ -1222,12 +1262,12 @@ struct Sdl3FunctionTable(Movable):
         self.get_haptic_features = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin]) -> UInt32]("SDL_GetHapticFeatures")
         self.get_num_haptic_axes = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin]) -> Int32]("SDL_GetNumHapticAxes")
         self.haptic_effect_supported = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool]("SDL_HapticEffectSupported")
-        self.create_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> Int32]("SDL_CreateHapticEffect")
-        self.update_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32, Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool]("SDL_UpdateHapticEffect")
-        self.run_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32, UInt32) -> Bool]("SDL_RunHapticEffect")
-        self.stop_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool]("SDL_StopHapticEffect")
-        self.destroy_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32) -> NoneType]("SDL_DestroyHapticEffect")
-        self.get_haptic_effect_status = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool]("SDL_GetHapticEffectStatus")
+        self.create_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Ptr[HapticEffect, ImmutExternalOrigin]) -> HapticEffectID]("SDL_CreateHapticEffect")
+        self.update_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID, Ptr[HapticEffect, ImmutExternalOrigin]) -> Bool]("SDL_UpdateHapticEffect")
+        self.run_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID, UInt32) -> Bool]("SDL_RunHapticEffect")
+        self.stop_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> Bool]("SDL_StopHapticEffect")
+        self.destroy_haptic_effect = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> NoneType]("SDL_DestroyHapticEffect")
+        self.get_haptic_effect_status = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], HapticEffectID) -> Bool]("SDL_GetHapticEffectStatus")
         self.set_haptic_gain = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool]("SDL_SetHapticGain")
         self.set_haptic_autocenter = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin], Int32) -> Bool]("SDL_SetHapticAutocenter")
         self.pause_haptic = self.dlhandle.get_function[fn(Ptr[Haptic, MutExternalOrigin]) -> Bool]("SDL_PauseHaptic")
@@ -1412,11 +1452,13 @@ struct Sdl3FunctionTable(Movable):
         self.get_relative_mouse_state = self.dlhandle.get_function[fn(Ptr[Float32, MutExternalOrigin], Ptr[Float32, MutExternalOrigin]) -> MouseButtonFlags]("SDL_GetRelativeMouseState")
         self.warp_mouse_in_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Float32, Float32) -> NoneType]("SDL_WarpMouseInWindow")
         self.warp_mouse_global = self.dlhandle.get_function[fn(Float32, Float32) -> Bool]("SDL_WarpMouseGlobal")
+        self.set_relative_mouse_transform = self.dlhandle.get_function[fn(MouseMotionTransformCallback, Ptr[NoneType, MutExternalOrigin]) -> Bool]("SDL_SetRelativeMouseTransform")
         self.set_window_relative_mouse_mode = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool]("SDL_SetWindowRelativeMouseMode")
         self.get_window_relative_mouse_mode = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Bool]("SDL_GetWindowRelativeMouseMode")
         self.capture_mouse = self.dlhandle.get_function[fn(Bool) -> Bool]("SDL_CaptureMouse")
         self.create_cursor = self.dlhandle.get_function[fn(Ptr[UInt8, ImmutExternalOrigin], Ptr[UInt8, ImmutExternalOrigin], Int32, Int32, Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]]("SDL_CreateCursor")
         self.create_color_cursor = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]]("SDL_CreateColorCursor")
+        self.create_animated_cursor = self.dlhandle.get_function[fn(Ptr[CursorFrameInfo, MutExternalOrigin], Int32, Int32, Int32) -> Ptr[Cursor, MutExternalOrigin]]("SDL_CreateAnimatedCursor")
         self.create_system_cursor = self.dlhandle.get_function[fn(SystemCursor) -> Ptr[Cursor, MutExternalOrigin]]("SDL_CreateSystemCursor")
         self.set_cursor = self.dlhandle.get_function[fn(Ptr[Cursor, MutExternalOrigin]) -> Bool]("SDL_SetCursor")
         self.get_cursor = self.dlhandle.get_function[fn() -> Ptr[Cursor, MutExternalOrigin]]("SDL_GetCursor")
@@ -1425,6 +1467,7 @@ struct Sdl3FunctionTable(Movable):
         self.show_cursor = self.dlhandle.get_function[fn() -> Bool]("SDL_ShowCursor")
         self.hide_cursor = self.dlhandle.get_function[fn() -> Bool]("SDL_HideCursor")
         self.cursor_visible = self.dlhandle.get_function[fn() -> Bool]("SDL_CursorVisible")
+        self.get_pen_device_type = self.dlhandle.get_function[fn(PenID) -> PenDeviceType]("SDL_GetPenDeviceType")
         self.get_pixel_format_name = self.dlhandle.get_function[fn(PixelFormat) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetPixelFormatName")
         self.get_masks_for_pixel_format = self.dlhandle.get_function[fn(PixelFormat, Ptr[Int32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin], Ptr[UInt32, MutExternalOrigin]) -> Bool]("SDL_GetMasksForPixelFormat")
         self.get_pixel_format_for_masks = self.dlhandle.get_function[fn(Int32, UInt32, UInt32, UInt32, UInt32) -> PixelFormat]("SDL_GetPixelFormatForMasks")
@@ -1473,6 +1516,8 @@ struct Sdl3FunctionTable(Movable):
         self.create_window_and_renderer = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin], Int32, Int32, WindowFlags, Ptr[Ptr[Window, MutExternalOrigin], MutExternalOrigin], Ptr[Ptr[Renderer, MutExternalOrigin], MutExternalOrigin]) -> Bool]("SDL_CreateWindowAndRenderer")
         self.create_renderer = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]]("SDL_CreateRenderer")
         self.create_renderer_with_properties = self.dlhandle.get_function[fn(PropertiesID) -> Ptr[Renderer, MutExternalOrigin]]("SDL_CreateRendererWithProperties")
+        self.create_gpu_renderer = self.dlhandle.get_function[fn(Ptr[GPUDevice, MutExternalOrigin], Ptr[Window, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]]("SDL_CreateGPURenderer")
+        self.get_gpu_renderer_device = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin]) -> Ptr[GPUDevice, MutExternalOrigin]]("SDL_GetGPURendererDevice")
         self.create_software_renderer = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]]("SDL_CreateSoftwareRenderer")
         self.get_renderer = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]]("SDL_GetRenderer")
         self.get_render_window = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin]) -> Ptr[Window, MutExternalOrigin]]("SDL_GetRenderWindow")
@@ -1486,6 +1531,8 @@ struct Sdl3FunctionTable(Movable):
         self.get_texture_properties = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin]) -> PropertiesID]("SDL_GetTextureProperties")
         self.get_renderer_from_texture = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin]) -> Ptr[Renderer, MutExternalOrigin]]("SDL_GetRendererFromTexture")
         self.get_texture_size = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin], Ptr[Float32, MutExternalOrigin], Ptr[Float32, MutExternalOrigin]) -> Bool]("SDL_GetTextureSize")
+        self.set_texture_palette = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin], Ptr[Palette, MutExternalOrigin]) -> Bool]("SDL_SetTexturePalette")
+        self.get_texture_palette = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin]) -> Ptr[Palette, MutExternalOrigin]]("SDL_GetTexturePalette")
         self.set_texture_color_mod = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin], UInt8, UInt8, UInt8) -> Bool]("SDL_SetTextureColorMod")
         self.set_texture_color_mod_float = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin], Float32, Float32, Float32) -> Bool]("SDL_SetTextureColorModFloat")
         self.get_texture_color_mod = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin], Ptr[UInt8, MutExternalOrigin]) -> Bool]("SDL_GetTextureColorMod")
@@ -1543,8 +1590,11 @@ struct Sdl3FunctionTable(Movable):
         self.render_texture_affine = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin], Ptr[FPoint, ImmutExternalOrigin]) -> Bool]("SDL_RenderTextureAffine")
         self.render_texture_tiled = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Ptr[FRect, ImmutExternalOrigin]) -> Bool]("SDL_RenderTextureTiled")
         self.render_texture9_grid = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Float32, Float32, Float32, Float32, Ptr[FRect, ImmutExternalOrigin]) -> Bool]("SDL_RenderTexture9Grid")
+        self.render_texture9_grid_tiled = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[FRect, ImmutExternalOrigin], Float32, Float32, Float32, Float32, Float32, Ptr[FRect, ImmutExternalOrigin], Float32) -> Bool]("SDL_RenderTexture9GridTiled")
         self.render_geometry = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[Vertex, ImmutExternalOrigin], Int32, Ptr[Int32, ImmutExternalOrigin], Int32) -> Bool]("SDL_RenderGeometry")
         self.render_geometry_raw = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Texture, MutExternalOrigin], Ptr[Float32, ImmutExternalOrigin], Int32, Ptr[FColor, ImmutExternalOrigin], Int32, Ptr[Float32, ImmutExternalOrigin], Int32, Int32, Ptr[NoneType, ImmutExternalOrigin], Int32, Int32) -> Bool]("SDL_RenderGeometryRaw")
+        self.set_render_texture_address_mode = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], TextureAddressMode, TextureAddressMode) -> Bool]("SDL_SetRenderTextureAddressMode")
+        self.get_render_texture_address_mode = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[TextureAddressMode, MutExternalOrigin], Ptr[TextureAddressMode, MutExternalOrigin]) -> Bool]("SDL_GetRenderTextureAddressMode")
         self.render_read_pixels = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Rect, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("SDL_RenderReadPixels")
         self.render_present = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin]) -> Bool]("SDL_RenderPresent")
         self.destroy_texture = self.dlhandle.get_function[fn(Ptr[Texture, MutExternalOrigin]) -> NoneType]("SDL_DestroyTexture")
@@ -1557,6 +1607,12 @@ struct Sdl3FunctionTable(Movable):
         self.get_render_v_sync = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[Int32, MutExternalOrigin]) -> Bool]("SDL_GetRenderVSync")
         self.render_debug_text = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Float32, Float32, Ptr[c_char, ImmutExternalOrigin]) -> Bool]("SDL_RenderDebugText")
         self.render_debug_text_format = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Float32, Float32, Ptr[c_char, ImmutExternalOrigin]) -> Bool]("SDL_RenderDebugTextFormat")
+        self.set_default_texture_scale_mode = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], ScaleMode) -> Bool]("SDL_SetDefaultTextureScaleMode")
+        self.get_default_texture_scale_mode = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[ScaleMode, MutExternalOrigin]) -> Bool]("SDL_GetDefaultTextureScaleMode")
+        self.create_gpu_render_state = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[GPURenderStateCreateInfo, ImmutExternalOrigin]) -> Ptr[GPURenderState, MutExternalOrigin]]("SDL_CreateGPURenderState")
+        self.set_gpu_render_state_fragment_uniforms = self.dlhandle.get_function[fn(Ptr[GPURenderState, MutExternalOrigin], UInt32, Ptr[NoneType, ImmutExternalOrigin], UInt32) -> Bool]("SDL_SetGPURenderStateFragmentUniforms")
+        self.set_gpu_render_state = self.dlhandle.get_function[fn(Ptr[Renderer, MutExternalOrigin], Ptr[GPURenderState, MutExternalOrigin]) -> Bool]("SDL_SetGPURenderState")
+        self.destroy_gpu_render_state = self.dlhandle.get_function[fn(Ptr[GPURenderState, MutExternalOrigin]) -> NoneType]("SDL_DestroyGPURenderState")
         self.get_sensors = self.dlhandle.get_function[fn(Ptr[Int32, MutExternalOrigin]) -> Ptr[SensorID, MutExternalOrigin]]("SDL_GetSensors")
         self.get_sensor_name_for_id = self.dlhandle.get_function[fn(SensorID) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetSensorNameForID")
         self.get_sensor_type_for_id = self.dlhandle.get_function[fn(SensorID) -> SensorType]("SDL_GetSensorTypeForID")
@@ -1603,10 +1659,16 @@ struct Sdl3FunctionTable(Movable):
         self.remove_surface_alternate_images = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> NoneType]("SDL_RemoveSurfaceAlternateImages")
         self.lock_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> Bool]("SDL_LockSurface")
         self.unlock_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> NoneType]("SDL_UnlockSurface")
+        self.load_surface_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadSurface_IO")
+        self.load_surface = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadSurface")
         self.load_bmp_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadBMP_IO")
         self.load_bmp = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadBMP")
         self.save_bmp_io = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[IOStream, MutExternalOrigin], Bool) -> Bool]("SDL_SaveBMP_IO")
         self.save_bmp = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Bool]("SDL_SaveBMP")
+        self.load_png_io = self.dlhandle.get_function[fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadPNG_IO")
+        self.load_png = self.dlhandle.get_function[fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("SDL_LoadPNG")
+        self.save_png_io = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[IOStream, MutExternalOrigin], Bool) -> Bool]("SDL_SavePNG_IO")
+        self.save_png = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[c_char, ImmutExternalOrigin]) -> Bool]("SDL_SavePNG")
         self.set_surface_rle = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Bool) -> Bool]("SDL_SetSurfaceRLE")
         self.surface_has_rle = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> Bool]("SDL_SurfaceHasRLE")
         self.set_surface_color_key = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Bool, UInt32) -> Bool]("SDL_SetSurfaceColorKey")
@@ -1621,6 +1683,7 @@ struct Sdl3FunctionTable(Movable):
         self.set_surface_clip_rect = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[Rect, ImmutExternalOrigin]) -> Bool]("SDL_SetSurfaceClipRect")
         self.get_surface_clip_rect = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Ptr[Rect, MutExternalOrigin]) -> Bool]("SDL_GetSurfaceClipRect")
         self.flip_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], FlipMode) -> Bool]("SDL_FlipSurface")
+        self.rotate_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Float32) -> Ptr[Surface, MutExternalOrigin]]("SDL_RotateSurface")
         self.duplicate_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("SDL_DuplicateSurface")
         self.scale_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], Int32, Int32, ScaleMode) -> Ptr[Surface, MutExternalOrigin]]("SDL_ScaleSurface")
         self.convert_surface = self.dlhandle.get_function[fn(Ptr[Surface, MutExternalOrigin], PixelFormat) -> Ptr[Surface, MutExternalOrigin]]("SDL_ConvertSurface")
@@ -1725,6 +1788,7 @@ struct Sdl3FunctionTable(Movable):
         self.set_window_bordered = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool]("SDL_SetWindowBordered")
         self.set_window_resizable = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool]("SDL_SetWindowResizable")
         self.set_window_always_on_top = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool]("SDL_SetWindowAlwaysOnTop")
+        self.set_window_fill_document = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Bool) -> Bool]("SDL_SetWindowFillDocument")
         self.show_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Bool]("SDL_ShowWindow")
         self.hide_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Bool]("SDL_HideWindow")
         self.raise_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Bool]("SDL_RaiseWindow")
@@ -1756,6 +1820,10 @@ struct Sdl3FunctionTable(Movable):
         self.set_window_hit_test = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], HitTest, Ptr[NoneType, MutExternalOrigin]) -> Bool]("SDL_SetWindowHitTest")
         self.set_window_shape = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Ptr[Surface, MutExternalOrigin]) -> Bool]("SDL_SetWindowShape")
         self.flash_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], FlashOperation) -> Bool]("SDL_FlashWindow")
+        self.set_window_progress_state = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], ProgressState) -> Bool]("SDL_SetWindowProgressState")
+        self.get_window_progress_state = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> ProgressState]("SDL_GetWindowProgressState")
+        self.set_window_progress_value = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin], Float32) -> Bool]("SDL_SetWindowProgressValue")
+        self.get_window_progress_value = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> Float32]("SDL_GetWindowProgressValue")
         self.destroy_window = self.dlhandle.get_function[fn(Ptr[Window, MutExternalOrigin]) -> NoneType]("SDL_DestroyWindow")
         self.screen_saver_enabled = self.dlhandle.get_function[fn() -> Bool]("SDL_ScreenSaverEnabled")
         self.enable_screen_saver = self.dlhandle.get_function[fn() -> Bool]("SDL_EnableScreenSaver")

@@ -449,6 +449,19 @@ struct TouchFingerEvent(Copyable):
 
 
 @fieldwise_init
+struct PinchFingerEvent(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_PinchFingerEvent
+    """
+    var type: EventType
+    var reserved: UInt32
+    var timestamp: UInt64
+    var scale: Float32
+    var windowID: WindowID
+
+
+@fieldwise_init
 struct PenProximityEvent(Copyable):
     """See official documentation for details.
     
@@ -928,7 +941,7 @@ struct GPUMultisampleState(Copyable):
     var sample_count: GPUSampleCount
     var sample_mask: UInt32
     var enable_mask: Bool
-    var padding1: UInt8
+    var enable_alpha_to_coverage: Bool
     var padding2: UInt8
     var padding3: UInt8
 
@@ -1051,8 +1064,8 @@ struct GPUDepthStencilTargetInfo(Copyable):
     var stencil_store_op: GPUStoreOp
     var cycle: Bool
     var clear_stencil: UInt8
-    var padding1: UInt8
-    var padding2: UInt8
+    var mip_level: UInt8
+    var layer: UInt8
 
 
 @fieldwise_init
@@ -1122,6 +1135,21 @@ struct GPUStorageTextureReadWriteBinding(Copyable):
 
 
 @fieldwise_init
+struct GPUVulkanOptions(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GPUVulkanOptions
+    """
+    var vulkan_api_version: UInt32
+    var feature_list: Ptr[NoneType, MutExternalOrigin]
+    var vulkan_10_physical_device_features: Ptr[NoneType, MutExternalOrigin]
+    var device_extension_count: UInt32
+    var device_extension_names: Ptr[CStringSlice[ImmutExternalOrigin], MutExternalOrigin]
+    var instance_extension_count: UInt32
+    var instance_extension_names: Ptr[CStringSlice[ImmutExternalOrigin], MutExternalOrigin]
+
+
+@fieldwise_init
 struct GUID(Copyable):
     """See official documentation for details.
     
@@ -1136,7 +1164,7 @@ struct HapticDirection(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticDirection
     """
-    var type: UInt8
+    var type: HapticDirectionType
     var dir: InlineArray[Int32, Int(3)]
 
 
@@ -1146,7 +1174,7 @@ struct HapticConstant(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticConstant
     """
-    var type: UInt16
+    var type: HapticEffectType
     var direction: HapticDirection
     var length: UInt32
     var delay: UInt16
@@ -1165,7 +1193,7 @@ struct HapticPeriodic(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticPeriodic
     """
-    var type: UInt16
+    var type: HapticEffectType
     var direction: HapticDirection
     var length: UInt32
     var delay: UInt16
@@ -1187,7 +1215,7 @@ struct HapticCondition(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticCondition
     """
-    var type: UInt16
+    var type: HapticEffectType
     var direction: HapticDirection
     var length: UInt32
     var delay: UInt16
@@ -1207,7 +1235,7 @@ struct HapticRamp(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticRamp
     """
-    var type: UInt16
+    var type: HapticEffectType
     var direction: HapticDirection
     var length: UInt32
     var delay: UInt16
@@ -1227,7 +1255,7 @@ struct HapticLeftRight(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticLeftRight
     """
-    var type: UInt16
+    var type: HapticEffectType
     var length: UInt32
     var large_magnitude: UInt16
     var small_magnitude: UInt16
@@ -1239,7 +1267,7 @@ struct HapticCustom(Copyable):
     
     https://wiki.libsdl.org/SDL3/SDL_HapticCustom
     """
-    var type: UInt16
+    var type: HapticEffectType
     var direction: HapticDirection
     var length: UInt32
     var delay: UInt16
@@ -1321,6 +1349,16 @@ struct VirtualJoystickDesc(Copyable):
     var SendEffect: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32) -> Bool, ImmutExternalOrigin]
     var SetSensorsEnabled: Ptr[fn(Ptr[NoneType, MutExternalOrigin], Bool) -> Bool, ImmutExternalOrigin]
     var Cleanup: Ptr[fn(Ptr[NoneType, MutExternalOrigin]) -> NoneType, ImmutExternalOrigin]
+
+
+@fieldwise_init
+struct CursorFrameInfo(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_CursorFrameInfo
+    """
+    var surface: Ptr[Surface, MutExternalOrigin]
+    var duration: UInt32
 
 
 @fieldwise_init
@@ -1448,6 +1486,22 @@ struct Texture(Copyable):
     var w: Int32
     var h: Int32
     var refcount: Int32
+
+
+@fieldwise_init
+struct GPURenderStateCreateInfo(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GPURenderStateCreateInfo
+    """
+    var fragment_shader: Ptr[GPUShader, MutExternalOrigin]
+    var num_sampler_bindings: Int32
+    var sampler_bindings: Ptr[GPUTextureSamplerBinding, ImmutExternalOrigin]
+    var num_storage_textures: Int32
+    var storage_textures: Ptr[Ptr[GPUTexture, MutExternalOrigin], ImmutExternalOrigin]
+    var num_storage_buffers: Int32
+    var storage_buffers: Ptr[Ptr[GPUBuffer, MutExternalOrigin], ImmutExternalOrigin]
+    var props: PropertiesID
 
 
 @fieldwise_init
@@ -1585,3 +1639,24 @@ struct TTF_SubString(Copyable):
     var line_index: Int32
     var cluster_index: Int32
     var rect: Rect
+
+
+@fieldwise_init
+struct MIX_StereoGains(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_StereoGains
+    """
+    var left: Float32
+    var right: Float32
+
+
+@fieldwise_init
+struct MIX_Point3D(Copyable):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_Point3D
+    """
+    var x: Float32
+    var y: Float32
+    var z: Float32

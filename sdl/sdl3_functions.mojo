@@ -445,6 +445,48 @@ fn put_audio_stream_data(stream: Ptr[AudioStream], buf: Ptr[NoneType], len: Int3
         raise get_error()
 
 
+fn put_audio_stream_data_no_copy(
+    stream: Ptr[AudioStream],
+    buf: Ptr[NoneType],
+    len: Int32,
+    callback: AudioStreamDataCompleteCallback,
+    userdata: Ptr[NoneType],
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_PutAudioStreamDataNoCopy
+    """
+    var success = get_sdl3_function_table().put_audio_stream_data_no_copy(
+        Ptr(to=stream).bitcast[Ptr[AudioStream, MutExternalOrigin]]()[],
+        Ptr(to=buf).bitcast[Ptr[NoneType, ImmutExternalOrigin]]()[],
+        Ptr(to=len).bitcast[Int32]()[],
+        Ptr(to=callback).bitcast[AudioStreamDataCompleteCallback]()[],
+        Ptr(to=userdata).bitcast[Ptr[NoneType, MutExternalOrigin]]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn put_audio_stream_planar_data(
+    stream: Ptr[AudioStream],
+    channel_buffers: Ptr[Ptr[NoneType, ImmutExternalOrigin]],
+    num_channels: Int32,
+    num_samples: Int32,
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_PutAudioStreamPlanarData
+    """
+    var success = get_sdl3_function_table().put_audio_stream_planar_data(
+        Ptr(to=stream).bitcast[Ptr[AudioStream, MutExternalOrigin]]()[],
+        Ptr(to=channel_buffers).bitcast[Ptr[Ptr[NoneType, ImmutExternalOrigin], ImmutExternalOrigin]]()[],
+        Ptr(to=num_channels).bitcast[Int32]()[],
+        Ptr(to=num_samples).bitcast[Int32]()[],
+    )
+    if not success:
+        raise get_error()
+
+
 fn get_audio_stream_data(stream: Ptr[AudioStream], buf: Ptr[NoneType], len: Int32) -> Int32:
     """See official documentation for details.
     
@@ -857,7 +899,7 @@ fn open_camera(
     return result
 
 
-fn get_camera_permission_state(camera: Ptr[Camera]) -> Int32:
+fn get_camera_permission_state(camera: Ptr[Camera]) -> CameraPermissionState:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetCameraPermissionState
@@ -1308,6 +1350,18 @@ fn get_window_from_event(event: Ptr[Event]) raises -> Ptr[Window, MutExternalOri
     if not result:
         raise "Error in get_window_from_event call. See official documentation for details."
     return result
+
+
+fn get_event_description(event: Ptr[Event], buf: Ptr[c_char], buflen: Int32) -> Int32:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetEventDescription
+    """
+    return get_sdl3_function_table().get_event_description(
+        Ptr(to=event).bitcast[Ptr[Event, ImmutExternalOrigin]]()[],
+        Ptr(to=buf).bitcast[Ptr[c_char, MutExternalOrigin]]()[],
+        Ptr(to=buflen).bitcast[Int32]()[],
+    )
 
 
 fn get_base_path() raises -> CStringSlice[ImmutExternalOrigin]:
@@ -2412,6 +2466,16 @@ fn get_gpu_shader_formats(device: Ptr[GPUDevice]) -> GPUShaderFormat:
     https://wiki.libsdl.org/SDL3/SDL_GetGPUShaderFormats
     """
     return get_sdl3_function_table().get_gpu_shader_formats(
+        Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[]
+    )
+
+
+fn get_gpu_device_properties(device: Ptr[GPUDevice]) -> PropertiesID:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetGPUDeviceProperties
+    """
+    return get_sdl3_function_table().get_gpu_device_properties(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[]
     )
 
@@ -3627,6 +3691,26 @@ fn calculate_gpu_texture_format_size(
     )
 
 
+fn get_pixel_format_from_gpu_texture_format(format: GPUTextureFormat) -> PixelFormat:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetPixelFormatFromGPUTextureFormat
+    """
+    return get_sdl3_function_table().get_pixel_format_from_gpu_texture_format(
+        Ptr(to=format).bitcast[GPUTextureFormat]()[]
+    )
+
+
+fn get_gpu_texture_format_from_pixel_format(format: PixelFormat) -> GPUTextureFormat:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetGPUTextureFormatFromPixelFormat
+    """
+    return get_sdl3_function_table().get_gpu_texture_format_from_pixel_format(
+        Ptr(to=format).bitcast[PixelFormat]()[]
+    )
+
+
 fn guid_to_string(guid: GUID, pszGUID: Ptr[c_char], cbGUID: Int32):
     """See official documentation for details.
     
@@ -3825,7 +3909,7 @@ fn haptic_effect_supported(haptic: Ptr[Haptic], effect: Ptr[HapticEffect]) -> Bo
     )
 
 
-fn create_haptic_effect(haptic: Ptr[Haptic], effect: Ptr[HapticEffect]) -> Int32:
+fn create_haptic_effect(haptic: Ptr[Haptic], effect: Ptr[HapticEffect]) -> HapticEffectID:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CreateHapticEffect
@@ -3836,66 +3920,68 @@ fn create_haptic_effect(haptic: Ptr[Haptic], effect: Ptr[HapticEffect]) -> Int32
     )
 
 
-fn update_haptic_effect(haptic: Ptr[Haptic], effect: Int32, data: Ptr[HapticEffect]) raises:
+fn update_haptic_effect(
+    haptic: Ptr[Haptic], effect: HapticEffectID, data: Ptr[HapticEffect]
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_UpdateHapticEffect
     """
     var success = get_sdl3_function_table().update_haptic_effect(
         Ptr(to=haptic).bitcast[Ptr[Haptic, MutExternalOrigin]]()[],
-        Ptr(to=effect).bitcast[Int32]()[],
+        Ptr(to=effect).bitcast[HapticEffectID]()[],
         Ptr(to=data).bitcast[Ptr[HapticEffect, ImmutExternalOrigin]]()[],
     )
     if not success:
         raise get_error()
 
 
-fn run_haptic_effect(haptic: Ptr[Haptic], effect: Int32, iterations: UInt32) raises:
+fn run_haptic_effect(haptic: Ptr[Haptic], effect: HapticEffectID, iterations: UInt32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_RunHapticEffect
     """
     var success = get_sdl3_function_table().run_haptic_effect(
         Ptr(to=haptic).bitcast[Ptr[Haptic, MutExternalOrigin]]()[],
-        Ptr(to=effect).bitcast[Int32]()[],
+        Ptr(to=effect).bitcast[HapticEffectID]()[],
         Ptr(to=iterations).bitcast[UInt32]()[],
     )
     if not success:
         raise get_error()
 
 
-fn stop_haptic_effect(haptic: Ptr[Haptic], effect: Int32) raises:
+fn stop_haptic_effect(haptic: Ptr[Haptic], effect: HapticEffectID) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_StopHapticEffect
     """
     var success = get_sdl3_function_table().stop_haptic_effect(
         Ptr(to=haptic).bitcast[Ptr[Haptic, MutExternalOrigin]]()[],
-        Ptr(to=effect).bitcast[Int32]()[],
+        Ptr(to=effect).bitcast[HapticEffectID]()[],
     )
     if not success:
         raise get_error()
 
 
-fn destroy_haptic_effect(haptic: Ptr[Haptic], effect: Int32):
+fn destroy_haptic_effect(haptic: Ptr[Haptic], effect: HapticEffectID):
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_DestroyHapticEffect
     """
     get_sdl3_function_table().destroy_haptic_effect(
         Ptr(to=haptic).bitcast[Ptr[Haptic, MutExternalOrigin]]()[],
-        Ptr(to=effect).bitcast[Int32]()[],
+        Ptr(to=effect).bitcast[HapticEffectID]()[],
     )
 
 
-fn get_haptic_effect_status(haptic: Ptr[Haptic], effect: Int32) -> Bool:
+fn get_haptic_effect_status(haptic: Ptr[Haptic], effect: HapticEffectID) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetHapticEffectStatus
     """
     return get_sdl3_function_table().get_haptic_effect_status(
         Ptr(to=haptic).bitcast[Ptr[Haptic, MutExternalOrigin]]()[],
-        Ptr(to=effect).bitcast[Int32]()[],
+        Ptr(to=effect).bitcast[HapticEffectID]()[],
     )
 
 
@@ -6001,6 +6087,21 @@ fn warp_mouse_global(x: Float32, y: Float32) raises:
         raise get_error()
 
 
+fn set_relative_mouse_transform(
+    callback: MouseMotionTransformCallback, userdata: Ptr[NoneType]
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetRelativeMouseTransform
+    """
+    var success = get_sdl3_function_table().set_relative_mouse_transform(
+        Ptr(to=callback).bitcast[MouseMotionTransformCallback]()[],
+        Ptr(to=userdata).bitcast[Ptr[NoneType, MutExternalOrigin]]()[],
+    )
+    if not success:
+        raise get_error()
+
+
 fn set_window_relative_mouse_mode(window: Ptr[Window], enabled: Bool) raises:
     """See official documentation for details.
     
@@ -6063,6 +6164,24 @@ fn create_color_cursor(
     """
     var result = get_sdl3_function_table().create_color_cursor(
         Ptr(to=surface).bitcast[Ptr[Surface, MutExternalOrigin]]()[],
+        Ptr(to=hot_x).bitcast[Int32]()[],
+        Ptr(to=hot_y).bitcast[Int32]()[],
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn create_animated_cursor(
+    frames: Ptr[CursorFrameInfo], frame_count: Int32, hot_x: Int32, hot_y: Int32
+) raises -> Ptr[Cursor, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_CreateAnimatedCursor
+    """
+    var result = get_sdl3_function_table().create_animated_cursor(
+        Ptr(to=frames).bitcast[Ptr[CursorFrameInfo, MutExternalOrigin]]()[],
+        Ptr(to=frame_count).bitcast[Int32]()[],
         Ptr(to=hot_x).bitcast[Int32]()[],
         Ptr(to=hot_y).bitcast[Int32]()[],
     )
@@ -6154,6 +6273,14 @@ fn cursor_visible() -> Bool:
     https://wiki.libsdl.org/SDL3/SDL_CursorVisible
     """
     return get_sdl3_function_table().cursor_visible()
+
+
+fn get_pen_device_type(instance_id: PenID) -> PenDeviceType:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetPenDeviceType
+    """
+    return get_sdl3_function_table().get_pen_device_type(Ptr(to=instance_id).bitcast[PenID]()[])
 
 
 fn get_pixel_format_name(format: PixelFormat) -> CStringSlice[ImmutExternalOrigin]:
@@ -6294,7 +6421,7 @@ fn map_rgba(
 
 
 fn get_rgb(
-    pixel: UInt32,
+    pixelvalue: UInt32,
     format: Ptr[PixelFormatDetails],
     palette: Ptr[Palette],
     r: Ptr[UInt8],
@@ -6306,7 +6433,7 @@ fn get_rgb(
     https://wiki.libsdl.org/SDL3/SDL_GetRGB
     """
     get_sdl3_function_table().get_rgb(
-        Ptr(to=pixel).bitcast[UInt32]()[],
+        Ptr(to=pixelvalue).bitcast[UInt32]()[],
         Ptr(to=format).bitcast[Ptr[PixelFormatDetails, ImmutExternalOrigin]]()[],
         Ptr(to=palette).bitcast[Ptr[Palette, ImmutExternalOrigin]]()[],
         Ptr(to=r).bitcast[Ptr[UInt8, MutExternalOrigin]]()[],
@@ -6316,7 +6443,7 @@ fn get_rgb(
 
 
 fn get_rgba(
-    pixel: UInt32,
+    pixelvalue: UInt32,
     format: Ptr[PixelFormatDetails],
     palette: Ptr[Palette],
     r: Ptr[UInt8],
@@ -6329,7 +6456,7 @@ fn get_rgba(
     https://wiki.libsdl.org/SDL3/SDL_GetRGBA
     """
     get_sdl3_function_table().get_rgba(
-        Ptr(to=pixel).bitcast[UInt32]()[],
+        Ptr(to=pixelvalue).bitcast[UInt32]()[],
         Ptr(to=format).bitcast[Ptr[PixelFormatDetails, ImmutExternalOrigin]]()[],
         Ptr(to=palette).bitcast[Ptr[Palette, ImmutExternalOrigin]]()[],
         Ptr(to=r).bitcast[Ptr[UInt8, MutExternalOrigin]]()[],
@@ -6822,6 +6949,35 @@ fn create_renderer_with_properties(props: PropertiesID) raises -> Ptr[Renderer, 
     return result
 
 
+fn create_gpu_renderer(
+    device: Ptr[GPUDevice], window: Ptr[Window]
+) raises -> Ptr[Renderer, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_CreateGPURenderer
+    """
+    var result = get_sdl3_function_table().create_gpu_renderer(
+        Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn get_gpu_renderer_device(renderer: Ptr[Renderer]) raises -> Ptr[GPUDevice, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetGPURendererDevice
+    """
+    var result = get_sdl3_function_table().get_gpu_renderer_device(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[]
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
 fn create_software_renderer(surface: Ptr[Surface]) raises -> Ptr[Renderer, MutExternalOrigin]:
     """See official documentation for details.
     
@@ -6998,6 +7154,32 @@ fn get_texture_size(texture: Ptr[Texture], w: Ptr[Float32], h: Ptr[Float32]) rai
     )
     if not success:
         raise get_error()
+
+
+fn set_texture_palette(texture: Ptr[Texture], palette: Ptr[Palette]) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetTexturePalette
+    """
+    var success = get_sdl3_function_table().set_texture_palette(
+        Ptr(to=texture).bitcast[Ptr[Texture, MutExternalOrigin]]()[],
+        Ptr(to=palette).bitcast[Ptr[Palette, MutExternalOrigin]]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn get_texture_palette(texture: Ptr[Texture]) raises -> Ptr[Palette, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetTexturePalette
+    """
+    var result = get_sdl3_function_table().get_texture_palette(
+        Ptr(to=texture).bitcast[Ptr[Texture, MutExternalOrigin]]()[]
+    )
+    if not result:
+        raise "Error in get_texture_palette call. See official documentation for details."
+    return result
 
 
 fn set_texture_color_mod(texture: Ptr[Texture], r: UInt8, g: UInt8, b: UInt8) raises:
@@ -7390,17 +7572,15 @@ fn render_coordinates_to_window(
         raise get_error()
 
 
-fn convert_event_to_render_coordinates(renderer: Ptr[Renderer], event: Ptr[Event]) raises:
+fn convert_event_to_render_coordinates(renderer: Ptr[Renderer], event: Ptr[Event]) -> Bool:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ConvertEventToRenderCoordinates
     """
-    var success = get_sdl3_function_table().convert_event_to_render_coordinates(
+    return get_sdl3_function_table().convert_event_to_render_coordinates(
         Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
         Ptr(to=event).bitcast[Ptr[Event, MutExternalOrigin]]()[],
     )
-    if not success:
-        raise get_error()
 
 
 fn set_render_viewport(renderer: Ptr[Renderer], rect: Ptr[Rect]) raises:
@@ -7881,6 +8061,38 @@ fn render_texture9_grid(
         raise get_error()
 
 
+fn render_texture9_grid_tiled(
+    renderer: Ptr[Renderer],
+    texture: Ptr[Texture],
+    srcrect: Ptr[FRect],
+    left_width: Float32,
+    right_width: Float32,
+    top_height: Float32,
+    bottom_height: Float32,
+    scale: Float32,
+    dstrect: Ptr[FRect],
+    tileScale: Float32,
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_RenderTexture9GridTiled
+    """
+    var success = get_sdl3_function_table().render_texture9_grid_tiled(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=texture).bitcast[Ptr[Texture, MutExternalOrigin]]()[],
+        Ptr(to=srcrect).bitcast[Ptr[FRect, ImmutExternalOrigin]]()[],
+        Ptr(to=left_width).bitcast[Float32]()[],
+        Ptr(to=right_width).bitcast[Float32]()[],
+        Ptr(to=top_height).bitcast[Float32]()[],
+        Ptr(to=bottom_height).bitcast[Float32]()[],
+        Ptr(to=scale).bitcast[Float32]()[],
+        Ptr(to=dstrect).bitcast[Ptr[FRect, ImmutExternalOrigin]]()[],
+        Ptr(to=tileScale).bitcast[Float32]()[],
+    )
+    if not success:
+        raise get_error()
+
+
 fn render_geometry(
     renderer: Ptr[Renderer],
     texture: Ptr[Texture],
@@ -7936,6 +8148,38 @@ fn render_geometry_raw(
         Ptr(to=indices).bitcast[Ptr[NoneType, ImmutExternalOrigin]]()[],
         Ptr(to=num_indices).bitcast[Int32]()[],
         Ptr(to=size_indices).bitcast[Int32]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn set_render_texture_address_mode(
+    renderer: Ptr[Renderer], u_mode: TextureAddressMode, v_mode: TextureAddressMode
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetRenderTextureAddressMode
+    """
+    var success = get_sdl3_function_table().set_render_texture_address_mode(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=u_mode).bitcast[TextureAddressMode]()[],
+        Ptr(to=v_mode).bitcast[TextureAddressMode]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn get_render_texture_address_mode(
+    renderer: Ptr[Renderer], u_mode: Ptr[TextureAddressMode], v_mode: Ptr[TextureAddressMode]
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetRenderTextureAddressMode
+    """
+    var success = get_sdl3_function_table().get_render_texture_address_mode(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=u_mode).bitcast[Ptr[TextureAddressMode, MutExternalOrigin]]()[],
+        Ptr(to=v_mode).bitcast[Ptr[TextureAddressMode, MutExternalOrigin]]()[],
     )
     if not success:
         raise get_error()
@@ -8102,6 +8346,88 @@ fn render_debug_text_format(
     )
     if not success:
         raise get_error()
+
+
+fn set_default_texture_scale_mode(renderer: Ptr[Renderer], scale_mode: ScaleMode) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetDefaultTextureScaleMode
+    """
+    var success = get_sdl3_function_table().set_default_texture_scale_mode(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=scale_mode).bitcast[ScaleMode]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn get_default_texture_scale_mode(renderer: Ptr[Renderer], scale_mode: Ptr[ScaleMode]) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetDefaultTextureScaleMode
+    """
+    var success = get_sdl3_function_table().get_default_texture_scale_mode(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=scale_mode).bitcast[Ptr[ScaleMode, MutExternalOrigin]]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn create_gpu_render_state(
+    renderer: Ptr[Renderer], createinfo: Ptr[GPURenderStateCreateInfo]
+) raises -> Ptr[GPURenderState, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_CreateGPURenderState
+    """
+    var result = get_sdl3_function_table().create_gpu_render_state(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=createinfo).bitcast[Ptr[GPURenderStateCreateInfo, ImmutExternalOrigin]]()[],
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn set_gpu_render_state_fragment_uniforms(
+    state: Ptr[GPURenderState], slot_index: UInt32, data: Ptr[NoneType], length: UInt32
+) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetGPURenderStateFragmentUniforms
+    """
+    var success = get_sdl3_function_table().set_gpu_render_state_fragment_uniforms(
+        Ptr(to=state).bitcast[Ptr[GPURenderState, MutExternalOrigin]]()[],
+        Ptr(to=slot_index).bitcast[UInt32]()[],
+        Ptr(to=data).bitcast[Ptr[NoneType, ImmutExternalOrigin]]()[],
+        Ptr(to=length).bitcast[UInt32]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn set_gpu_render_state(renderer: Ptr[Renderer], state: Ptr[GPURenderState]) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetGPURenderState
+    """
+    var success = get_sdl3_function_table().set_gpu_render_state(
+        Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
+        Ptr(to=state).bitcast[Ptr[GPURenderState, MutExternalOrigin]]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn destroy_gpu_render_state(state: Ptr[GPURenderState]):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_DestroyGPURenderState
+    """
+    get_sdl3_function_table().destroy_gpu_render_state(
+        Ptr(to=state).bitcast[Ptr[GPURenderState, MutExternalOrigin]]()[]
+    )
 
 
 fn get_sensors(count: Ptr[Int32]) raises -> Ptr[SensorID, MutExternalOrigin]:
@@ -8691,6 +9017,32 @@ fn unlock_surface(surface: Ptr[Surface]):
     )
 
 
+fn load_surface_io(src: Ptr[IOStream], closeio: Bool) raises -> Ptr[Surface, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_LoadSurface_IO
+    """
+    var result = get_sdl3_function_table().load_surface_io(
+        Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=closeio).bitcast[Bool]()[]
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn load_surface(file: CStringSlice) raises -> Ptr[Surface, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_LoadSurface
+    """
+    var result = get_sdl3_function_table().load_surface(
+        file.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
 fn load_bmp_io(src: Ptr[IOStream], closeio: Bool) raises -> Ptr[Surface, MutExternalOrigin]:
     """See official documentation for details.
     
@@ -8737,6 +9089,59 @@ fn save_bmp(surface: Ptr[Surface], file: CStringSlice) raises:
     https://wiki.libsdl.org/SDL3/SDL_SaveBMP
     """
     var success = get_sdl3_function_table().save_bmp(
+        Ptr(to=surface).bitcast[Ptr[Surface, MutExternalOrigin]]()[],
+        file.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
+    )
+    if not success:
+        raise get_error()
+
+
+fn load_png_io(src: Ptr[IOStream], closeio: Bool) raises -> Ptr[Surface, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_LoadPNG_IO
+    """
+    var result = get_sdl3_function_table().load_png_io(
+        Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=closeio).bitcast[Bool]()[]
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn load_png(file: CStringSlice) raises -> Ptr[Surface, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_LoadPNG
+    """
+    var result = get_sdl3_function_table().load_png(
+        file.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()
+    )
+    if not result:
+        raise get_error()
+    return result
+
+
+fn save_png_io(surface: Ptr[Surface], dst: Ptr[IOStream], closeio: Bool) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SavePNG_IO
+    """
+    var success = get_sdl3_function_table().save_png_io(
+        Ptr(to=surface).bitcast[Ptr[Surface, MutExternalOrigin]]()[],
+        Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
+        Ptr(to=closeio).bitcast[Bool]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn save_png(surface: Ptr[Surface], file: CStringSlice) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SavePNG
+    """
+    var success = get_sdl3_function_table().save_png(
         Ptr(to=surface).bitcast[Ptr[Surface, MutExternalOrigin]]()[],
         file.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
     )
@@ -8923,6 +9328,20 @@ fn flip_surface(surface: Ptr[Surface], flip: FlipMode) raises:
     )
     if not success:
         raise get_error()
+
+
+fn rotate_surface(surface: Ptr[Surface], angle: Float32) raises -> Ptr[Surface, MutExternalOrigin]:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_RotateSurface
+    """
+    var result = get_sdl3_function_table().rotate_surface(
+        Ptr(to=surface).bitcast[Ptr[Surface, MutExternalOrigin]]()[],
+        Ptr(to=angle).bitcast[Float32]()[],
+    )
+    if not result:
+        raise get_error()
+    return result
 
 
 fn duplicate_surface(surface: Ptr[Surface]) raises -> Ptr[Surface, MutExternalOrigin]:
@@ -9714,12 +10133,14 @@ fn get_num_video_drivers() -> Int32:
     return get_sdl3_function_table().get_num_video_drivers()
 
 
-fn get_video_driver(index: Int32) -> CStringSlice[ImmutExternalOrigin]:
+fn get_video_driver(index: Int32) raises -> CStringSlice[ImmutExternalOrigin]:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetVideoDriver
     """
     var cstring = get_sdl3_function_table().get_video_driver(Ptr(to=index).bitcast[Int32]()[])
+    if not cstring.unsafe_ptr():
+        raise "Error in get_video_driver call. See official documentation for details."
     return cstring
 
 
@@ -10390,6 +10811,18 @@ fn set_window_always_on_top(window: Ptr[Window], on_top: Bool) raises:
         raise get_error()
 
 
+fn set_window_fill_document(window: Ptr[Window], fill: Bool) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetWindowFillDocument
+    """
+    var success = get_sdl3_function_table().set_window_fill_document(
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[], Ptr(to=fill).bitcast[Bool]()[]
+    )
+    if not success:
+        raise get_error()
+
+
 fn show_window(window: Ptr[Window]) raises:
     """See official documentation for details.
     
@@ -10769,6 +11202,52 @@ fn flash_window(window: Ptr[Window], operation: FlashOperation) raises:
     )
     if not success:
         raise get_error()
+
+
+fn set_window_progress_state(window: Ptr[Window], state: ProgressState) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetWindowProgressState
+    """
+    var success = get_sdl3_function_table().set_window_progress_state(
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
+        Ptr(to=state).bitcast[ProgressState]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn get_window_progress_state(window: Ptr[Window]) -> ProgressState:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetWindowProgressState
+    """
+    return get_sdl3_function_table().get_window_progress_state(
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[]
+    )
+
+
+fn set_window_progress_value(window: Ptr[Window], value: Float32) raises:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_SetWindowProgressValue
+    """
+    var success = get_sdl3_function_table().set_window_progress_value(
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
+        Ptr(to=value).bitcast[Float32]()[],
+    )
+    if not success:
+        raise get_error()
+
+
+fn get_window_progress_value(window: Ptr[Window]) -> Float32:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GetWindowProgressValue
+    """
+    return get_sdl3_function_table().get_window_progress_value(
+        Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[]
+    )
 
 
 fn destroy_window(window: Ptr[Window]):

@@ -114,6 +114,30 @@ struct CameraPosition(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime BACK_FACING = CameraPosition(value = 2)
 
 
+struct CameraPermissionState(TrivialRegisterType, Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_CameraPermissionState
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime DENIED = CameraPermissionState(value = -1)
+    comptime PENDING = CameraPermissionState(value = 0)
+    comptime APPROVED = CameraPermissionState(value = 1)
+
+
 struct EventType(TrivialRegisterType, Equatable, Intable, Indexer):
     """See official documentation for details.
     
@@ -150,8 +174,9 @@ struct EventType(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime DISPLAY_DESKTOP_MODE_CHANGED = EventType(value = 341)
     comptime DISPLAY_CURRENT_MODE_CHANGED = EventType(value = 342)
     comptime DISPLAY_CONTENT_SCALE_CHANGED = EventType(value = 343)
+    comptime DISPLAY_USABLE_BOUNDS_CHANGED = EventType(value = 344)
     comptime DISPLAY_FIRST = EventType(value = 337)
-    comptime DISPLAY_LAST = EventType(value = 343)
+    comptime DISPLAY_LAST = EventType(value = 344)
     comptime WINDOW_SHOWN = EventType(value = 514)
     comptime WINDOW_HIDDEN = EventType(value = 515)
     comptime WINDOW_EXPOSED = EventType(value = 516)
@@ -187,6 +212,8 @@ struct EventType(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime KEYBOARD_ADDED = EventType(value = 773)
     comptime KEYBOARD_REMOVED = EventType(value = 774)
     comptime TEXT_EDITING_CANDIDATES = EventType(value = 775)
+    comptime SCREEN_KEYBOARD_SHOWN = EventType(value = 776)
+    comptime SCREEN_KEYBOARD_HIDDEN = EventType(value = 777)
     comptime MOUSE_MOTION = EventType(value = 1024)
     comptime MOUSE_BUTTON_DOWN = EventType(value = 1025)
     comptime MOUSE_BUTTON_UP = EventType(value = 1026)
@@ -218,6 +245,9 @@ struct EventType(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime FINGER_UP = EventType(value = 1793)
     comptime FINGER_MOTION = EventType(value = 1794)
     comptime FINGER_CANCELED = EventType(value = 1795)
+    comptime PINCH_BEGIN = EventType(value = 1808)
+    comptime PINCH_UPDATE = EventType(value = 1809)
+    comptime PINCH_END = EventType(value = 1810)
     comptime CLIPBOARD_UPDATE = EventType(value = 2304)
     comptime DROP_FILE = EventType(value = 4096)
     comptime DROP_TEXT = EventType(value = 4097)
@@ -389,7 +419,8 @@ struct GamepadType(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime NINTENDO_SWITCH_JOYCON_LEFT = GamepadType(value = 8)
     comptime NINTENDO_SWITCH_JOYCON_RIGHT = GamepadType(value = 9)
     comptime NINTENDO_SWITCH_JOYCON_PAIR = GamepadType(value = 10)
-    comptime COUNT = GamepadType(value = 11)
+    comptime GAMECUBE = GamepadType(value = 11)
+    comptime COUNT = GamepadType(value = 12)
 
 
 struct GamepadButton(TrivialRegisterType, Equatable, Intable, Indexer):
@@ -1635,6 +1666,31 @@ struct PenAxis(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime COUNT = PenAxis(value = 7)
 
 
+struct PenDeviceType(TrivialRegisterType, Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_PenDeviceType
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = PenDeviceType(value = -1)
+    comptime UNKNOWN = PenDeviceType(value = 0)
+    comptime DIRECT = PenDeviceType(value = 1)
+    comptime INDIRECT = PenDeviceType(value = 2)
+
+
 struct PixelType(TrivialRegisterType, Equatable, Intable, Indexer):
     """See official documentation for details.
     
@@ -2090,7 +2146,7 @@ struct Colorspace(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime BT2020_LIMITED = Colorspace(value = 554706441)
     comptime BT2020_FULL = Colorspace(value = 571483657)
     comptime RGB_DEFAULT = Colorspace(value = 301991328)
-    comptime YUV_DEFAULT = Colorspace(value = 570426566)
+    comptime YUV_DEFAULT = Colorspace(value = 554703046)
 
 
 struct PowerState(TrivialRegisterType, Equatable, Intable, Indexer):
@@ -2169,6 +2225,31 @@ struct TextureAccess(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime STATIC = TextureAccess(value = 0)
     comptime STREAMING = TextureAccess(value = 1)
     comptime TARGET = TextureAccess(value = 2)
+
+
+struct TextureAddressMode(TrivialRegisterType, Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_TextureAddressMode
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = TextureAddressMode(value = -1)
+    comptime AUTO = TextureAddressMode(value = 0)
+    comptime CLAMP = TextureAddressMode(value = 1)
+    comptime WRAP = TextureAddressMode(value = 2)
 
 
 struct RendererLogicalPresentation(TrivialRegisterType, Equatable, Intable, Indexer):
@@ -2519,6 +2600,7 @@ struct ScaleMode(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime INVALID = ScaleMode(value = -1)
     comptime NEAREST = ScaleMode(value = 0)
     comptime LINEAR = ScaleMode(value = 1)
+    comptime PIXELART = ScaleMode(value = 2)
 
 
 struct FlipMode(TrivialRegisterType, Equatable, Intable, Indexer):
@@ -2543,6 +2625,7 @@ struct FlipMode(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime NONE = FlipMode(value = 0)
     comptime HORIZONTAL = FlipMode(value = 1)
     comptime VERTICAL = FlipMode(value = 2)
+    comptime HORIZONTAL_AND_VERTICAL = FlipMode(value = 3)
 
 
 struct DateFormat(TrivialRegisterType, Equatable, Intable, Indexer):
@@ -2691,6 +2774,33 @@ struct FlashOperation(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime UNTIL_FOCUSED = FlashOperation(value = 2)
 
 
+struct ProgressState(TrivialRegisterType, Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_ProgressState
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = ProgressState(value = -1)
+    comptime NONE = ProgressState(value = 0)
+    comptime INDETERMINATE = ProgressState(value = 1)
+    comptime NORMAL = ProgressState(value = 2)
+    comptime PAUSED = ProgressState(value = 3)
+    comptime ERROR = ProgressState(value = 4)
+
+
 struct GLAttr(TrivialRegisterType, Equatable, Intable, Indexer):
     """See official documentation for details.
     
@@ -2769,6 +2879,31 @@ struct HitTestResult(TrivialRegisterType, Equatable, Intable, Indexer):
     comptime RESIZE_BOTTOM = HitTestResult(value = 7)
     comptime RESIZE_BOTTOMLEFT = HitTestResult(value = 8)
     comptime RESIZE_LEFT = HitTestResult(value = 9)
+
+
+struct IMG_AnimationDecoderStatus(TrivialRegisterType, Equatable, Intable, Indexer):
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_image/IMG_AnimationDecoderStatus
+    """
+    var value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self.value = value
+
+    fn __eq__(self, rhs: Self) -> Bool:
+        return self.value == rhs.value
+
+    fn __int__(self) -> Int:
+        return Int(self.value)
+
+    fn __mlir_index__(self) -> __mlir_type.index:
+        return self.__int__()._mlir_value
+
+    comptime INVALID = IMG_AnimationDecoderStatus(value = -1)
+    comptime OK = IMG_AnimationDecoderStatus(value = 0)
+    comptime FAILED = IMG_AnimationDecoderStatus(value = 1)
+    comptime COMPLETE = IMG_AnimationDecoderStatus(value = 2)
 
 
 struct TTF_HintingFlags(TrivialRegisterType, Equatable, Intable, Indexer):

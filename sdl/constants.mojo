@@ -44,6 +44,13 @@ https://wiki.libsdl.org/SDL3/SDL_AUDIO_DEVICE_DEFAULT_RECORDING
 """
 
 
+comptime PROP_AUDIOSTREAM_AUTO_CLEANUP_BOOLEAN = "SDL.audiostream.auto_cleanup"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_AUDIOSTREAM_AUTO_CLEANUP_BOOLEAN
+"""
+
+
 comptime BLENDMODE_NONE = 0x00000000
 """See official documentation for details.
 
@@ -324,10 +331,45 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_PREFERLOWPOWER_BOOLEAN
 """
 
 
+comptime PROP_GPU_DEVICE_CREATE_VERBOSE_BOOLEAN = "SDL.gpu.device.create.verbose"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_VERBOSE_BOOLEAN
+"""
+
+
 comptime PROP_GPU_DEVICE_CREATE_NAME_STRING = "SDL.gpu.device.create.name"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_NAME_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_FEATURE_CLIP_DISTANCE_BOOLEAN = "SDL.gpu.device.create.feature.clip_distance"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_FEATURE_CLIP_DISTANCE_BOOLEAN
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_FEATURE_DEPTH_CLAMPING_BOOLEAN = "SDL.gpu.device.create.feature.depth_clamping"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_FEATURE_DEPTH_CLAMPING_BOOLEAN
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_FEATURE_INDIRECT_DRAW_FIRST_INSTANCE_BOOLEAN = "SDL.gpu.device.create.feature.indirect_draw_first_instance"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_FEATURE_INDIRECT_DRAW_FIRST_INSTANCE_BOOLEAN
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_FEATURE_ANISOTROPY_BOOLEAN = "SDL.gpu.device.create.feature.anisotropy"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_FEATURE_ANISOTROPY_BOOLEAN
 """
 
 
@@ -373,10 +415,80 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_SHADERS_METALLIB_BOOLEAN
 """
 
 
+comptime PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN = "SDL.gpu.device.create.d3d12.allowtier1resourcebinding"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_D3D12_ALLOW_FEWER_RESOURCE_SLOTS_BOOLEAN
+"""
+
+
 comptime PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING = "SDL.gpu.device.create.d3d12.semantic"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_D3D12_SEMANTIC_NAME_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_VERSION_NUMBER = "SDL.gpu.device.create.d3d12.agility_sdk_version"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_VERSION_NUMBER
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_PATH_STRING = "SDL.gpu.device.create.d3d12.agility_sdk_path"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_D3D12_AGILITY_SDK_PATH_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_VULKAN_REQUIRE_HARDWARE_ACCELERATION_BOOLEAN = "SDL.gpu.device.create.vulkan.requirehardwareacceleration"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_VULKAN_REQUIRE_HARDWARE_ACCELERATION_BOOLEAN
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER = "SDL.gpu.device.create.vulkan.options"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_VULKAN_OPTIONS_POINTER
+"""
+
+
+comptime PROP_GPU_DEVICE_CREATE_METAL_ALLOW_MACFAMILY1_BOOLEAN = "SDL.gpu.device.create.metal.allowmacfamily1"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_CREATE_METAL_ALLOW_MACFAMILY1_BOOLEAN
+"""
+
+
+comptime PROP_GPU_DEVICE_NAME_STRING = "SDL.gpu.device.name"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_NAME_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_DRIVER_NAME_STRING = "SDL.gpu.device.driver_name"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_DRIVER_NAME_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_DRIVER_VERSION_STRING = "SDL.gpu.device.driver_version"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_DRIVER_VERSION_STRING
+"""
+
+
+comptime PROP_GPU_DEVICE_DRIVER_INFO_STRING = "SDL.gpu.device.driver_info"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_DEVICE_DRIVER_INFO_STRING
 """
 
 
@@ -468,6 +580,13 @@ comptime PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING = "SDL.gpu.transferbuffer.cr
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_GPU_TRANSFERBUFFER_CREATE_NAME_STRING
+"""
+
+
+comptime HAPTIC_INFINITY = 4294967295
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HAPTIC_INFINITY
 """
 
 
@@ -639,13 +758,6 @@ https://wiki.libsdl.org/SDL3/SDL_HAPTIC_STEERING_AXIS
 """
 
 
-comptime HAPTIC_INFINITY = 4294967295
-"""See official documentation for details.
-
-https://wiki.libsdl.org/SDL3/SDL_HAPTIC_INFINITY
-"""
-
-
 comptime HINT_ALLOW_ALT_TAB_WHILE_GRABBED = "SDL_ALLOW_ALT_TAB_WHILE_GRABBED"
 """See official documentation for details.
 
@@ -772,6 +884,13 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_AUDIO_DEVICE_STREAM_ROLE
 """
 
 
+comptime HINT_AUDIO_DEVICE_RAW_STREAM = "SDL_AUDIO_DEVICE_RAW_STREAM"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_AUDIO_DEVICE_RAW_STREAM
+"""
+
+
 comptime HINT_AUDIO_DISK_INPUT_FILE = "SDL_AUDIO_DISK_INPUT_FILE"
 """See official documentation for details.
 
@@ -881,6 +1000,13 @@ comptime HINT_DISPLAY_USABLE_BOUNDS = "SDL_DISPLAY_USABLE_BOUNDS"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_DISPLAY_USABLE_BOUNDS
+"""
+
+
+comptime HINT_INVALID_PARAM_CHECKS = "SDL_INVALID_PARAM_CHECKS"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_INVALID_PARAM_CHECKS
 """
 
 
@@ -1021,6 +1147,13 @@ comptime HINT_HIDAPI_LIBUSB = "SDL_HIDAPI_LIBUSB"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_HIDAPI_LIBUSB
+"""
+
+
+comptime HINT_HIDAPI_LIBUSB_GAMECUBE = "SDL_HIDAPI_LIBUSB_GAMECUBE"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_HIDAPI_LIBUSB_GAMECUBE
 """
 
 
@@ -1297,6 +1430,41 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_STEAM_HORI
 """
 
 
+comptime HINT_JOYSTICK_HIDAPI_LG4FF = "SDL_JOYSTICK_HIDAPI_LG4FF"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_LG4FF
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_8BITDO = "SDL_JOYSTICK_HIDAPI_8BITDO"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_8BITDO
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_SINPUT = "SDL_JOYSTICK_HIDAPI_SINPUT"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_SINPUT
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_ZUIKI = "SDL_JOYSTICK_HIDAPI_ZUIKI"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_ZUIKI
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_FLYDIGI = "SDL_JOYSTICK_HIDAPI_FLYDIGI"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_FLYDIGI
+"""
+
+
 comptime HINT_JOYSTICK_HIDAPI_SWITCH = "SDL_JOYSTICK_HIDAPI_SWITCH"
 """See official documentation for details.
 
@@ -1315,6 +1483,13 @@ comptime HINT_JOYSTICK_HIDAPI_SWITCH_PLAYER_LED = "SDL_JOYSTICK_HIDAPI_SWITCH_PL
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_SWITCH_PLAYER_LED
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_SWITCH2 = "SDL_JOYSTICK_HIDAPI_SWITCH2"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_SWITCH2
 """
 
 
@@ -1378,6 +1553,20 @@ comptime HINT_JOYSTICK_HIDAPI_XBOX_ONE_HOME_LED = "SDL_JOYSTICK_HIDAPI_XBOX_ONE_
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_XBOX_ONE_HOME_LED
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_GIP = "SDL_JOYSTICK_HIDAPI_GIP"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_GIP
+"""
+
+
+comptime HINT_JOYSTICK_HIDAPI_GIP_RESET_FOR_METADATA = "SDL_JOYSTICK_HIDAPI_GIP_RESET_FOR_METADATA"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_JOYSTICK_HIDAPI_GIP_RESET_FOR_METADATA
 """
 
 
@@ -1521,6 +1710,13 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_KMSDRM_REQUIRE_DRM_MASTER
 """
 
 
+comptime HINT_KMSDRM_ATOMIC = "SDL_KMSDRM_ATOMIC"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_KMSDRM_ATOMIC
+"""
+
+
 comptime HINT_LOGGING = "SDL_LOGGING"
 """See official documentation for details.
 
@@ -1563,6 +1759,13 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_MAC_SCROLL_MOMENTUM
 """
 
 
+comptime HINT_MAC_PRESS_AND_HOLD = "SDL_MAC_PRESS_AND_HOLD"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_MAC_PRESS_AND_HOLD
+"""
+
+
 comptime HINT_MAIN_CALLBACK_RATE = "SDL_MAIN_CALLBACK_RATE"
 """See official documentation for details.
 
@@ -1595,6 +1798,13 @@ comptime HINT_MOUSE_DEFAULT_SYSTEM_CURSOR = "SDL_MOUSE_DEFAULT_SYSTEM_CURSOR"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_MOUSE_DEFAULT_SYSTEM_CURSOR
+"""
+
+
+comptime HINT_MOUSE_DPI_SCALE_CURSORS = "SDL_MOUSE_DPI_SCALE_CURSORS"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_MOUSE_DPI_SCALE_CURSORS
 """
 
 
@@ -1696,6 +1906,13 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_OPENGL_ES_DRIVER
 """
 
 
+comptime HINT_OPENGL_FORCE_SRGB_FRAMEBUFFER = "SDL_OPENGL_FORCE_SRGB_FRAMEBUFFER"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_OPENGL_FORCE_SRGB_FRAMEBUFFER
+"""
+
+
 comptime HINT_OPENVR_LIBRARY = "SDL_OPENVR_LIBRARY"
 """See official documentation for details.
 
@@ -1742,6 +1959,13 @@ comptime HINT_RENDER_DIRECT3D11_DEBUG = "SDL_RENDER_DIRECT3D11_DEBUG"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_RENDER_DIRECT3D11_DEBUG
+"""
+
+
+comptime HINT_RENDER_DIRECT3D11_WARP = "SDL_RENDER_DIRECT3D11_WARP"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_RENDER_DIRECT3D11_WARP
 """
 
 
@@ -1812,6 +2036,34 @@ comptime HINT_ROG_GAMEPAD_MICE_EXCLUDED = "SDL_ROG_GAMEPAD_MICE_EXCLUDED"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_ROG_GAMEPAD_MICE_EXCLUDED
+"""
+
+
+comptime HINT_PS2_GS_WIDTH = "SDL_PS2_GS_WIDTH"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_PS2_GS_WIDTH
+"""
+
+
+comptime HINT_PS2_GS_HEIGHT = "SDL_PS2_GS_HEIGHT"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_PS2_GS_HEIGHT
+"""
+
+
+comptime HINT_PS2_GS_PROGRESSIVE = "SDL_PS2_GS_PROGRESSIVE"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_PS2_GS_PROGRESSIVE
+"""
+
+
+comptime HINT_PS2_GS_MODE = "SDL_PS2_GS_MODE"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_PS2_GS_MODE
 """
 
 
@@ -1952,6 +2204,20 @@ comptime HINT_VIDEO_MAC_FULLSCREEN_MENU_VISIBILITY = "SDL_VIDEO_MAC_FULLSCREEN_M
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_HINT_VIDEO_MAC_FULLSCREEN_MENU_VISIBILITY
+"""
+
+
+comptime HINT_VIDEO_METAL_AUTO_RESIZE_DRAWABLE = "SDL_VIDEO_METAL_AUTO_RESIZE_DRAWABLE"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_VIDEO_METAL_AUTO_RESIZE_DRAWABLE
+"""
+
+
+comptime HINT_VIDEO_MATCH_EXCLUSIVE_MODE_ON_MOVE = "SDL_VIDEO_MATCH_EXCLUSIVE_MODE_ON_MOVE"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_VIDEO_MATCH_EXCLUSIVE_MODE_ON_MOVE
 """
 
 
@@ -2228,6 +2494,13 @@ https://wiki.libsdl.org/SDL3/SDL_HINT_WINDOWS_RAW_KEYBOARD
 """
 
 
+comptime HINT_WINDOWS_RAW_KEYBOARD_EXCLUDE_HOTKEYS = "SDL_WINDOWS_RAW_KEYBOARD_EXCLUDE_HOTKEYS"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HINT_WINDOWS_RAW_KEYBOARD_EXCLUDE_HOTKEYS
+"""
+
+
 comptime HINT_WINDOWS_FORCE_SEMAPHORE_KERNEL = "SDL_WINDOWS_FORCE_SEMAPHORE_KERNEL"
 """See official documentation for details.
 
@@ -2456,6 +2729,13 @@ comptime PROP_IOSTREAM_MEMORY_SIZE_NUMBER = "SDL.iostream.memory.size"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_IOSTREAM_MEMORY_SIZE_NUMBER
+"""
+
+
+comptime PROP_IOSTREAM_MEMORY_FREE_FUNC_POINTER = "SDL.iostream.memory.free"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_IOSTREAM_MEMORY_FREE_FUNC_POINTER
 """
 
 
@@ -4685,6 +4965,13 @@ https://wiki.libsdl.org/SDL3/SDL_PEN_INPUT_ERASER_TIP
 """
 
 
+comptime PEN_INPUT_IN_PROXIMITY = 1 << 31
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PEN_INPUT_IN_PROXIMITY
+"""
+
+
 comptime ALPHA_OPAQUE = 255
 """See official documentation for details.
 
@@ -4713,10 +5000,24 @@ https://wiki.libsdl.org/SDL3/SDL_ALPHA_TRANSPARENT_FLOAT
 """
 
 
+comptime PROP_NAME_STRING = "SDL.name"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_NAME_STRING
+"""
+
+
 comptime SOFTWARE_RENDERER = "software"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_SOFTWARE_RENDERER
+"""
+
+
+comptime GPU_RENDERER = "gpu"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_GPU_RENDERER
 """
 
 
@@ -4752,6 +5053,34 @@ comptime PROP_RENDERER_CREATE_PRESENT_VSYNC_NUMBER = "SDL.renderer.create.presen
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_CREATE_PRESENT_VSYNC_NUMBER
+"""
+
+
+comptime PROP_RENDERER_CREATE_GPU_DEVICE_POINTER = "SDL.renderer.create.gpu.device"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_CREATE_GPU_DEVICE_POINTER
+"""
+
+
+comptime PROP_RENDERER_CREATE_GPU_SHADERS_SPIRV_BOOLEAN = "SDL.renderer.create.gpu.shaders_spirv"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_CREATE_GPU_SHADERS_SPIRV_BOOLEAN
+"""
+
+
+comptime PROP_RENDERER_CREATE_GPU_SHADERS_DXIL_BOOLEAN = "SDL.renderer.create.gpu.shaders_dxil"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_CREATE_GPU_SHADERS_DXIL_BOOLEAN
+"""
+
+
+comptime PROP_RENDERER_CREATE_GPU_SHADERS_MSL_BOOLEAN = "SDL.renderer.create.gpu.shaders_msl"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_CREATE_GPU_SHADERS_MSL_BOOLEAN
 """
 
 
@@ -4836,6 +5165,13 @@ comptime PROP_RENDERER_TEXTURE_FORMATS_POINTER = "SDL.renderer.texture_formats"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_TEXTURE_FORMATS_POINTER
+"""
+
+
+comptime PROP_RENDERER_TEXTURE_WRAPPING_BOOLEAN = "SDL.renderer.texture_wrapping"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_RENDERER_TEXTURE_WRAPPING_BOOLEAN
 """
 
 
@@ -5000,6 +5336,13 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_HEIGHT_NUMBER
 """
 
 
+comptime PROP_TEXTURE_CREATE_PALETTE_POINTER = "SDL.texture.create.palette"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_PALETTE_POINTER
+"""
+
+
 comptime PROP_TEXTURE_CREATE_SDR_WHITE_POINT_FLOAT = "SDL.texture.create.SDR_white_point"
 """See official documentation for details.
 
@@ -5123,6 +5466,41 @@ comptime PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER = "SDL.texture.create.vulkan.
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_VULKAN_TEXTURE_NUMBER
+"""
+
+
+comptime PROP_TEXTURE_CREATE_VULKAN_LAYOUT_NUMBER = "SDL.texture.create.vulkan.layout"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_VULKAN_LAYOUT_NUMBER
+"""
+
+
+comptime PROP_TEXTURE_CREATE_GPU_TEXTURE_POINTER = "SDL.texture.create.gpu.texture"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_POINTER
+"""
+
+
+comptime PROP_TEXTURE_CREATE_GPU_TEXTURE_UV_POINTER = "SDL.texture.create.gpu.texture_uv"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_UV_POINTER
+"""
+
+
+comptime PROP_TEXTURE_CREATE_GPU_TEXTURE_U_POINTER = "SDL.texture.create.gpu.texture_u"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_U_POINTER
+"""
+
+
+comptime PROP_TEXTURE_CREATE_GPU_TEXTURE_V_POINTER = "SDL.texture.create.gpu.texture_v"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_CREATE_GPU_TEXTURE_V_POINTER
 """
 
 
@@ -5308,6 +5686,34 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_VULKAN_TEXTURE_NUMBER
 """
 
 
+comptime PROP_TEXTURE_GPU_TEXTURE_POINTER = "SDL.texture.gpu.texture"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_GPU_TEXTURE_POINTER
+"""
+
+
+comptime PROP_TEXTURE_GPU_TEXTURE_UV_POINTER = "SDL.texture.gpu.texture_uv"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_GPU_TEXTURE_UV_POINTER
+"""
+
+
+comptime PROP_TEXTURE_GPU_TEXTURE_U_POINTER = "SDL.texture.gpu.texture_u"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_GPU_TEXTURE_U_POINTER
+"""
+
+
+comptime PROP_TEXTURE_GPU_TEXTURE_V_POINTER = "SDL.texture.gpu.texture_v"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_TEXTURE_GPU_TEXTURE_V_POINTER
+"""
+
+
 comptime RENDERER_VSYNC_DISABLED = 0
 """See official documentation for details.
 
@@ -5399,6 +5805,13 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_SURFACE_HOTSPOT_Y_NUMBER
 """
 
 
+comptime PROP_SURFACE_ROTATION_FLOAT = "SDL.surface.rotation"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_SURFACE_ROTATION_FLOAT
+"""
+
+
 comptime MS_PER_SECOND = 1000
 """See official documentation for details.
 
@@ -5455,14 +5868,14 @@ https://wiki.libsdl.org/SDL3/SDL_MAJOR_VERSION
 """
 
 
-comptime MINOR_VERSION = 2
+comptime MINOR_VERSION = 4
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_MINOR_VERSION
 """
 
 
-comptime MICRO_VERSION = 29
+comptime MICRO_VERSION = 1
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_MICRO_VERSION
@@ -5630,6 +6043,13 @@ https://wiki.libsdl.org/SDL3/SDL_WINDOW_KEYBOARD_GRABBED
 """
 
 
+comptime WINDOW_FILL_DOCUMENT = UInt64(0x0000000000200000)
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_WINDOW_FILL_DOCUMENT
+"""
+
+
 comptime WINDOW_VULKAN = UInt64(0x0000000010000000)
 """See official documentation for details.
 
@@ -5774,6 +6194,20 @@ comptime PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER = "SDL.display.KMSDRM.pane
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_DISPLAY_KMSDRM_PANEL_ORIENTATION_NUMBER
+"""
+
+
+comptime PROP_DISPLAY_WAYLAND_WL_OUTPUT_POINTER = "SDL.display.wayland.wl_output"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_DISPLAY_WAYLAND_WL_OUTPUT_POINTER
+"""
+
+
+comptime PROP_DISPLAY_WINDOWS_HMONITOR_POINTER = "SDL.display.windows.hmonitor"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_DISPLAY_WINDOWS_HMONITOR_POINTER
 """
 
 
@@ -5980,6 +6414,13 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_CREATE_COCOA_VIEW_POINTER
 """
 
 
+comptime PROP_WINDOW_CREATE_WINDOWSCENE_POINTER = "SDL.window.create.uikit.windowscene"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_CREATE_WINDOWSCENE_POINTER
+"""
+
+
 comptime PROP_WINDOW_CREATE_WAYLAND_SURFACE_ROLE_CUSTOM_BOOLEAN = "SDL.window.create.wayland.surface_role_custom"
 """See official documentation for details.
 
@@ -6019,6 +6460,20 @@ comptime PROP_WINDOW_CREATE_X11_WINDOW_NUMBER = "SDL.window.create.x11.window"
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_CREATE_X11_WINDOW_NUMBER
+"""
+
+
+comptime PROP_WINDOW_CREATE_EMSCRIPTEN_CANVAS_ID_STRING = "SDL.window.create.emscripten.canvas_id"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_CANVAS_ID_STRING
+"""
+
+
+comptime PROP_WINDOW_CREATE_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING = "SDL.window.create.emscripten.keyboard_element"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_CREATE_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING
 """
 
 
@@ -6134,10 +6589,10 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_COCOA_METAL_VIEW_TAG_NUMBER
 """
 
 
-comptime PROP_WINDOW_OPENVR_OVERLAY_ID = "SDL.window.openvr.overlay_id"
+comptime PROP_WINDOW_OPENVR_OVERLAY_ID_NUMBER = "SDL.window.openvr.overlay_id"
 """See official documentation for details.
 
-https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_OPENVR_OVERLAY_ID
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_OPENVR_OVERLAY_ID_NUMBER
 """
 
 
@@ -6267,6 +6722,20 @@ https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_X11_WINDOW_NUMBER
 """
 
 
+comptime PROP_WINDOW_EMSCRIPTEN_CANVAS_ID_STRING = "SDL.window.emscripten.canvas_id"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_EMSCRIPTEN_CANVAS_ID_STRING
+"""
+
+
+comptime PROP_WINDOW_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING = "SDL.window.emscripten.keyboard_element"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_PROP_WINDOW_EMSCRIPTEN_KEYBOARD_ELEMENT_STRING
+"""
+
+
 comptime WINDOW_SURFACE_VSYNC_DISABLED = 0
 """See official documentation for details.
 
@@ -6288,14 +6757,14 @@ https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MAJOR_VERSION
 """
 
 
-comptime IMAGE_MINOR_VERSION = 2
+comptime IMAGE_MINOR_VERSION = 4
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MINOR_VERSION
 """
 
 
-comptime IMAGE_MICRO_VERSION = 5
+comptime IMAGE_MICRO_VERSION = 1
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL_image/SDL_IMAGE_MICRO_VERSION
@@ -6306,6 +6775,209 @@ comptime IMAGE_VERSION = versionnum(IMAGE_MAJOR_VERSION, IMAGE_MINOR_VERSION, IM
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL_image/SDL_IMAGE_VERSION
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_FILENAME_STRING = "SDL_image.animation_encoder.create.filename"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_FILENAME_STRING
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_IOSTREAM_POINTER = "SDL_image.animation_encoder.create.iostream"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_IOSTREAM_POINTER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_image.animation_encoder.create.iostream.autoclose"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_TYPE_STRING = "SDL_image.animation_encoder.create.type"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_TYPE_STRING
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_QUALITY_NUMBER = "SDL_image.animation_encoder.create.quality"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_QUALITY_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_TIMEBASE_NUMERATOR_NUMBER = "SDL_image.animation_encoder.create.timebase.numerator"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_TIMEBASE_NUMERATOR_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_TIMEBASE_DENOMINATOR_NUMBER = "SDL_image.animation_encoder.create.timebase.denominator"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_TIMEBASE_DENOMINATOR_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_AVIF_MAX_THREADS_NUMBER = "SDL_image.animation_encoder.create.avif.max_threads"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_AVIF_MAX_THREADS_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_AVIF_KEYFRAME_INTERVAL_NUMBER = "SDL_image.animation_encoder.create.avif.keyframe_interval"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_AVIF_KEYFRAME_INTERVAL_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_ENCODER_CREATE_GIF_USE_LUT_BOOLEAN = "SDL_image.animation_encoder.create.gif.use_lut"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_ENCODER_CREATE_GIF_USE_LUT_BOOLEAN
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_FILENAME_STRING = "SDL_image.animation_decoder.create.filename"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_FILENAME_STRING
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_IOSTREAM_POINTER = "SDL_image.animation_decoder.create.iostream"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_IOSTREAM_POINTER
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN = "SDL_image.animation_decoder.create.iostream.autoclose"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_IOSTREAM_AUTOCLOSE_BOOLEAN
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_TYPE_STRING = "SDL_image.animation_decoder.create.type"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_TYPE_STRING
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_TIMEBASE_NUMERATOR_NUMBER = "SDL_image.animation_decoder.create.timebase.numerator"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_TIMEBASE_NUMERATOR_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_TIMEBASE_DENOMINATOR_NUMBER = "SDL_image.animation_decoder.create.timebase.denominator"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_TIMEBASE_DENOMINATOR_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_MAX_THREADS_NUMBER = "SDL_image.animation_decoder.create.avif.max_threads"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_MAX_THREADS_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_ALLOW_INCREMENTAL_BOOLEAN = "SDL_image.animation_decoder.create.avif.allow_incremental"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_ALLOW_INCREMENTAL_BOOLEAN
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_ALLOW_PROGRESSIVE_BOOLEAN = "SDL_image.animation_decoder.create.avif.allow_progressive"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_AVIF_ALLOW_PROGRESSIVE_BOOLEAN
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_GIF_TRANSPARENT_COLOR_INDEX_NUMBER = "SDL_image.animation_encoder.create.gif.transparent_color_index"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_GIF_TRANSPARENT_COLOR_INDEX_NUMBER
+"""
+
+
+comptime IMG_PROP_ANIMATION_DECODER_CREATE_GIF_NUM_COLORS_NUMBER = "SDL_image.animation_encoder.create.gif.num_colors"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_ANIMATION_DECODER_CREATE_GIF_NUM_COLORS_NUMBER
+"""
+
+
+comptime IMG_PROP_METADATA_IGNORE_PROPS_BOOLEAN = "SDL_image.metadata.ignore_props"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_IGNORE_PROPS_BOOLEAN
+"""
+
+
+comptime IMG_PROP_METADATA_DESCRIPTION_STRING = "SDL_image.metadata.description"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_DESCRIPTION_STRING
+"""
+
+
+comptime IMG_PROP_METADATA_COPYRIGHT_STRING = "SDL_image.metadata.copyright"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_COPYRIGHT_STRING
+"""
+
+
+comptime IMG_PROP_METADATA_TITLE_STRING = "SDL_image.metadata.title"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_TITLE_STRING
+"""
+
+
+comptime IMG_PROP_METADATA_AUTHOR_STRING = "SDL_image.metadata.author"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_AUTHOR_STRING
+"""
+
+
+comptime IMG_PROP_METADATA_CREATION_TIME_STRING = "SDL_image.metadata.creation_time"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_CREATION_TIME_STRING
+"""
+
+
+comptime IMG_PROP_METADATA_FRAME_COUNT_NUMBER = "SDL_image.metadata.frame_count"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_FRAME_COUNT_NUMBER
+"""
+
+
+comptime IMG_PROP_METADATA_LOOP_COUNT_NUMBER = "SDL_image.metadata.loop_count"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_image/IMG_PROP_METADATA_LOOP_COUNT_NUMBER
 """
 
 
@@ -6586,4 +7258,242 @@ comptime TTF_SUBSTRING_TEXT_END = 0x00000800
 """See official documentation for details.
 
 https://wiki.libsdl.org/SDL_ttf/TTF_SUBSTRING_TEXT_END
+"""
+
+
+comptime MIXER_MAJOR_VERSION = 3
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/SDL_MIXER_MAJOR_VERSION
+"""
+
+
+comptime MIXER_MINOR_VERSION = 1
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/SDL_MIXER_MINOR_VERSION
+"""
+
+
+comptime MIXER_MICRO_VERSION = 2
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/SDL_MIXER_MICRO_VERSION
+"""
+
+
+comptime MIXER_VERSION = versionnum(MIXER_MAJOR_VERSION, MIXER_MINOR_VERSION, MIXER_MICRO_VERSION)
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/SDL_MIXER_VERSION
+"""
+
+
+comptime MIX_PROP_MIXER_DEVICE_NUMBER = "SDL_mixer.mixer.device"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_MIXER_DEVICE_NUMBER
+"""
+
+
+comptime MIX_PROP_AUDIO_LOAD_IOSTREAM_POINTER = "SDL_mixer.audio.load.iostream"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_LOAD_IOSTREAM_POINTER
+"""
+
+
+comptime MIX_PROP_AUDIO_LOAD_CLOSEIO_BOOLEAN = "SDL_mixer.audio.load.closeio"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_LOAD_CLOSEIO_BOOLEAN
+"""
+
+
+comptime MIX_PROP_AUDIO_LOAD_PREDECODE_BOOLEAN = "SDL_mixer.audio.load.predecode"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_LOAD_PREDECODE_BOOLEAN
+"""
+
+
+comptime MIX_PROP_AUDIO_LOAD_PREFERRED_MIXER_POINTER = "SDL_mixer.audio.load.preferred_mixer"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_LOAD_PREFERRED_MIXER_POINTER
+"""
+
+
+comptime MIX_PROP_AUDIO_LOAD_SKIP_METADATA_TAGS_BOOLEAN = "SDL_mixer.audio.load.skip_metadata_tags"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_LOAD_SKIP_METADATA_TAGS_BOOLEAN
+"""
+
+
+comptime MIX_PROP_AUDIO_DECODER_STRING = "SDL_mixer.audio.decoder"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_AUDIO_DECODER_STRING
+"""
+
+
+comptime MIX_PROP_METADATA_TITLE_STRING = "SDL_mixer.metadata.title"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_TITLE_STRING
+"""
+
+
+comptime MIX_PROP_METADATA_ARTIST_STRING = "SDL_mixer.metadata.artist"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_ARTIST_STRING
+"""
+
+
+comptime MIX_PROP_METADATA_ALBUM_STRING = "SDL_mixer.metadata.album"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_ALBUM_STRING
+"""
+
+
+comptime MIX_PROP_METADATA_COPYRIGHT_STRING = "SDL_mixer.metadata.copyright"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_COPYRIGHT_STRING
+"""
+
+
+comptime MIX_PROP_METADATA_TRACK_NUMBER = "SDL_mixer.metadata.track"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_TRACK_NUMBER
+"""
+
+
+comptime MIX_PROP_METADATA_TOTAL_TRACKS_NUMBER = "SDL_mixer.metadata.total_tracks"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_TOTAL_TRACKS_NUMBER
+"""
+
+
+comptime MIX_PROP_METADATA_YEAR_NUMBER = "SDL_mixer.metadata.year"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_YEAR_NUMBER
+"""
+
+
+comptime MIX_PROP_METADATA_DURATION_FRAMES_NUMBER = "SDL_mixer.metadata.duration_frames"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_DURATION_FRAMES_NUMBER
+"""
+
+
+comptime MIX_PROP_METADATA_DURATION_INFINITE_BOOLEAN = "SDL_mixer.metadata.duration_infinite"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_METADATA_DURATION_INFINITE_BOOLEAN
+"""
+
+
+comptime MIX_DURATION_UNKNOWN = -1
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_DURATION_UNKNOWN
+"""
+
+
+comptime MIX_DURATION_INFINITE = -2
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_DURATION_INFINITE
+"""
+
+
+comptime MIX_PROP_PLAY_LOOPS_NUMBER = "SDL_mixer.play.loops"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_LOOPS_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_MAX_FRAME_NUMBER = "SDL_mixer.play.max_frame"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_MAX_FRAME_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_MAX_MILLISECONDS_NUMBER = "SDL_mixer.play.max_milliseconds"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_MAX_MILLISECONDS_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_START_FRAME_NUMBER = "SDL_mixer.play.start_frame"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_START_FRAME_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_START_MILLISECOND_NUMBER = "SDL_mixer.play.start_millisecond"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_START_MILLISECOND_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER = "SDL_mixer.play.loop_start_frame"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_LOOP_START_FRAME_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_LOOP_START_MILLISECOND_NUMBER = "SDL_mixer.play.loop_start_millisecond"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_LOOP_START_MILLISECOND_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_FADE_IN_FRAMES_NUMBER = "SDL_mixer.play.fade_in_frames"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_FADE_IN_FRAMES_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_FADE_IN_MILLISECONDS_NUMBER = "SDL_mixer.play.fade_in_milliseconds"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_FADE_IN_MILLISECONDS_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_FADE_IN_START_GAIN_FLOAT = "SDL_mixer.play.fade_in_start_gain"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_FADE_IN_START_GAIN_FLOAT
+"""
+
+
+comptime MIX_PROP_PLAY_APPEND_SILENCE_FRAMES_NUMBER = "SDL_mixer.play.append_silence_frames"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_APPEND_SILENCE_FRAMES_NUMBER
+"""
+
+
+comptime MIX_PROP_PLAY_APPEND_SILENCE_MILLISECONDS_NUMBER = "SDL_mixer.play.append_silence_milliseconds"
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PROP_PLAY_APPEND_SILENCE_MILLISECONDS_NUMBER
 """

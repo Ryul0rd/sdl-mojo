@@ -21,6 +21,13 @@ struct AudioStream:
     pass
 
 
+comptime AudioStreamDataCompleteCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[NoneType, ImmutExternalOrigin], Int32) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_AudioStreamDataCompleteCallback
+"""
+
+
 comptime AudioStreamCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[AudioStream, MutExternalOrigin], Int32, Int32) -> NoneType
 """See official documentation for details.
 
@@ -240,6 +247,27 @@ struct Haptic:
     pass
 
 
+comptime HapticEffectType = UInt16
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HapticEffectType
+"""
+
+
+comptime HapticDirectionType = UInt8
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HapticDirectionType
+"""
+
+
+comptime HapticEffectID = Int32
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_HapticEffectID
+"""
+
+
 struct HapticEffect:
     """See official documentation for details.
     
@@ -377,6 +405,13 @@ https://wiki.libsdl.org/SDL3/SDL_MouseButtonFlags
 """
 
 
+comptime MouseMotionTransformCallback = fn(Ptr[NoneType, MutExternalOrigin], UInt64, Ptr[Window, MutExternalOrigin], MouseID, Ptr[Float32, MutExternalOrigin], Ptr[Float32, MutExternalOrigin]) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL3/SDL_MouseMotionTransformCallback
+"""
+
+
 comptime PenID = UInt32
 """See official documentation for details.
 
@@ -416,6 +451,14 @@ struct Renderer:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_Renderer
+    """
+    pass
+
+
+struct GPURenderState:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL3/SDL_GPURenderState
     """
     pass
 
@@ -613,6 +656,22 @@ https://wiki.libsdl.org/SDL3/SDL_HitTest
 """
 
 
+struct IMG_AnimationEncoder:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_image/IMG_AnimationEncoder
+    """
+    pass
+
+
+struct IMG_AnimationDecoder:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_image/IMG_AnimationDecoder
+    """
+    pass
+
+
 struct TTF_Font:
     """See official documentation for details.
     
@@ -649,3 +708,71 @@ comptime TTF_SubStringFlags = UInt32
 
 https://wiki.libsdl.org/SDL_ttf/TTF_SubStringFlags
 """
+
+
+struct MIX_Mixer:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_Mixer
+    """
+    pass
+
+
+struct MIX_Audio:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_Audio
+    """
+    pass
+
+
+struct MIX_Track:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_Track
+    """
+    pass
+
+
+struct MIX_Group:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_Group
+    """
+    pass
+
+
+comptime MIX_TrackStoppedCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[MIX_Track, MutExternalOrigin]) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_TrackStoppedCallback
+"""
+
+
+comptime MIX_TrackMixCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[MIX_Track, MutExternalOrigin], Ptr[AudioSpec, ImmutExternalOrigin], Ptr[Float32, MutExternalOrigin], Int32) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_TrackMixCallback
+"""
+
+
+comptime MIX_GroupMixCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[MIX_Group, MutExternalOrigin], Ptr[AudioSpec, ImmutExternalOrigin], Ptr[Float32, MutExternalOrigin], Int32) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_GroupMixCallback
+"""
+
+
+comptime MIX_PostMixCallback = fn(Ptr[NoneType, MutExternalOrigin], Ptr[MIX_Mixer, MutExternalOrigin], Ptr[AudioSpec, ImmutExternalOrigin], Ptr[Float32, MutExternalOrigin], Int32) -> NoneType
+"""See official documentation for details.
+
+https://wiki.libsdl.org/SDL_mixer/MIX_PostMixCallback
+"""
+
+
+struct MIX_AudioDecoder:
+    """See official documentation for details.
+    
+    https://wiki.libsdl.org/SDL_mixer/MIX_AudioDecoder
+    """
+    pass
