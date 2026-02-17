@@ -1,6 +1,6 @@
 [workspace]
 authors = ["Ryan <18477649+Ryul0rd@users.noreply.github.com>"]
-channels = ["https://conda.modular.com/max-nightly", "conda-forge"]
+channels = ["rslattery", "https://conda.modular.com/max-nightly", "conda-forge"]
 name = "sdl-mojo"
 platforms = ["linux-64"]
 version = "0.1.0"
@@ -20,6 +20,6 @@ tqdm = ">=4.67.1,<5"
 libclang = "==18.1.1"
 
 [host-dependencies]
-mojo = ">=0.26.2.0.dev2026012822,<0.27"
-sdl3 = "==3.2.12"
-sdl_image = "==1.2.12"
+mojo = "==0.26.2.0.dev2026021605"
+sdl3 = ">=3.4,<3.5"
+sdl3_image = ">=3.4,<3.5"

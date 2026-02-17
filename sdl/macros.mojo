@@ -121,7 +121,7 @@ fn define_pixelformat(type: Int32, order: Int32, layout: Int32, bits: Int, bytes
 
     https://wiki.libsdl.org/SDL3/SDL_DEFINE_PIXELFORMAT
     """
-    var value = (1 << 28) | (type << 24) | (order << 20) | (layout << 16) | (bits << 8) | (bytes << 0)
+    var value = (1 << 28) | (type << 24) | (order << 20) | (layout << 16) | (Int32(bits) << 8) | (Int32(bytes) << 0)
     return PixelFormat(value=value)
 
 

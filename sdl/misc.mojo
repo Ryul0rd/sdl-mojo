@@ -1,7 +1,7 @@
 from memory import memset_zero, memcpy
 from sys import size_of
 from sys.info import CompilationTarget
-from sys.ffi import  _get_global_or_null, _get_global
+from ffi import  _get_global_or_null, _get_global
 from math import ceildiv
 from os import PathLike
 from .enums import EventType, GamepadBindingType, GamepadButton, GamepadAxis
