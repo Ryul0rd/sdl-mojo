@@ -4,7 +4,7 @@ from .enums import *
 from .vulkan import *
 from .sdl_mixer_function_table import get_sdl_mixer_function_table
 from .sdl3_functions import get_error
-from sys.ffi import CStringSlice, c_char
+from ffi import CStringSlice, c_char
 
 
 comptime Ptr = UnsafePointer
@@ -18,12 +18,14 @@ fn mix_version() -> Int32:
     return get_sdl_mixer_function_table().mix_version()
 
 
-fn mix_init() -> Bool:
+fn mix_init() raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_Init
     """
-    return get_sdl_mixer_function_table().mix_init()
+    var success = get_sdl_mixer_function_table().mix_init()
+    if not success:
+        raise get_error()
 
 
 fn mix_quit():
@@ -331,64 +333,74 @@ fn mix_get_track_mixer(track: Ptr[MIX_Track]) raises -> Ptr[MIX_Mixer, MutExtern
     return result
 
 
-fn mix_set_track_audio(track: Ptr[MIX_Track], audio: Ptr[MIX_Audio]) -> Bool:
+fn mix_set_track_audio(track: Ptr[MIX_Track], audio: Ptr[MIX_Audio]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackAudio
     """
-    return get_sdl_mixer_function_table().mix_set_track_audio(
+    var success = get_sdl_mixer_function_table().mix_set_track_audio(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=audio).bitcast[Ptr[MIX_Audio, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_set_track_audio_stream(track: Ptr[MIX_Track], stream: Ptr[AudioStream]) -> Bool:
+fn mix_set_track_audio_stream(track: Ptr[MIX_Track], stream: Ptr[AudioStream]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackAudioStream
     """
-    return get_sdl_mixer_function_table().mix_set_track_audio_stream(
+    var success = get_sdl_mixer_function_table().mix_set_track_audio_stream(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=stream).bitcast[Ptr[AudioStream, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_set_track_io_stream(track: Ptr[MIX_Track], io: Ptr[IOStream], closeio: Bool) -> Bool:
+fn mix_set_track_io_stream(track: Ptr[MIX_Track], io: Ptr[IOStream], closeio: Bool) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackIOStream
     """
-    return get_sdl_mixer_function_table().mix_set_track_io_stream(
+    var success = get_sdl_mixer_function_table().mix_set_track_io_stream(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=io).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=closeio).bitcast[Bool]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn mix_set_track_raw_io_stream(
     track: Ptr[MIX_Track], io: Ptr[IOStream], spec: Ptr[AudioSpec], closeio: Bool
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackRawIOStream
     """
-    return get_sdl_mixer_function_table().mix_set_track_raw_io_stream(
+    var success = get_sdl_mixer_function_table().mix_set_track_raw_io_stream(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=io).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=spec).bitcast[Ptr[AudioSpec, ImmutExternalOrigin]]()[],
         Ptr(to=closeio).bitcast[Bool]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_tag_track(track: Ptr[MIX_Track], tag: CStringSlice) -> Bool:
+fn mix_tag_track(track: Ptr[MIX_Track], tag: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_TagTrack
     """
-    return get_sdl_mixer_function_table().mix_tag_track(
+    var success = get_sdl_mixer_function_table().mix_tag_track(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         tag.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
     )
+    if not success:
+        raise get_error()
 
 
 fn mix_untag_track(track: Ptr[MIX_Track], tag: CStringSlice):
@@ -435,15 +447,17 @@ fn mix_get_tagged_tracks(
     return result
 
 
-fn mix_set_track_playback_position(track: Ptr[MIX_Track], frames: Int64) -> Bool:
+fn mix_set_track_playback_position(track: Ptr[MIX_Track], frames: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackPlaybackPosition
     """
-    return get_sdl_mixer_function_table().mix_set_track_playback_position(
+    var success = get_sdl_mixer_function_table().mix_set_track_playback_position(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=frames).bitcast[Int64]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn mix_get_track_playback_position(track: Ptr[MIX_Track]) -> Int64:
@@ -476,15 +490,17 @@ fn mix_get_track_loops(track: Ptr[MIX_Track]) -> Int32:
     )
 
 
-fn mix_set_track_loops(track: Ptr[MIX_Track], num_loops: Int32) -> Bool:
+fn mix_set_track_loops(track: Ptr[MIX_Track], num_loops: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_SetTrackLoops
     """
-    return get_sdl_mixer_function_table().mix_set_track_loops(
+    var success = get_sdl_mixer_function_table().mix_set_track_loops(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=num_loops).bitcast[Int32]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn mix_get_track_audio(track: Ptr[MIX_Track]) raises -> Ptr[MIX_Audio, MutExternalOrigin]:
@@ -585,134 +601,158 @@ fn mix_frames_to_ms(sample_rate: Int32, frames: Int64) -> Int64:
     )
 
 
-fn mix_play_track(track: Ptr[MIX_Track], options: PropertiesID) -> Bool:
+fn mix_play_track(track: Ptr[MIX_Track], options: PropertiesID) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PlayTrack
     """
-    return get_sdl_mixer_function_table().mix_play_track(
+    var success = get_sdl_mixer_function_table().mix_play_track(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=options).bitcast[PropertiesID]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_play_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice, options: PropertiesID) -> Bool:
+fn mix_play_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice, options: PropertiesID) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PlayTag
     """
-    return get_sdl_mixer_function_table().mix_play_tag(
+    var success = get_sdl_mixer_function_table().mix_play_tag(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         tag.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
         Ptr(to=options).bitcast[PropertiesID]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_play_audio(mixer: Ptr[MIX_Mixer], audio: Ptr[MIX_Audio]) -> Bool:
+fn mix_play_audio(mixer: Ptr[MIX_Mixer], audio: Ptr[MIX_Audio]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PlayAudio
     """
-    return get_sdl_mixer_function_table().mix_play_audio(
+    var success = get_sdl_mixer_function_table().mix_play_audio(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         Ptr(to=audio).bitcast[Ptr[MIX_Audio, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_stop_track(track: Ptr[MIX_Track], fade_out_frames: Int64) -> Bool:
+fn mix_stop_track(track: Ptr[MIX_Track], fade_out_frames: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_StopTrack
     """
-    return get_sdl_mixer_function_table().mix_stop_track(
+    var success = get_sdl_mixer_function_table().mix_stop_track(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[],
         Ptr(to=fade_out_frames).bitcast[Int64]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_stop_all_tracks(mixer: Ptr[MIX_Mixer], fade_out_ms: Int64) -> Bool:
+fn mix_stop_all_tracks(mixer: Ptr[MIX_Mixer], fade_out_ms: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_StopAllTracks
     """
-    return get_sdl_mixer_function_table().mix_stop_all_tracks(
+    var success = get_sdl_mixer_function_table().mix_stop_all_tracks(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         Ptr(to=fade_out_ms).bitcast[Int64]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_stop_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice, fade_out_ms: Int64) -> Bool:
+fn mix_stop_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice, fade_out_ms: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_StopTag
     """
-    return get_sdl_mixer_function_table().mix_stop_tag(
+    var success = get_sdl_mixer_function_table().mix_stop_tag(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         tag.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
         Ptr(to=fade_out_ms).bitcast[Int64]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_pause_track(track: Ptr[MIX_Track]) -> Bool:
+fn mix_pause_track(track: Ptr[MIX_Track]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PauseTrack
     """
-    return get_sdl_mixer_function_table().mix_pause_track(
+    var success = get_sdl_mixer_function_table().mix_pause_track(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_pause_all_tracks(mixer: Ptr[MIX_Mixer]) -> Bool:
+fn mix_pause_all_tracks(mixer: Ptr[MIX_Mixer]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PauseAllTracks
     """
-    return get_sdl_mixer_function_table().mix_pause_all_tracks(
+    var success = get_sdl_mixer_function_table().mix_pause_all_tracks(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_pause_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice) -> Bool:
+fn mix_pause_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_PauseTag
     """
-    return get_sdl_mixer_function_table().mix_pause_tag(
+    var success = get_sdl_mixer_function_table().mix_pause_tag(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         tag.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_resume_track(track: Ptr[MIX_Track]) -> Bool:
+fn mix_resume_track(track: Ptr[MIX_Track]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_ResumeTrack
     """
-    return get_sdl_mixer_function_table().mix_resume_track(
+    var success = get_sdl_mixer_function_table().mix_resume_track(
         Ptr(to=track).bitcast[Ptr[MIX_Track, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_resume_all_tracks(mixer: Ptr[MIX_Mixer]) -> Bool:
+fn mix_resume_all_tracks(mixer: Ptr[MIX_Mixer]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_ResumeAllTracks
     """
-    return get_sdl_mixer_function_table().mix_resume_all_tracks(
+    var success = get_sdl_mixer_function_table().mix_resume_all_tracks(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn mix_resume_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice) -> Bool:
+fn mix_resume_tag(mixer: Ptr[MIX_Mixer], tag: CStringSlice) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL_mixer/MIX_ResumeTag
     """
-    return get_sdl_mixer_function_table().mix_resume_tag(
+    var success = get_sdl_mixer_function_table().mix_resume_tag(
         Ptr(to=mixer).bitcast[Ptr[MIX_Mixer, MutExternalOrigin]]()[],
         tag.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
     )
+    if not success:
+        raise get_error()
 
 
 fn mix_track_playing(track: Ptr[MIX_Track]) -> Bool:

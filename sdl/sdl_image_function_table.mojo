@@ -1,4 +1,4 @@
-from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char
+from ffi import OwnedDLHandle, _Global, _get_global, c_char
 from sys import CompilationTarget
 from os import PathLike
 from pathlib import Path

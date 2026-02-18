@@ -594,7 +594,7 @@ def emit_sdl_typedefs(files: Dict[str, str], typedefs: List[SdlTypedef], lib_spe
         typedefs_file_parts.append((
             "from .structs import *\n"
             "from .misc import *\n"
-            "from sys.ffi import c_char\n"
+            "from ffi import c_char\n"
             "\n\n"
             "comptime Ptr = UnsafePointer\n"
         ))
@@ -709,7 +709,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         function_table_type_name = f"Sdl{lib_spec.name.removeprefix('SDL_').capitalize()}FunctionTable"
         load_dl_name = f"load_{lib_spec.name.removeprefix('SDL_').lower()}_dl"
     functions_table_file_parts: List[str] = [
-        "from sys.ffi import OwnedDLHandle, _Global, _get_global, c_char\n",
+        "from ffi import OwnedDLHandle, _Global, _get_global, c_char\n",
         "from sys import CompilationTarget\n",
         "from os import PathLike\n",
         "from pathlib import Path\n",
@@ -780,7 +780,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         f"from .vulkan import *\n",
         f"from .{function_table_filename.removesuffix('.mojo')} import get_{function_table_global_name}\n",
         "" if lib_spec.name == "SDL3" else "from .sdl3_functions import get_error\n",
-        f"from sys.ffi import CStringSlice, c_char\n",
+        f"from ffi import CStringSlice, c_char\n",
         f"\n\n",
         f"comptime Ptr = UnsafePointer\n",
     ]
@@ -798,7 +798,11 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     return_type_mojo = emit_mojo_type(function.return_type)
     returns_bool_error = (
         return_type_mojo == "Bool"
-        and "Returns: true on success or false on failure" in original_docstring
+        and re.search(
+            r"Returns:\s*true.*?false\s*on\s*(?:error|failure)", 
+            original_docstring, 
+            flags=re.IGNORECASE | re.DOTALL
+        ) is not None
     )
     returns_ptr_error = (
         isinstance(function.return_type, SdlPointer)

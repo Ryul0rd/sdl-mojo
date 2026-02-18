@@ -1,6 +1,6 @@
 from .structs import *
 from .misc import *
-from sys.ffi import c_char
+from ffi import c_char
 
 
 comptime Ptr = UnsafePointer

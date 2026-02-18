@@ -3,7 +3,7 @@ from .structs import *
 from .enums import *
 from .vulkan import *
 from .sdl3_function_table import get_sdl3_function_table
-from sys.ffi import CStringSlice, c_char
+from ffi import CStringSlice, c_char
 
 
 comptime Ptr = UnsafePointer
@@ -3432,15 +3432,17 @@ fn window_supports_gpu_present_mode(
     )
 
 
-fn claim_window_for_gpu_device(device: Ptr[GPUDevice], window: Ptr[Window]) -> Bool:
+fn claim_window_for_gpu_device(device: Ptr[GPUDevice], window: Ptr[Window]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ClaimWindowForGPUDevice
     """
-    return get_sdl3_function_table().claim_window_for_gpu_device(
+    var success = get_sdl3_function_table().claim_window_for_gpu_device(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
         Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn release_window_from_gpu_device(device: Ptr[GPUDevice], window: Ptr[Window]):
@@ -3459,30 +3461,34 @@ fn set_gpu_swapchain_parameters(
     window: Ptr[Window],
     swapchain_composition: GPUSwapchainComposition,
     present_mode: GPUPresentMode,
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetGPUSwapchainParameters
     """
-    return get_sdl3_function_table().set_gpu_swapchain_parameters(
+    var success = get_sdl3_function_table().set_gpu_swapchain_parameters(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
         Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
         Ptr(to=swapchain_composition).bitcast[GPUSwapchainComposition]()[],
         Ptr(to=present_mode).bitcast[GPUPresentMode]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn set_gpu_allowed_frames_in_flight(
     device: Ptr[GPUDevice], allowed_frames_in_flight: UInt32
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SetGPUAllowedFramesInFlight
     """
-    return get_sdl3_function_table().set_gpu_allowed_frames_in_flight(
+    var success = get_sdl3_function_table().set_gpu_allowed_frames_in_flight(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
         Ptr(to=allowed_frames_in_flight).bitcast[UInt32]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn get_gpu_swapchain_texture_format(
@@ -3504,29 +3510,33 @@ fn acquire_gpu_swapchain_texture(
     swapchain_texture: Ptr[Ptr[GPUTexture, MutExternalOrigin]],
     swapchain_texture_width: Ptr[UInt32],
     swapchain_texture_height: Ptr[UInt32],
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_AcquireGPUSwapchainTexture
     """
-    return get_sdl3_function_table().acquire_gpu_swapchain_texture(
+    var success = get_sdl3_function_table().acquire_gpu_swapchain_texture(
         Ptr(to=command_buffer).bitcast[Ptr[GPUCommandBuffer, MutExternalOrigin]]()[],
         Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture).bitcast[Ptr[Ptr[GPUTexture, MutExternalOrigin], MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture_width).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture_height).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn wait_for_gpu_swapchain(device: Ptr[GPUDevice], window: Ptr[Window]) -> Bool:
+fn wait_for_gpu_swapchain(device: Ptr[GPUDevice], window: Ptr[Window]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WaitForGPUSwapchain
     """
-    return get_sdl3_function_table().wait_for_gpu_swapchain(
+    var success = get_sdl3_function_table().wait_for_gpu_swapchain(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
         Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn wait_and_acquire_gpu_swapchain_texture(
@@ -3535,28 +3545,32 @@ fn wait_and_acquire_gpu_swapchain_texture(
     swapchain_texture: Ptr[Ptr[GPUTexture, MutExternalOrigin]],
     swapchain_texture_width: Ptr[UInt32],
     swapchain_texture_height: Ptr[UInt32],
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WaitAndAcquireGPUSwapchainTexture
     """
-    return get_sdl3_function_table().wait_and_acquire_gpu_swapchain_texture(
+    var success = get_sdl3_function_table().wait_and_acquire_gpu_swapchain_texture(
         Ptr(to=command_buffer).bitcast[Ptr[GPUCommandBuffer, MutExternalOrigin]]()[],
         Ptr(to=window).bitcast[Ptr[Window, MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture).bitcast[Ptr[Ptr[GPUTexture, MutExternalOrigin], MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture_width).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
         Ptr(to=swapchain_texture_height).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn submit_gpu_command_buffer(command_buffer: Ptr[GPUCommandBuffer]) -> Bool:
+fn submit_gpu_command_buffer(command_buffer: Ptr[GPUCommandBuffer]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_SubmitGPUCommandBuffer
     """
-    return get_sdl3_function_table().submit_gpu_command_buffer(
+    var success = get_sdl3_function_table().submit_gpu_command_buffer(
         Ptr(to=command_buffer).bitcast[Ptr[GPUCommandBuffer, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
 fn submit_gpu_command_buffer_and_acquire_fence(
@@ -3574,24 +3588,28 @@ fn submit_gpu_command_buffer_and_acquire_fence(
     return result
 
 
-fn cancel_gpu_command_buffer(command_buffer: Ptr[GPUCommandBuffer]) -> Bool:
+fn cancel_gpu_command_buffer(command_buffer: Ptr[GPUCommandBuffer]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_CancelGPUCommandBuffer
     """
-    return get_sdl3_function_table().cancel_gpu_command_buffer(
+    var success = get_sdl3_function_table().cancel_gpu_command_buffer(
         Ptr(to=command_buffer).bitcast[Ptr[GPUCommandBuffer, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn wait_for_gpu_idle(device: Ptr[GPUDevice]) -> Bool:
+fn wait_for_gpu_idle(device: Ptr[GPUDevice]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WaitForGPUIdle
     """
-    return get_sdl3_function_table().wait_for_gpu_idle(
+    var success = get_sdl3_function_table().wait_for_gpu_idle(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[]
     )
+    if not success:
+        raise get_error()
 
 
 fn wait_for_gpu_fences(
@@ -3599,17 +3617,19 @@ fn wait_for_gpu_fences(
     wait_all: Bool,
     fences: Ptr[Ptr[GPUFence, MutExternalOrigin]],
     num_fences: UInt32,
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WaitForGPUFences
     """
-    return get_sdl3_function_table().wait_for_gpu_fences(
+    var success = get_sdl3_function_table().wait_for_gpu_fences(
         Ptr(to=device).bitcast[Ptr[GPUDevice, MutExternalOrigin]]()[],
         Ptr(to=wait_all).bitcast[Bool]()[],
         Ptr(to=fences).bitcast[Ptr[Ptr[GPUFence, MutExternalOrigin], ImmutExternalOrigin]]()[],
         Ptr(to=num_fences).bitcast[UInt32]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn query_gpu_fence(device: Ptr[GPUDevice], fence: Ptr[GPUFence]) -> Bool:
@@ -4577,276 +4597,328 @@ fn read_s8(src: Ptr[IOStream], value: Ptr[Int8]) raises:
         raise get_error()
 
 
-fn read_u16_le(src: Ptr[IOStream], value: Ptr[UInt16]) -> Bool:
+fn read_u16_le(src: Ptr[IOStream], value: Ptr[UInt16]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU16LE
     """
-    return get_sdl3_function_table().read_u16_le(
+    var success = get_sdl3_function_table().read_u16_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt16, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s16_le(src: Ptr[IOStream], value: Ptr[Int16]) -> Bool:
+fn read_s16_le(src: Ptr[IOStream], value: Ptr[Int16]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS16LE
     """
-    return get_sdl3_function_table().read_s16_le(
+    var success = get_sdl3_function_table().read_s16_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int16, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_u16_be(src: Ptr[IOStream], value: Ptr[UInt16]) -> Bool:
+fn read_u16_be(src: Ptr[IOStream], value: Ptr[UInt16]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU16BE
     """
-    return get_sdl3_function_table().read_u16_be(
+    var success = get_sdl3_function_table().read_u16_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt16, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s16_be(src: Ptr[IOStream], value: Ptr[Int16]) -> Bool:
+fn read_s16_be(src: Ptr[IOStream], value: Ptr[Int16]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS16BE
     """
-    return get_sdl3_function_table().read_s16_be(
+    var success = get_sdl3_function_table().read_s16_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int16, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_u32_le(src: Ptr[IOStream], value: Ptr[UInt32]) -> Bool:
+fn read_u32_le(src: Ptr[IOStream], value: Ptr[UInt32]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU32LE
     """
-    return get_sdl3_function_table().read_u32_le(
+    var success = get_sdl3_function_table().read_u32_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s32_le(src: Ptr[IOStream], value: Ptr[Int32]) -> Bool:
+fn read_s32_le(src: Ptr[IOStream], value: Ptr[Int32]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS32LE
     """
-    return get_sdl3_function_table().read_s32_le(
+    var success = get_sdl3_function_table().read_s32_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_u32_be(src: Ptr[IOStream], value: Ptr[UInt32]) -> Bool:
+fn read_u32_be(src: Ptr[IOStream], value: Ptr[UInt32]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU32BE
     """
-    return get_sdl3_function_table().read_u32_be(
+    var success = get_sdl3_function_table().read_u32_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s32_be(src: Ptr[IOStream], value: Ptr[Int32]) -> Bool:
+fn read_s32_be(src: Ptr[IOStream], value: Ptr[Int32]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS32BE
     """
-    return get_sdl3_function_table().read_s32_be(
+    var success = get_sdl3_function_table().read_s32_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int32, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_u64_le(src: Ptr[IOStream], value: Ptr[UInt64]) -> Bool:
+fn read_u64_le(src: Ptr[IOStream], value: Ptr[UInt64]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU64LE
     """
-    return get_sdl3_function_table().read_u64_le(
+    var success = get_sdl3_function_table().read_u64_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt64, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s64_le(src: Ptr[IOStream], value: Ptr[Int64]) -> Bool:
+fn read_s64_le(src: Ptr[IOStream], value: Ptr[Int64]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS64LE
     """
-    return get_sdl3_function_table().read_s64_le(
+    var success = get_sdl3_function_table().read_s64_le(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int64, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_u64_be(src: Ptr[IOStream], value: Ptr[UInt64]) -> Bool:
+fn read_u64_be(src: Ptr[IOStream], value: Ptr[UInt64]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadU64BE
     """
-    return get_sdl3_function_table().read_u64_be(
+    var success = get_sdl3_function_table().read_u64_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[UInt64, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn read_s64_be(src: Ptr[IOStream], value: Ptr[Int64]) -> Bool:
+fn read_s64_be(src: Ptr[IOStream], value: Ptr[Int64]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadS64BE
     """
-    return get_sdl3_function_table().read_s64_be(
+    var success = get_sdl3_function_table().read_s64_be(
         Ptr(to=src).bitcast[Ptr[IOStream, MutExternalOrigin]]()[],
         Ptr(to=value).bitcast[Ptr[Int64, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u8(dst: Ptr[IOStream], value: UInt8) -> Bool:
+fn write_u8(dst: Ptr[IOStream], value: UInt8) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU8
     """
-    return get_sdl3_function_table().write_u8(
+    var success = get_sdl3_function_table().write_u8(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt8]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s8(dst: Ptr[IOStream], value: Int8) -> Bool:
+fn write_s8(dst: Ptr[IOStream], value: Int8) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS8
     """
-    return get_sdl3_function_table().write_s8(
+    var success = get_sdl3_function_table().write_s8(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int8]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u16_le(dst: Ptr[IOStream], value: UInt16) -> Bool:
+fn write_u16_le(dst: Ptr[IOStream], value: UInt16) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU16LE
     """
-    return get_sdl3_function_table().write_u16_le(
+    var success = get_sdl3_function_table().write_u16_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt16]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s16_le(dst: Ptr[IOStream], value: Int16) -> Bool:
+fn write_s16_le(dst: Ptr[IOStream], value: Int16) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS16LE
     """
-    return get_sdl3_function_table().write_s16_le(
+    var success = get_sdl3_function_table().write_s16_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int16]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u16_be(dst: Ptr[IOStream], value: UInt16) -> Bool:
+fn write_u16_be(dst: Ptr[IOStream], value: UInt16) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU16BE
     """
-    return get_sdl3_function_table().write_u16_be(
+    var success = get_sdl3_function_table().write_u16_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt16]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s16_be(dst: Ptr[IOStream], value: Int16) -> Bool:
+fn write_s16_be(dst: Ptr[IOStream], value: Int16) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS16BE
     """
-    return get_sdl3_function_table().write_s16_be(
+    var success = get_sdl3_function_table().write_s16_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int16]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u32_le(dst: Ptr[IOStream], value: UInt32) -> Bool:
+fn write_u32_le(dst: Ptr[IOStream], value: UInt32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU32LE
     """
-    return get_sdl3_function_table().write_u32_le(
+    var success = get_sdl3_function_table().write_u32_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt32]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s32_le(dst: Ptr[IOStream], value: Int32) -> Bool:
+fn write_s32_le(dst: Ptr[IOStream], value: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS32LE
     """
-    return get_sdl3_function_table().write_s32_le(
+    var success = get_sdl3_function_table().write_s32_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int32]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u32_be(dst: Ptr[IOStream], value: UInt32) -> Bool:
+fn write_u32_be(dst: Ptr[IOStream], value: UInt32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU32BE
     """
-    return get_sdl3_function_table().write_u32_be(
+    var success = get_sdl3_function_table().write_u32_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt32]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s32_be(dst: Ptr[IOStream], value: Int32) -> Bool:
+fn write_s32_be(dst: Ptr[IOStream], value: Int32) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS32BE
     """
-    return get_sdl3_function_table().write_s32_be(
+    var success = get_sdl3_function_table().write_s32_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int32]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u64_le(dst: Ptr[IOStream], value: UInt64) -> Bool:
+fn write_u64_le(dst: Ptr[IOStream], value: UInt64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU64LE
     """
-    return get_sdl3_function_table().write_u64_le(
+    var success = get_sdl3_function_table().write_u64_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt64]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s64_le(dst: Ptr[IOStream], value: Int64) -> Bool:
+fn write_s64_le(dst: Ptr[IOStream], value: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS64LE
     """
-    return get_sdl3_function_table().write_s64_le(
+    var success = get_sdl3_function_table().write_s64_le(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int64]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_u64_be(dst: Ptr[IOStream], value: UInt64) -> Bool:
+fn write_u64_be(dst: Ptr[IOStream], value: UInt64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteU64BE
     """
-    return get_sdl3_function_table().write_u64_be(
+    var success = get_sdl3_function_table().write_u64_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[UInt64]()[]
     )
+    if not success:
+        raise get_error()
 
 
-fn write_s64_be(dst: Ptr[IOStream], value: Int64) -> Bool:
+fn write_s64_be(dst: Ptr[IOStream], value: Int64) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteS64BE
     """
-    return get_sdl3_function_table().write_s64_be(
+    var success = get_sdl3_function_table().write_s64_be(
         Ptr(to=dst).bitcast[Ptr[IOStream, MutExternalOrigin]]()[], Ptr(to=value).bitcast[Int64]()[]
     )
+    if not success:
+        raise get_error()
 
 
 fn lock_joysticks():
@@ -7572,15 +7644,17 @@ fn render_coordinates_to_window(
         raise get_error()
 
 
-fn convert_event_to_render_coordinates(renderer: Ptr[Renderer], event: Ptr[Event]) -> Bool:
+fn convert_event_to_render_coordinates(renderer: Ptr[Renderer], event: Ptr[Event]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ConvertEventToRenderCoordinates
     """
-    return get_sdl3_function_table().convert_event_to_render_coordinates(
+    var success = get_sdl3_function_table().convert_event_to_render_coordinates(
         Ptr(to=renderer).bitcast[Ptr[Renderer, MutExternalOrigin]]()[],
         Ptr(to=event).bitcast[Ptr[Event, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn set_render_viewport(renderer: Ptr[Renderer], rect: Ptr[Rect]) raises:
@@ -8667,46 +8741,52 @@ fn storage_ready(storage: Ptr[Storage]) -> Bool:
     )
 
 
-fn get_storage_file_size(storage: Ptr[Storage], path: CStringSlice, length: Ptr[UInt64]) -> Bool:
+fn get_storage_file_size(storage: Ptr[Storage], path: CStringSlice, length: Ptr[UInt64]) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_GetStorageFileSize
     """
-    return get_sdl3_function_table().get_storage_file_size(
+    var success = get_sdl3_function_table().get_storage_file_size(
         Ptr(to=storage).bitcast[Ptr[Storage, MutExternalOrigin]]()[],
         path.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
         Ptr(to=length).bitcast[Ptr[UInt64, MutExternalOrigin]]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn read_storage_file(
     storage: Ptr[Storage], path: CStringSlice, destination: Ptr[NoneType], length: UInt64
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_ReadStorageFile
     """
-    return get_sdl3_function_table().read_storage_file(
+    var success = get_sdl3_function_table().read_storage_file(
         Ptr(to=storage).bitcast[Ptr[Storage, MutExternalOrigin]]()[],
         path.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
         Ptr(to=destination).bitcast[Ptr[NoneType, MutExternalOrigin]]()[],
         Ptr(to=length).bitcast[UInt64]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn write_storage_file(
     storage: Ptr[Storage], path: CStringSlice, source: Ptr[NoneType], length: UInt64
-) -> Bool:
+) raises:
     """See official documentation for details.
     
     https://wiki.libsdl.org/SDL3/SDL_WriteStorageFile
     """
-    return get_sdl3_function_table().write_storage_file(
+    var success = get_sdl3_function_table().write_storage_file(
         Ptr(to=storage).bitcast[Ptr[Storage, MutExternalOrigin]]()[],
         path.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin](),
         Ptr(to=source).bitcast[Ptr[NoneType, ImmutExternalOrigin]]()[],
         Ptr(to=length).bitcast[UInt64]()[],
     )
+    if not success:
+        raise get_error()
 
 
 fn create_storage_directory(storage: Ptr[Storage], path: CStringSlice) raises:

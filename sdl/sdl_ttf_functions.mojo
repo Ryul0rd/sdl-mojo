@@ -4,7 +4,7 @@ from .enums import *
 from .vulkan import *
 from .sdl_ttf_function_table import get_sdl_ttf_function_table
 from .sdl3_functions import get_error
-from sys.ffi import CStringSlice, c_char
+from ffi import CStringSlice, c_char
 
 
 comptime Ptr = UnsafePointer
