@@ -10,6 +10,8 @@ from .enums import *
 from .sdl3_function_table import load_dl
 from .sdl_image_function_table import load_image_dl
 from .sdl_ttf_function_table import load_ttf_dl
+from .sdl_mixer_function_table import load_mixer_dl
 from .sdl3_functions import *
 from .sdl_image_functions import *
 from .sdl_ttf_functions import *
+from .sdl_mixer_functions import *
