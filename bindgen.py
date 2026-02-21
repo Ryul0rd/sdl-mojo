@@ -641,6 +641,7 @@ def emit_sdl_structs(files: Dict[str, str], structs: List[SdlStruct], lib_spec: 
             "from .typedefs import *\n"
             "from .enums import *\n"
             "from .misc import *\n"
+            "from ffi import CStringSlice\n"
             "\n\n"
             "comptime Ptr = UnsafePointer\n"
         ))
@@ -716,7 +717,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "from .structs import *\n",
         "from .enums import *\n",
         "from .vulkan import *\n",
-        "" if lib_spec.name == "SDL3" else "from .sdl3_functions import get_error\n",
+        "" if lib_spec.name == "SDL3" else "from .sdl3_function_table import Sdl3FunctionTable\n",
         "\n\n",
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
@@ -724,9 +725,12 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         f"    var dynamic_library_handle: OwnedDLHandle\n",
     ]
 
+    if lib_spec.name != "SDL3":
+        functions_table_file_parts.append("    var _get_error: fn() -> CStringSlice[ImmutExternalOrigin]\n")
+
     for function in functions:
         mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        functions_table_file_parts.append(f'    var pointer_{mojo_function_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
+        functions_table_file_parts.append(f'    var _{mojo_function_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
 
     functions_table_file_parts.extend((
         "\n",
@@ -750,8 +754,15 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
         mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(
-            f'        self.pointer_{mojo_function_name} = self.dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
+            f'        self._{mojo_function_name} = self.dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
         )
+
+    if lib_spec.name != "SDL3":
+        functions_table_file_parts.extend((
+            "\n",
+            "    fn get_error(self) -> CStringSlice[ImmutExternalOrigin]:\n",
+            "        return self._get_error()\n",
+        ))
 
     for function in functions:
         functions_table_file_parts.append("\n")
@@ -780,7 +791,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     )
     
     if "GetError" in original_docstring:
-        error_message = "get_error()"
+        error_message = "self._get_error()"
     else:
         error_message = f'"Error in {mojo_function_name} call. See official documentation for details."'
 
@@ -835,7 +846,7 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
     ))
     parts.append(emit_wiki_docstring(lib_spec.name, function.name, indent_level=2))
     parts.append(emit_fn_like(
-        f"{result_part}self.pointer_{mojo_function_name}(",
+        f"{result_part}self._{mojo_function_name}(",
         [
             f"{argument.name}.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()"
             if is_string(argument.type) else

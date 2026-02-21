@@ -1,6 +1,7 @@
 from .typedefs import *
 from .enums import *
 from .misc import *
+from ffi import CStringSlice
 
 
 comptime Ptr = UnsafePointer
