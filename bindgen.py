@@ -729,8 +729,9 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         functions_table_file_parts.append("    var _get_error: fn() -> CStringSlice[ImmutExternalOrigin]\n")
 
     for function in functions:
-        mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        functions_table_file_parts.append(f'    var _{mojo_function_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
+        mojo_function_name = pascal_to_snake_case(remove_library_prefix(function.name))
+        mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
+        functions_table_file_parts.append(f'    var _{mojo_function_name}: {mojo_function_type}\n')
 
     functions_table_file_parts.extend((
         "\n",
@@ -752,7 +753,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
     ))
 
     for function in functions:
-        mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+        mojo_function_name = pascal_to_snake_case(remove_library_prefix(function.name))
         mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(
             f'        self._{mojo_function_name} = self.dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
@@ -774,7 +775,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
 
 
 def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
-    mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+    mojo_function_name = pascal_to_snake_case(remove_library_prefix(function.name))
     original_docstring = emit_original_docstring(function.docstring)
     return_type_mojo = emit_mojo_type(function.return_type)
     
@@ -990,6 +991,13 @@ def emit_fn_like(
         lines.append(inner_indent + arg_line + ",\n")
     lines.append(base_indent + final_line)
     return "".join(lines)
+
+
+def remove_library_prefix(function_name: str) -> str:
+    for prefix in ("SDL_", "IMG_", "TTF_", "Mix_", "MIX_"):
+        if function_name.startswith(prefix):
+            return function_name[len(prefix):]
+    return function_name
 
 
 def pascal_to_snake_case(name: str) -> str:
