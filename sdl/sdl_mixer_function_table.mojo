@@ -108,7 +108,7 @@ struct SdlMixerFunctionTable:
     var _mix_get_audio_decoder_format: fn(Ptr[MIX_AudioDecoder, MutExternalOrigin], Ptr[AudioSpec, MutExternalOrigin]) -> Bool
     var _mix_decode_audio: fn(Ptr[MIX_AudioDecoder, MutExternalOrigin], Ptr[NoneType, MutExternalOrigin], Int32, Ptr[AudioSpec, ImmutExternalOrigin]) -> Int32
 
-    fn __init__(out self) raises:
+    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable) raises:
         var library_path: Path
         @parameter
         if CompilationTarget.is_linux():
@@ -118,10 +118,11 @@ struct SdlMixerFunctionTable:
         else:
             constrained[False, "Target operating system is not supported."]()
             library_path = Path()
-        self = Self(library_path)
+        self = Self(sdl3_function_table, library_path)
 
-    fn __init__(out self, library_path: Path) raises:
+    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable, library_path: Path) raises:
         self.dynamic_library_handle = OwnedDLHandle(library_path)
+        self._get_error = sdl3_function_table._get_error
         self._mix_version = self.dynamic_library_handle.get_function[fn() -> Int32]("MIX_Version")
         self._mix_init = self.dynamic_library_handle.get_function[fn() -> Bool]("MIX_Init")
         self._mix_quit = self.dynamic_library_handle.get_function[fn() -> NoneType]("MIX_Quit")

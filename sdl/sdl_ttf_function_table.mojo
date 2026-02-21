@@ -134,7 +134,7 @@ struct SdlTtfFunctionTable:
     var _ttf_quit: fn() -> NoneType
     var _ttf_was_init: fn() -> Int32
 
-    fn __init__(out self) raises:
+    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable) raises:
         var library_path: Path
         @parameter
         if CompilationTarget.is_linux():
@@ -144,10 +144,11 @@ struct SdlTtfFunctionTable:
         else:
             constrained[False, "Target operating system is not supported."]()
             library_path = Path()
-        self = Self(library_path)
+        self = Self(sdl3_function_table, library_path)
 
-    fn __init__(out self, library_path: Path) raises:
+    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable, library_path: Path) raises:
         self.dynamic_library_handle = OwnedDLHandle(library_path)
+        self._get_error = sdl3_function_table._get_error
         self._ttf_version = self.dynamic_library_handle.get_function[fn() -> Int32]("TTF_Version")
         self._ttf_get_free_type_version = self.dynamic_library_handle.get_function[fn(Ptr[Int32, MutExternalOrigin], Ptr[Int32, MutExternalOrigin], Ptr[Int32, MutExternalOrigin]) -> NoneType]("TTF_GetFreeTypeVersion")
         self._ttf_get_harf_buzz_version = self.dynamic_library_handle.get_function[fn(Ptr[Int32, MutExternalOrigin], Ptr[Int32, MutExternalOrigin], Ptr[Int32, MutExternalOrigin]) -> NoneType]("TTF_GetHarfBuzzVersion")

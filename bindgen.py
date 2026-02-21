@@ -734,7 +734,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
 
     functions_table_file_parts.extend((
         "\n",
-        "    fn __init__(out self) raises:\n",
+        "    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable) raises:\n",
         "        var library_path: Path\n",
         "        @parameter\n",
         "        if CompilationTarget.is_linux():\n",
@@ -744,10 +744,11 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "        else:\n",
         '            constrained[False, "Target operating system is not supported."]()\n',
         "            library_path = Path()\n",
-        "        self = Self(library_path)\n",
+        "        self = Self(sdl3_function_table, library_path)\n",
         "\n",
-        "    fn __init__(out self, library_path: Path) raises:\n",
+        "    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable, library_path: Path) raises:\n",
         "        self.dynamic_library_handle = OwnedDLHandle(library_path)\n",
+        "        self._get_error = sdl3_function_table._get_error\n",
     ))
 
     for function in functions:
