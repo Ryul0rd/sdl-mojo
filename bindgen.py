@@ -701,15 +701,13 @@ def emit_sdl_enums(files: Dict[str, str], enums: List[SdlEnum], lib_spec: SdlLib
 
 
 def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_spec: SdlLibSpec):
-    function_table_global_name = f"{lib_spec.name.lower()}_function_table"
     if lib_spec.name == "SDL3":
         function_table_type_name = "Sdl3FunctionTable"
-        load_dl_name = "load_dl"
     else:
         function_table_type_name = f"Sdl{lib_spec.name.removeprefix('SDL_').capitalize()}FunctionTable"
-        load_dl_name = f"load_{lib_spec.name.removeprefix('SDL_').lower()}_dl"
+    
     functions_table_file_parts: List[str] = [
-        "from ffi import OwnedDLHandle, _Global, _get_global, c_char\n",
+        "from ffi import OwnedDLHandle, c_char, CStringSlice\n",
         "from sys import CompilationTarget\n",
         "from os import PathLike\n",
         "from pathlib import Path\n",
@@ -718,84 +716,56 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "from .structs import *\n",
         "from .enums import *\n",
         "from .vulkan import *\n",
+        "" if lib_spec.name == "SDL3" else "from .sdl3_functions import get_error\n",
         "\n\n",
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
-        f'comptime {function_table_global_name} = _Global["{function_table_global_name}", zero_init[{function_table_type_name}]]()\n',
-        "\n\n",
-        f"fn zero_init_{function_table_global_name}() -> OpaquePointer[MutExternalOrigin]:\n"
-        f"    var fn_table = alloc[{function_table_type_name}](1)\n"
-        f"    memset_zero(fn_table, 1)\n"
-        f"    return fn_table.bitcast[NoneType]()\n"
-        "\n\n",
-        f"fn destroy_{function_table_global_name}(fn_table: OpaquePointer[MutExternalOrigin]):\n"
-        f"    fn_table.bitcast[{function_table_type_name}]().destroy_pointee()\n"
-        "\n\n",
-        f"fn get_{function_table_global_name}() -> ref [MutExternalOrigin] {function_table_type_name}:\n",
-        f"    return _get_global[\n",
-        f'        "{function_table_global_name}", zero_init_{function_table_global_name}, destroy_{function_table_global_name},\n',
-        f"    ]().bitcast[{function_table_type_name}]()[]\n",
-        "\n\n",
-        f'fn {load_dl_name}() raises:\n',
-        f"    var path: Path\n",
-        f"    @parameter\n",
-        f"    if CompilationTarget.is_linux():\n",
-        f'        path = Path("{lib_spec.dlname}.so")\n',
-        f"    elif CompilationTarget.is_macos():\n",
-        f'        path = Path("{lib_spec.dlname}.dylib")\n',
-        f"    else:\n",
-        f'        constrained[False, "Target OS is not supported."]()\n',
-        f'        path = Path()\n',
-        f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n",
-        f"    fn_table.init_pointee_move({function_table_type_name}(path))\n",
-        "\n\n",
-        f'fn {load_dl_name}(path: Some[PathLike]) raises:\n',
-        f"    var fn_table = Ptr(to=get_{function_table_global_name}())\n",
-        f"    fn_table.init_pointee_move({function_table_type_name}(path))\n",
-        f"\n\n",
-        f"struct {function_table_type_name}(Movable):\n",
-        f"    var dlhandle: OwnedDLHandle\n",
+        f"struct {function_table_type_name}:\n",
+        f"    var dynamic_library_handle: OwnedDLHandle\n",
     ]
+
     for function in functions:
-        mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        functions_table_file_parts.append(f'    var {mojo_fn_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
-    functions_table_file_parts.append((
-        "\n"
-        "    fn __init__(out self, path: Some[PathLike]) raises:\n"
-        "        self.dlhandle = OwnedDLHandle(path)\n"
+        mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+        functions_table_file_parts.append(f'    var pointer_{mojo_function_name}: {emit_mojo_type(function.as_fn_type(), use_cstringslice=False)}\n')
+
+    functions_table_file_parts.extend((
+        "\n",
+        "    fn __init__(out self) raises:\n",
+        "        var library_path: Path\n",
+        "        @parameter\n",
+        "        if CompilationTarget.is_linux():\n",
+        f'            library_path = Path("{lib_spec.dlname}.so")\n',
+        "        elif CompilationTarget.is_macos():\n",
+        f'            library_path = Path("{lib_spec.dlname}.dylib")\n',
+        "        else:\n",
+        '            constrained[False, "Target operating system is not supported."]()\n',
+        "            library_path = Path()\n",
+        "        self = Self(library_path)\n",
+        "\n",
+        "    fn __init__(out self, library_path: Path) raises:\n",
+        "        self.dynamic_library_handle = OwnedDLHandle(library_path)\n",
     ))
+
     for function in functions:
-        mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
-        mojo_fn_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
+        mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+        mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(
-            f'        self.{mojo_fn_name} = self.dlhandle.get_function[{mojo_fn_type}]("{function.name}")\n'
+            f'        self.pointer_{mojo_function_name} = self.dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
         )
+
+    for function in functions:
+        functions_table_file_parts.append("\n")
+        functions_table_file_parts.append(emit_sdl_function(function, lib_spec))
+
     function_table_filename = f"{lib_spec.name.lower()}_function_table.mojo"
     files[function_table_filename] = "".join(functions_table_file_parts)
 
-    functions_file_parts: List[str] = [
-        f"from .typedefs import *\n",
-        f"from .structs import *\n",
-        f"from .enums import *\n",
-        f"from .vulkan import *\n",
-        f"from .{function_table_filename.removesuffix('.mojo')} import get_{function_table_global_name}\n",
-        "" if lib_spec.name == "SDL3" else "from .sdl3_functions import get_error\n",
-        f"from ffi import CStringSlice, c_char\n",
-        f"\n\n",
-        f"comptime Ptr = UnsafePointer\n",
-    ]
-    for function in functions:
-        functions_file_parts.append("\n\n")
-        functions_file_parts.append(emit_sdl_function(function, lib_spec))
-    functions_filename = f"{lib_spec.name.lower()}_functions.mojo"
-    files[functions_filename] = "".join(functions_file_parts)
-
 
 def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
-    mojo_fn_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
+    mojo_function_name = pascal_to_snake_case(function.name.removeprefix("SDL_"))
     original_docstring = emit_original_docstring(function.docstring)
-    function_table_global_name = f"{lib_spec.name.lower()}_function_table"
     return_type_mojo = emit_mojo_type(function.return_type)
+    
     returns_bool_error = (
         return_type_mojo == "Bool"
         and re.search(
@@ -804,41 +774,42 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
             flags=re.IGNORECASE | re.DOTALL
         ) is not None
     )
-    returns_ptr_error = (
+    returns_pointer_error = (
         isinstance(function.return_type, SdlPointer)
         and "NULL" in original_docstring
     )
+    
     if "GetError" in original_docstring:
-        error = "get_error()"
+        error_message = "get_error()"
     else:
-        error = f'"Error in {mojo_fn_name} call. See official documentation for details."'
+        error_message = f'"Error in {mojo_function_name} call. See official documentation for details."'
 
     if returns_bool_error:
         return_part = ") raises:\n"
-        result_part = "var success = "
+        result_part = "var success_status = "
         post_call_part = (
-            f"    if not success:\n"
-            f"        raise {error}\n"
+            f"        if not success_status:\n"
+            f"            raise {error_message}\n"
         )
-    elif is_string(function.return_type) and returns_ptr_error:
-        result_part = "var cstring = "
+    elif is_string(function.return_type) and returns_pointer_error:
+        result_part = "var c_string = "
         return_part = f") raises -> {return_type_mojo}:\n"
         post_call_part = (
-            f"    if not cstring.unsafe_ptr():\n"
-            f"        raise {error}\n"
-            f"    return cstring\n"
+            f"        if not c_string.unsafe_ptr():\n"
+            f"            raise {error_message}\n"
+            f"        return c_string\n"
         )
     elif is_string(function.return_type):
-        result_part = "var cstring = "
+        result_part = "var c_string = "
         return_part = f") -> {return_type_mojo}:\n"
-        post_call_part = "    return cstring\n"
-    elif returns_ptr_error:
-        result_part = "var result = "
+        post_call_part = "        return c_string\n"
+    elif returns_pointer_error:
+        result_part = "var result_pointer = "
         return_part = f") raises -> {return_type_mojo}:\n"
         post_call_part = (
-            f"    if not result:\n"
-            f"        raise {error}\n"
-            f"    return result\n"
+            f"        if not result_pointer:\n"
+            f"            raise {error_message}\n"
+            f"        return result_pointer\n"
         )
     elif return_type_mojo == "NoneType":
         result_part = ""
@@ -849,26 +820,30 @@ def emit_sdl_function(function: SdlFunction, lib_spec: SdlLibSpec) -> str:
         return_part = f") -> {return_type_mojo}:\n"
         post_call_part = ""
 
+    arguments = ["self"]
+    arguments.extend([
+        f"{argument.name}: {emit_mojo_type(argument.type, omit_origin=True)}"
+        for argument in function.args
+    ])
+
     parts: List[str] = []
     parts.append(emit_fn_like(
-        f"fn {mojo_fn_name}(",
-        [
-            f"{arg.name}: {emit_mojo_type(arg.type, omit_origin=True)}"
-            for arg in function.args
-        ],
+        f"fn {mojo_function_name}(",
+        arguments,
         return_part,
+        base_indent_level = 1,
     ))
-    parts.append(emit_wiki_docstring(lib_spec.name, function.name))
+    parts.append(emit_wiki_docstring(lib_spec.name, function.name, indent_level=2))
     parts.append(emit_fn_like(
-        f"{result_part}get_{function_table_global_name}().{mojo_fn_name}(",
+        f"{result_part}self.pointer_{mojo_function_name}(",
         [
-            f"{arg.name}.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()"
-            if is_string(arg.type) else
-            f"Ptr(to={arg.name}).bitcast[{emit_mojo_type(arg.type)}]()[]"
-            for arg in function.args
+            f"{argument.name}.unsafe_ptr().unsafe_origin_cast[ImmutExternalOrigin]()"
+            if is_string(argument.type) else
+            f"Ptr(to={argument.name}).bitcast[{emit_mojo_type(argument.type)}]()[]"
+            for argument in function.args
         ],
         f")\n",
-        base_indent_level = 1,
+        base_indent_level = 2,
     ))
     parts.append(post_call_part)
     return "".join(parts)
