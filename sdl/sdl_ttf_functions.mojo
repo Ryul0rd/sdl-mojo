@@ -13,7 +13,7 @@ from .sdl3_functions import Sdl3Functions
 comptime Ptr = UnsafePointer
 
 
-struct SdlTtfFunctions:
+struct SdlTtfFunctions(Movable):
     var _dynamic_library_handle: OwnedDLHandle
     var _get_error: fn() -> CStringSlice[ImmutExternalOrigin]
     var _version: fn() -> Int32

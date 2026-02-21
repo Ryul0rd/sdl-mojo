@@ -721,7 +721,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "\n\n",
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
-        f"struct {function_table_type_name}:\n",
+        f"struct {function_table_type_name}(Movable):\n",
         f"    var _dynamic_library_handle: OwnedDLHandle\n",
     ]
 

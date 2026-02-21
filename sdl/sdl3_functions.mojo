@@ -12,7 +12,7 @@ from .vulkan import *
 comptime Ptr = UnsafePointer
 
 
-struct Sdl3Functions:
+struct Sdl3Functions(Movable):
     var _dynamic_library_handle: OwnedDLHandle
     var _get_num_audio_drivers: fn() -> Int32
     var _get_audio_driver: fn(Int32) -> CStringSlice[ImmutExternalOrigin]
