@@ -915,7 +915,7 @@ struct Sdl3Functions:
     var _vulkan_destroy_surface: fn(VkInstance, VkSurfaceKHR, Ptr[VkAllocationCallbacks, ImmutExternalOrigin]) -> NoneType
     var _vulkan_get_presentation_support: fn(VkInstance, VkPhysicalDevice, UInt32) -> Bool
 
-    fn __init__(out self, sdl3_functions: Sdl3Functions) raises:
+    fn __init__(out self) raises:
         var library_path: Path
         @parameter
         if CompilationTarget.is_linux():
@@ -925,11 +925,10 @@ struct Sdl3Functions:
         else:
             constrained[False, "Target operating system is not supported."]()
             library_path = Path()
-        self = Self(sdl3_functions, library_path)
+        self = Self(library_path)
 
-    fn __init__(out self, sdl3_functions: Sdl3Functions, library_path: Path) raises:
+    fn __init__(out self, library_path: Path) raises:
         self._dynamic_library_handle = OwnedDLHandle(library_path)
-        self._get_error = sdl3_functions._get_error
         self._get_num_audio_drivers = self._dynamic_library_handle.get_function[fn() -> Int32]("SDL_GetNumAudioDrivers")
         self._get_audio_driver = self._dynamic_library_handle.get_function[fn(Int32) -> CStringSlice[ImmutExternalOrigin]]("SDL_GetAudioDriver")
         self._get_current_audio_driver = self._dynamic_library_handle.get_function[fn() -> CStringSlice[ImmutExternalOrigin]]("SDL_GetCurrentAudioDriver")

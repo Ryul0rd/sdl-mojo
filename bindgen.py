@@ -733,9 +733,18 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(f'    var _{mojo_function_name}: {mojo_function_type}\n')
 
+    if lib_spec.name == "SDL3":
+        init1_args = ["out self"]
+        init2_args = ["out self", "library_path: Path"]
+        init_call_args = ["library_path"]
+    else:
+        init1_args = ["out self", "sdl3_functions: Sdl3Functions"]
+        init2_args = ["out self", "sdl3_functions: Sdl3Functions", "library_path: Path"]
+        init_call_args = ["sdl3_functions", "library_path"]
+
     functions_table_file_parts.extend((
         "\n",
-        "    fn __init__(out self, sdl3_functions: Sdl3Functions) raises:\n",
+        f"    fn __init__({', '.join(init1_args)}) raises:\n",
         "        var library_path: Path\n",
         "        @parameter\n",
         "        if CompilationTarget.is_linux():\n",
@@ -745,12 +754,13 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "        else:\n",
         '            constrained[False, "Target operating system is not supported."]()\n',
         "            library_path = Path()\n",
-        "        self = Self(sdl3_functions, library_path)\n",
+        f"        self = Self({', '.join(init_call_args)})\n",
         "\n",
-        "    fn __init__(out self, sdl3_functions: Sdl3Functions, library_path: Path) raises:\n",
+        f"    fn __init__({', '.join(init2_args)}) raises:\n",
         "        self._dynamic_library_handle = OwnedDLHandle(library_path)\n",
-        "        self._get_error = sdl3_functions._get_error\n",
     ))
+    if lib_spec.name != "SDL3":
+        functions_table_file_parts.append("        self._get_error = sdl3_functions._get_error\n")
 
     for function in functions:
         mojo_function_name = pascal_to_snake_case(remove_library_prefix(function.name))
