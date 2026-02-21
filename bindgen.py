@@ -722,7 +722,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
         f"struct {function_table_type_name}:\n",
-        f"    var dynamic_library_handle: OwnedDLHandle\n",
+        f"    var _dynamic_library_handle: OwnedDLHandle\n",
     ]
 
     if lib_spec.name != "SDL3":
@@ -748,7 +748,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "        self = Self(sdl3_functions, library_path)\n",
         "\n",
         "    fn __init__(out self, sdl3_functions: Sdl3Functions, library_path: Path) raises:\n",
-        "        self.dynamic_library_handle = OwnedDLHandle(library_path)\n",
+        "        self._dynamic_library_handle = OwnedDLHandle(library_path)\n",
         "        self._get_error = sdl3_functions._get_error\n",
     ))
 
@@ -756,7 +756,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         mojo_function_name = pascal_to_snake_case(remove_library_prefix(function.name))
         mojo_function_type = emit_mojo_type(function.as_fn_type(), use_cstringslice=False)
         functions_table_file_parts.append(
-            f'        self._{mojo_function_name} = self.dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
+            f'        self._{mojo_function_name} = self._dynamic_library_handle.get_function[{mojo_function_type}]("{function.name}")\n'
         )
 
     if lib_spec.name != "SDL3":
