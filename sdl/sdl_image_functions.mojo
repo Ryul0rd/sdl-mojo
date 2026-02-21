@@ -7,13 +7,13 @@ from .typedefs import *
 from .structs import *
 from .enums import *
 from .vulkan import *
-from .sdl3_function_table import Sdl3FunctionTable
+from .sdl3_functions import Sdl3Functions
 
 
 comptime Ptr = UnsafePointer
 
 
-struct SdlImageFunctionTable:
+struct SdlImageFunctions:
     var dynamic_library_handle: OwnedDLHandle
     var _get_error: fn() -> CStringSlice[ImmutExternalOrigin]
     var _img_version: fn() -> Int32
@@ -119,7 +119,7 @@ struct SdlImageFunctionTable:
     var _img_reset_animation_decoder: fn(Ptr[IMG_AnimationDecoder, MutExternalOrigin]) -> Bool
     var _img_close_animation_decoder: fn(Ptr[IMG_AnimationDecoder, MutExternalOrigin]) -> Bool
 
-    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable) raises:
+    fn __init__(out self, sdl3_functions: Sdl3Functions) raises:
         var library_path: Path
         @parameter
         if CompilationTarget.is_linux():
@@ -129,11 +129,11 @@ struct SdlImageFunctionTable:
         else:
             constrained[False, "Target operating system is not supported."]()
             library_path = Path()
-        self = Self(sdl3_function_table, library_path)
+        self = Self(sdl3_functions, library_path)
 
-    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable, library_path: Path) raises:
+    fn __init__(out self, sdl3_functions: Sdl3Functions, library_path: Path) raises:
         self.dynamic_library_handle = OwnedDLHandle(library_path)
-        self._get_error = sdl3_function_table._get_error
+        self._get_error = sdl3_functions._get_error
         self._img_version = self.dynamic_library_handle.get_function[fn() -> Int32]("IMG_Version")
         self._img_load = self.dynamic_library_handle.get_function[fn(Ptr[c_char, ImmutExternalOrigin]) -> Ptr[Surface, MutExternalOrigin]]("IMG_Load")
         self._img_load_io = self.dynamic_library_handle.get_function[fn(Ptr[IOStream, MutExternalOrigin], Bool) -> Ptr[Surface, MutExternalOrigin]]("IMG_Load_IO")

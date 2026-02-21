@@ -7,7 +7,7 @@ from .macros import *
 from .typedefs import *
 from .structs import *
 from .enums import *
-from .sdl3_function_table import Sdl3FunctionTable
-from .sdl_image_function_table import SdlImageFunctionTable
-from .sdl_ttf_function_table import SdlTtfFunctionTable
-from .sdl_mixer_function_table import SdlMixerFunctionTable
+from .sdl3_functions import Sdl3Functions
+from .sdl_image_functions import SdlImageFunctions
+from .sdl_ttf_functions import SdlTtfFunctions
+from .sdl_mixer_functions import SdlMixerFunctions

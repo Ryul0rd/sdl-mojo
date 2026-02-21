@@ -703,9 +703,9 @@ def emit_sdl_enums(files: Dict[str, str], enums: List[SdlEnum], lib_spec: SdlLib
 
 def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_spec: SdlLibSpec):
     if lib_spec.name == "SDL3":
-        function_table_type_name = "Sdl3FunctionTable"
+        function_table_type_name = "Sdl3Functions"
     else:
-        function_table_type_name = f"Sdl{lib_spec.name.removeprefix('SDL_').capitalize()}FunctionTable"
+        function_table_type_name = f"Sdl{lib_spec.name.removeprefix('SDL_').capitalize()}Functions"
     
     functions_table_file_parts: List[str] = [
         "from ffi import OwnedDLHandle, c_char, CStringSlice\n",
@@ -717,7 +717,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "from .structs import *\n",
         "from .enums import *\n",
         "from .vulkan import *\n",
-        "" if lib_spec.name == "SDL3" else "from .sdl3_function_table import Sdl3FunctionTable\n",
+        "" if lib_spec.name == "SDL3" else "from .sdl3_functions import Sdl3Functions\n",
         "\n\n",
         "comptime Ptr = UnsafePointer\n",
         "\n\n",
@@ -734,7 +734,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
 
     functions_table_file_parts.extend((
         "\n",
-        "    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable) raises:\n",
+        "    fn __init__(out self, sdl3_functions: Sdl3Functions) raises:\n",
         "        var library_path: Path\n",
         "        @parameter\n",
         "        if CompilationTarget.is_linux():\n",
@@ -744,11 +744,11 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         "        else:\n",
         '            constrained[False, "Target operating system is not supported."]()\n',
         "            library_path = Path()\n",
-        "        self = Self(sdl3_function_table, library_path)\n",
+        "        self = Self(sdl3_functions, library_path)\n",
         "\n",
-        "    fn __init__(out self, sdl3_function_table: Sdl3FunctionTable, library_path: Path) raises:\n",
+        "    fn __init__(out self, sdl3_functions: Sdl3Functions, library_path: Path) raises:\n",
         "        self.dynamic_library_handle = OwnedDLHandle(library_path)\n",
-        "        self._get_error = sdl3_function_table._get_error\n",
+        "        self._get_error = sdl3_functions._get_error\n",
     ))
 
     for function in functions:
@@ -769,7 +769,7 @@ def emit_sdl_functions(files: Dict[str, str], functions: List[SdlFunction], lib_
         functions_table_file_parts.append("\n")
         functions_table_file_parts.append(emit_sdl_function(function, lib_spec))
 
-    function_table_filename = f"{lib_spec.name.lower()}_function_table.mojo"
+    function_table_filename = f"{lib_spec.name.lower()}_functions.mojo"
     files[function_table_filename] = "".join(functions_table_file_parts)
 
 
