@@ -2,7 +2,7 @@ from .misc import (
     Event,
     GamepadBinding, GamepadBindingOutput, GamepadBindingOutputAxis,
     GamepadBindingInput, GamepadBindingInputAxis, GamepadBindingInputHat,
-    AllocationCallbacks,
+    VkAllocationCallbacks,
 )
 from .macros import *
 from .typedefs import *
