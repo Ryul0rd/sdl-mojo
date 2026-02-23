@@ -144,7 +144,7 @@ struct GamepadBindingOutputAxis(Copyable):
 
 
 @fieldwise_init
-struct AllocationCallbacks(Copyable, Equatable):
+struct VkAllocationCallbacks(Copyable, Equatable):
     var p_user_data: Ptr[NoneType, MutExternalOrigin]
     var pfn_allocation: PFN_vkAllocationFunction
     var pfn_reallocation: PFN_vkReallocationFunction
