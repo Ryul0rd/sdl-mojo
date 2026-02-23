@@ -141,3 +141,85 @@ struct GamepadBindingOutputAxis(Copyable):
     var axis: GamepadAxis
     var axis_min: Int32
     var axis_max: Int32
+
+
+@fieldwise_init
+struct AllocationCallbacks(Copyable, Equatable):
+    var p_user_data: Ptr[NoneType, MutExternalOrigin]
+    var pfn_allocation: PFN_vkAllocationFunction
+    var pfn_reallocation: PFN_vkReallocationFunction
+    var pfn_free: PFN_vkFreeFunction
+    var pfn_internal_allocation: PFN_vkInternalAllocationNotification
+    var pfn_internal_free: PFN_vkInternalFreeNotification
+
+
+comptime PFN_vkAllocationFunction = fn(
+    p_user_data: Ptr[NoneType, MutAnyOrigin],
+    size: UInt,
+    alignment: UInt,
+    allocation_scope: SystemAllocationScope,
+) -> Ptr[NoneType, MutAnyOrigin]
+
+
+comptime PFN_vkReallocationFunction = fn(
+    p_user_data: Ptr[NoneType, MutAnyOrigin],
+    p_original: Ptr[NoneType, MutAnyOrigin],
+    size: UInt,
+    alignment: UInt,
+    allocation_scope: SystemAllocationScope,
+) -> Ptr[NoneType, MutAnyOrigin]
+
+
+comptime PFN_vkFreeFunction = fn(
+    p_user_data: Ptr[NoneType, MutAnyOrigin], p_memory: Ptr[NoneType, MutAnyOrigin]
+)
+
+
+comptime PFN_vkInternalAllocationNotification = fn(
+    p_user_data: Ptr[NoneType, MutAnyOrigin],
+    size: UInt,
+    allocation_type: InternalAllocationType,
+    allocation_scope: SystemAllocationScope,
+)
+
+
+comptime PFN_vkInternalFreeNotification = fn(
+    p_user_data: Ptr[NoneType, MutAnyOrigin],
+    size: UInt,
+    allocation_type: InternalAllocationType,
+    allocation_scope: SystemAllocationScope,
+)
+
+
+struct SystemAllocationScope(TrivialRegisterPassable, Equatable):
+    var _value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self._value = value
+
+    fn value(self) -> Int32:
+        return self._value
+
+    fn __eq__(self, other: Self) -> Bool:
+        return self._value == other._value
+
+    comptime COMMAND = SystemAllocationScope(value = 0)
+    comptime OBJECT = SystemAllocationScope(value = 1)
+    comptime CACHE = SystemAllocationScope(value = 2)
+    comptime DEVICE = SystemAllocationScope(value = 3)
+    comptime INSTANCE = SystemAllocationScope(value = 4)
+
+
+struct InternalAllocationType(TrivialRegisterPassable, Equatable):
+    var _value: Int32
+
+    fn __init__(out self, *, value: Int32):
+        self._value = value
+
+    fn value(self) -> Int32:
+        return self._value
+
+    fn __eq__(self, other: Self) -> Bool:
+        return self._value == other._value
+
+    comptime EXECUTABLE = InternalAllocationType(value = 0)
